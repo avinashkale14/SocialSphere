@@ -1,0 +1,116 @@
+*{
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+.register{
+    height: 100vh;
+    background-color: rgb(193, 190, 255);
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    .card{
+        width: 60%;
+        height: 600px;
+
+        display: flex;
+        flex-direction: row-reverse;
+
+        background-color: white;
+        border-radius: 10px;
+        overflow: hidden;
+
+        .left{
+            flex: 1;
+
+            background:
+            linear-gradient(
+            rgba(39,11,96,0.5),
+            rgba(39,11,96,0.5)
+            ),
+            url("https://media.istockphoto.com/id/984020344/photo/child-playing-outdoor-in-the-nature.webp?a=1&b=1&s=612x612&w=0&k=20&c=-DggIw5S0muKT_Veh9hX4BInQESqU1CTwZna-qAMWr0=");
+
+            background-size: cover;
+            background-position: center;
+
+            padding: 50px;
+
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            gap: 30px;
+
+            color: white;
+
+            h1{
+                font-size: 70px;
+                line-height: 70px;
+            }
+
+            p{
+                font-size: 14px;
+            }
+
+            span{
+                font-size: 14px;
+            }
+
+            button{
+                width: 50%;
+                padding: 10px;
+
+                border: none;
+
+                background-color: white;
+                color: rebeccapurple;
+
+                font-weight: bold;
+                cursor: pointer;
+            }
+        }
+
+        .right{
+            flex: 1;
+
+            padding: 50px;
+
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            gap: 40px;
+
+            h1{
+                color: #555;
+                font-size: 40px;
+            }
+
+            form{
+                display: flex;
+                flex-direction: column;
+                gap: 25px;
+
+                input{
+                    border: none;
+                    border-bottom: 1px solid lightgray;
+                    padding: 20px 10px;
+                }
+
+                button{
+                    width: 50%;
+                    padding: 10px;
+
+                    border: none;
+
+                    background-color: #938eef;
+                    color: white;
+
+                    font-weight: bold;
+                    cursor: pointer;
+                }
+            }
+        }
+    }
+}
