@@ -2,31 +2,70 @@ import "./register.scss";
 import { Link } from "react-router-dom";
 
 const Register = () => {
+  const handleRegister = (e) => {
+    e.preventDefault();
+
+    // Backend registration will be added later
+    console.log("Register submitted");
+  };
+
   return (
     <div className="register">
-        <div className="card">
-          <div className="left">
-            <h1>Adii Social.</h1>
-            <p>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Fuga adipisci facilis incidunt nostrum, necessitatibus nisi nam expedita fugiat illo veniam repellat animi ratione reprehenderit repudiandae enim voluptas, eaque voluptatum accusantium?
-            </p>
-            <span>Don't you have an account</span>
-            <Link to="/login">
-            <button>Login</button>
-            </Link>
-          </div>
-          <div className="right">
-            <h1>Register</h1>
-            <form>
-               <input type="text" placeholder="Username"/>
-               <input type="email" placeholder="Email"/>
-               <input type="Password" placeholder="Password"/>
-               <input type="text" placeholder="Name"/>
-               <button>
-                Register
-               </button>
-            </form>
-          </div >
+      <div className="card">
+
+        {/* LEFT SIDE */}
+        <div className="left">
+          <h1>SocialSphere.</h1>
+
+          <p>
+            Join SocialSphere and connect with people, share your thoughts,
+            discover new ideas, and build meaningful connections.
+          </p>
+
+          <span>Already have an account?</span>
+
+          <Link to="/login">
+            <button type="button">Login</button>
+          </Link>
         </div>
+
+
+        {/* RIGHT SIDE */}
+        <div className="right">
+          <h1>Create Account</h1>
+
+          <form onSubmit={handleRegister}>
+            <input
+              type="text"
+              placeholder="Username"
+              required
+            />
+
+            <input
+              type="email"
+              placeholder="Email"
+              required
+            />
+
+            <input
+              type="password"
+              placeholder="Password"
+              required
+            />
+
+            <input
+              type="text"
+              placeholder="Full Name"
+              required
+            />
+
+            <button type="submit">
+              Register
+            </button>
+          </form>
+        </div>
+
+      </div>
     </div>
   );
 };

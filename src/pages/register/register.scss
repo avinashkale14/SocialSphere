@@ -1,116 +1,242 @@
-*{
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
+@import "../../style.scss";
 
-.register{
-    height: 100vh;
-    background-color: rgb(193, 190, 255);
+.register {
+  min-height: 100vh;
+  background-color: rgb(193, 190, 255);
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  padding: 20px;
+
+  .card {
+    width: 100%;
+    max-width: 1000px;
+    min-height: 600px;
 
     display: flex;
-    align-items: center;
-    justify-content: center;
+    flex-direction: row-reverse;
 
-    .card{
-        width: 60%;
-        height: 600px;
+    background-color: white;
+    border-radius: 15px;
+    overflow: hidden;
 
-        display: flex;
-        flex-direction: row-reverse;
+    box-shadow: 0px 10px 30px rgba(0, 0, 0, 0.15);
+
+    .left {
+      flex: 1;
+
+      background:
+        linear-gradient(
+          rgba(39, 11, 96, 0.6),
+          rgba(39, 11, 96, 0.6)
+        ),
+        url("https://media.istockphoto.com/id/984020344/photo/child-playing-outdoor-in-the-nature.webp?a=1&b=1&s=612x612&w=0&k=20&c=-DggIw5S0muKT_Veh9hX4BInQESqU1CTwZna-qAMWr0=");
+
+      background-size: cover;
+      background-position: center;
+
+      padding: 50px;
+
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+
+      gap: 25px;
+
+      color: white;
+
+      h1 {
+        font-size: 60px;
+        line-height: 1;
+      }
+
+      p {
+        font-size: 15px;
+        line-height: 1.6;
+      }
+
+      span {
+        font-size: 14px;
+      }
+
+      button {
+        width: 160px;
+        padding: 12px;
+
+        border: none;
+        border-radius: 5px;
 
         background-color: white;
-        border-radius: 10px;
-        overflow: hidden;
+        color: rebeccapurple;
 
-        .left{
-            flex: 1;
-
-            background:
-            linear-gradient(
-            rgba(39,11,96,0.5),
-            rgba(39,11,96,0.5)
-            ),
-            url("https://media.istockphoto.com/id/984020344/photo/child-playing-outdoor-in-the-nature.webp?a=1&b=1&s=612x612&w=0&k=20&c=-DggIw5S0muKT_Veh9hX4BInQESqU1CTwZna-qAMWr0=");
-
-            background-size: cover;
-            background-position: center;
-
-            padding: 50px;
-
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            gap: 30px;
-
-            color: white;
-
-            h1{
-                font-size: 70px;
-                line-height: 70px;
-            }
-
-            p{
-                font-size: 14px;
-            }
-
-            span{
-                font-size: 14px;
-            }
-
-            button{
-                width: 50%;
-                padding: 10px;
-
-                border: none;
-
-                background-color: white;
-                color: rebeccapurple;
-
-                font-weight: bold;
-                cursor: pointer;
-            }
-        }
-
-        .right{
-            flex: 1;
-
-            padding: 50px;
-
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            gap: 40px;
-
-            h1{
-                color: #555;
-                font-size: 40px;
-            }
-
-            form{
-                display: flex;
-                flex-direction: column;
-                gap: 25px;
-
-                input{
-                    border: none;
-                    border-bottom: 1px solid lightgray;
-                    padding: 20px 10px;
-                }
-
-                button{
-                    width: 50%;
-                    padding: 10px;
-
-                    border: none;
-
-                    background-color: #938eef;
-                    color: white;
-
-                    font-weight: bold;
-                    cursor: pointer;
-                }
-            }
-        }
+        font-weight: bold;
+        cursor: pointer;
+      }
     }
+
+    .right {
+      flex: 1;
+
+      padding: 50px;
+
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+
+      gap: 35px;
+
+      h1 {
+        color: #555;
+        font-size: 40px;
+      }
+
+      form {
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+
+        input {
+          width: 100%;
+
+          border: none;
+          border-bottom: 1px solid lightgray;
+
+          padding: 15px 10px;
+
+          outline: none;
+
+          &:focus {
+            border-bottom: 2px solid #938eef;
+          }
+        }
+
+        button {
+          width: 160px;
+
+          padding: 12px;
+
+          border: none;
+          border-radius: 5px;
+
+          background-color: #938eef;
+          color: white;
+
+          font-weight: bold;
+          cursor: pointer;
+        }
+      }
+    }
+  }
+}
+
+
+/* TABLET */
+
+@include tablet {
+  .register {
+    .card {
+      max-width: 800px;
+
+      .left,
+      .right {
+        padding: 35px;
+      }
+
+      .left {
+        h1 {
+          font-size: 50px;
+        }
+      }
+    }
+  }
+}
+
+
+/*  MOBILE - IMPORTANT */
+
+@include mobile-large {
+  .register {
+    padding: 15px;
+
+    align-items: flex-start;
+
+    .card {
+      width: 100%;
+      min-height: auto;
+
+      /* THIS FIXES YOUR PROBLEM */
+      flex-direction: column;
+
+      .left,
+      .right {
+        width: 100%;
+        flex: none;
+      }
+
+      .left {
+        min-height: 350px;
+
+        padding: 35px 25px;
+
+        h1 {
+          font-size: 42px;
+        }
+
+        p {
+          font-size: 14px;
+        }
+
+        button {
+          width: 100%;
+        }
+      }
+
+      .right {
+        padding: 35px 25px;
+
+        h1 {
+          font-size: 35px;
+        }
+
+        form {
+          gap: 20px;
+
+          button {
+            width: 100%;
+          }
+        }
+      }
+    }
+  }
+}
+
+
+/* SMALL MOBILE */
+
+@include mobile {
+  .register {
+    padding: 10px;
+
+    .card {
+      .left {
+        min-height: 320px;
+
+        padding: 25px 20px;
+
+        h1 {
+          font-size: 36px;
+        }
+      }
+
+      .right {
+        padding: 30px 20px;
+
+        h1 {
+          font-size: 30px;
+        }
+      }
+    }
+  }
 }
