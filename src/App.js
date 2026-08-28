@@ -31,16 +31,17 @@ function App() {
     return(
       <div className={`theme-${darkMode ? "dark": "light"}`}>
         <Navbar/>
-        <div style={{ display: "flex" }}>
+        <div className="main-layout">
           <LeftBar />
-          <div style={{flex: 6}}>
+          <main className="main-content">
             <Outlet />
-          </div>
+          </main>
           <RightBar />
         </div>
       </div>
     );
   };
+  
 
   const ProtectedRoute = ({children}) => {
     if(!currentUser){

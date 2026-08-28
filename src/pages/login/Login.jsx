@@ -4,34 +4,58 @@ import { useContext } from "react";
 import { AuthContext } from "../../context/authContext";
 
 const Login = () => {
+  const { login } = useContext(AuthContext);
 
-  const {login} = useContext(AuthContext);
-
-  const handleLogin = () => {
+  const handleLogin = (e) => {
+    e.preventDefault();
     login();
   };
 
   return (
     <div className="login">
-        <div className="card">
-          <div className="left">
-            <h1>Hello World.</h1>
-            <p>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Fuga adipisci facilis incidunt nostrum, necessitatibus nisi nam expedita fugiat illo veniam repellat animi ratione reprehenderit repudiandae enim voluptas, eaque voluptatum accusantium?
-            </p>
-            <span>Don't you have an account</span>
-            <Link to="/register">
-            <button>Register</button>
-            </Link>
-          </div>
-          <div className="right">
-            <h1>Login</h1>
-            <form>
-               <input type="text" placeholder="Username"/>
-               <input type="Password" placeholder="Password"/>
-               <button onClick={handleLogin}>Login</button>
-            </form>
-          </div>
+      <div className="card">
+
+        {/* LEFT SIDE */}
+        <div className="left">
+          <h1>Welcome Back.</h1>
+
+          <p>
+            Connect with people, share your thoughts, and discover what is
+            happening around you with SocialSphere.
+          </p>
+
+          <span>Don't have an account?</span>
+
+          <Link to="/register">
+            <button type="button">Register</button>
+          </Link>
         </div>
+
+
+        {/* RIGHT SIDE */}
+        <div className="right">
+          <h1>Login</h1>
+
+          <form onSubmit={handleLogin}>
+            <input
+              type="text"
+              placeholder="Username"
+              required
+            />
+
+            <input
+              type="password"
+              placeholder="Password"
+              required
+            />
+
+            <button type="submit">
+              Login
+            </button>
+          </form>
+        </div>
+
+      </div>
     </div>
   );
 };

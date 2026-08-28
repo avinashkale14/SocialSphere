@@ -1,102 +1,166 @@
 @import "../../style.scss";
 
 .rightbar {
-    @include themify ($themes){
+  @include themify($themes) {
     flex: 3;
+    min-width: 300px;
+    max-width: 380px;
+
     position: sticky;
     top: 55px;
+
     height: calc(100vh - 55px);
-    overflow: scroll;
+
+    overflow-y: auto;
+    overflow-x: hidden;
+
     background-color: themed("bgSoft");
 
-    @include mobile{
-        display: none;
-    }
-    @include tablet{
-        display: none;
+    &::-webkit-scrollbar {
+      display: none;
     }
 
-    &::-webkit-scrollbar{
-        display: none;
-    }
+    .container {
+      padding: 20px;
 
-    .container{
-        padding: 20px;
+      .item {
+        box-shadow: 0px 0px 15px 1px rgba(0, 0, 0, 0.09);
 
-        .item{
-            -webkit-box-shadow: 0px 0px 15px 1px rgba(0,0,0,0.09);
-            -moz-box-shadow: 0px 0px 15px 1px rgba(0,0,0,0.09);
-            box-shadow: 0px 0px 15px 1px rgba(0,0,0,0.09);
-            padding: 15px;
-            margin-bottom: 15px;
-            background-color: themed("bg");
+        padding: 15px;
+        margin-bottom: 15px;
 
+        background-color: themed("bg");
+        color: themed("textColor");
 
-            span{
-                color: gray;
-            }
-            
-            .user{
-                display: flex;
-                align-items: center;
-                justify-content: space-between;
-                margin: 12px 0px;
-
-                .userInfo{
-                    display: flex;
-                    align-items: center;
-                    gap: 10px;
-                    position: relative;
-
-                    img{
-                        width: 35px;
-                        height: 35px;
-                        border-radius: 50%;
-                        object-fit: cover;
-                    }
-
-                    .online{
-                        width: 12px;
-                        height: 12px;
-                        border-radius: 50px;
-                        background-color: limegreen;
-                        position: absolute;
-                        top: 0;
-                        left: 30px;
-                    }
-                    
-                    p{
-                        color: themed("textColor");
-                        font-size: 13px;
-                    }
-
-                    span{
-                        font-weight: 500;
-                        color: themed("textColor");
-                    }
-                }
-                .buttons{
-                    display: flex;
-                    align-items: center;
-                    gap: 10px;
-
-                    button{
-                        border: none;
-                        padding: 4px 8px;
-                        color: white;
-                        cursor: pointer;
-
-                        &:first-child{
-                            background-color: #5271ff;
-                        }
-
-                        &:last-child{
-                            background-color: #f0544f;
-                        }
-                    }
-                }
-            }
+        > span {
+          color: themed("textColorSoft");
+          font-size: 15px;
+          font-weight: 500;
         }
+
+        .user {
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+
+          gap: 10px;
+
+          margin: 15px 0;
+
+          .userInfo {
+            display: flex;
+            align-items: center;
+
+            gap: 10px;
+
+            position: relative;
+
+            min-width: 0;
+
+            img {
+              width: 35px;
+              height: 35px;
+
+              border-radius: 50%;
+              object-fit: cover;
+
+              flex-shrink: 0;
+            }
+
+            .online {
+              width: 12px;
+              height: 12px;
+
+              border-radius: 50%;
+
+              background-color: limegreen;
+
+              position: absolute;
+
+              top: 0;
+              left: 25px;
+
+              border: 2px solid themed("bg");
+            }
+
+            p {
+              color: themed("textColor");
+
+              font-size: 13px;
+
+              line-height: 1.4;
+
+              margin: 0;
+            }
+
+            span {
+              font-weight: 500;
+
+              color: themed("textColor");
+
+              font-size: 14px;
+            }
+          }
+
+          > span {
+            font-size: 12px;
+
+            color: themed("textColorSoft");
+
+            white-space: nowrap;
+          }
+
+          .buttons {
+            display: flex;
+            align-items: center;
+
+            gap: 8px;
+
+            flex-shrink: 0;
+
+            button {
+              border: none;
+
+              padding: 6px 10px;
+
+              color: white;
+
+              cursor: pointer;
+
+              text-transform: capitalize;
+
+              transition: 0.2s ease;
+
+              &:hover {
+                opacity: 0.85;
+              }
+
+              &:first-child {
+                background-color: #5271ff;
+              }
+
+              &:last-child {
+                background-color: #f0544f;
+              }
+            }
+          }
+        }
+      }
     }
-}
+
+
+    /* LAPTOP + TABLET
+       Hide RightBar */
+
+    @include laptop {
+      display: none;
+    }
+
+
+    /* MOBILE */
+
+    @include mobile-large {
+      display: none;
+    }
+  }
 }

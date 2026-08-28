@@ -1,76 +1,227 @@
- @import "../../style.scss";
- 
- .stories {
+@import "../../style.scss";
+
+.stories {
+  @include themify($themes) {
     display: flex;
-    gap: 10px;
+    gap: 12px;
+
+    width: 100%;
     height: 200px;
+
     margin-bottom: 20px;
 
-    @include mobile{
-            height: 50px;
-            justify-content: space-between;
-        }
+    overflow: hidden;
 
-    @include tablet{
-        height:100px;
-        gap: 20px;
-    }    
+    /* DESKTOP STORIES */
 
-    .story{
-        flex:1;
-        border-radius: 10px;
+    .story {
+      flex: 1;
+      min-width: 0;
+
+      height: 200px;
+
+      border-radius: 12px;
+      overflow: hidden;
+
+      position: relative;
+      cursor: pointer;
+
+      background-color: themed("bg");
+
+      transition: transform 0.2s ease;
+
+      &:hover {
+        transform: translateY(-3px);
+      }
+
+      img {
+        width: 100%;
+        height: 100%;
+
+        object-fit: cover;
+        display: block;
+      }
+
+      /* Dark gradient behind story name */
+      &::after {
+        content: "";
+        position: absolute;
+
+        left: 0;
+        right: 0;
+        bottom: 0;
+
+        height: 45%;
+
+        background: linear-gradient(
+          transparent,
+          rgba(0, 0, 0, 0.65)
+        );
+
+        pointer-events: none;
+      }
+
+      span {
+        position: absolute;
+
+        bottom: 12px;
+        left: 10px;
+        right: 10px;
+
+        color: white;
+
+        font-weight: 600;
+        font-size: 13px;
+
+        white-space: nowrap;
         overflow: hidden;
-        position: relative;
+        text-overflow: ellipsis;
 
-        @include mobile{
-            flex: none;
-            width: 50px;
-            height: 50px;
-            border-radius: 50%;
-        }
+        z-index: 2;
+      }
 
-        
-        img{
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
+      /* Add Story Button */
+      button {
+        position: absolute;
 
-        span{
-            position: absolute;
-            bottom: 10px;
-            left: 10px;
-            color: white;
-            font-weight: 500;
+        bottom: 42px;
+        left: 10px;
 
-            @include mobile{
-            display: none;
-        }
+        width: 34px;
+        height: 34px;
 
-        }
-        button{
-                position: absolute;
-                bottom: 40px;
-                left: 10px;
-                color: white;
-                background-color: #5271ff;
-                border: none;
-                border-radius: 50%;
-                width: 30px;
-                height: 30px;
-                cursor: pointer;
-                font-size: 30px;
-                display: flex;
-                align-items: center;
-                justify-content: center;
+        border: 3px solid white;
+        border-radius: 50%;
 
-                @include mobile{
-                    left: 0;
-                    right: 0;
-                    top: 0;
-                    bottom: 0;
-                    margin: auto;
-                }
-            }
+        background-color: #5271ff;
+        color: white;
+
+        cursor: pointer;
+
+        font-size: 25px;
+        line-height: 1;
+
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        z-index: 3;
+      }
     }
- }
+
+    /* TABLET + MOBILE
+       INSTAGRAM STYLE STORIES */
+
+    @include tablet {
+      height: 82px;
+
+      gap: 14px;
+
+      overflow-x: auto;
+      overflow-y: hidden;
+
+      padding: 6px 4px;
+
+      scrollbar-width: none;
+
+      &::-webkit-scrollbar {
+        display: none;
+      }
+
+      .story {
+        flex: 0 0 64px;
+
+        width: 64px;
+        height: 64px;
+
+        border-radius: 50%;
+
+        overflow: visible;
+
+        background: linear-gradient(
+          135deg,
+          #5271ff,
+          #8b5cf6,
+          #ec4899
+        );
+
+        padding: 3px;
+
+        border: none;
+
+        &:hover {
+          transform: none;
+        }
+
+        &::after {
+          display: none;
+        }
+
+        img {
+          width: 100%;
+          height: 100%;
+
+          border-radius: 50%;
+
+          object-fit: cover;
+
+          border: 2px solid themed("bg");
+        }
+
+        span {
+          display: none;
+        }
+
+        /* Add Story Button */
+        button {
+          width: 28px;
+          height: 28px;
+
+          bottom: -3px;
+          right: -3px;
+
+          left: auto;
+          top: auto;
+
+          border: 2px solid themed("bg");
+
+          border-radius: 50%;
+
+          background-color: #5271ff;
+          color: white;
+
+          font-size: 20px;
+          font-weight: 500;
+
+          z-index: 5;
+        }
+      }
+    }
+
+    /* SMALL MOBILE */
+
+    @include mobile {
+      height: 76px;
+
+      gap: 12px;
+
+      padding: 6px 3px;
+
+      .story {
+        flex: 0 0 58px;
+
+        width: 58px;
+        height: 58px;
+
+        padding: 3px;
+
+        button {
+          width: 26px;
+          height: 26px;
+
+          font-size: 18px;
+        }
+      }
+    }
+  }
+}

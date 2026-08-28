@@ -1,108 +1,286 @@
-*{
+@import "../../style.scss";
+
+* {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
 }
 
-.login{
-    height: 100vh;
-    background-color: rgb(193, 190, 255);
+.login {
+  min-height: 100vh;
+
+  padding: 30px 20px;
+
+  background-color: rgb(193, 190, 255);
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  .card {
+    width: min(100%, 1000px);
+    min-height: 600px;
 
     display: flex;
-    align-items: center;
-    justify-content: center;
 
-    .card{
-        width: 60%;
-        height: 600px;
+    background-color: white;
 
-        display: flex;
+    border-radius: 16px;
+
+    overflow: hidden;
+
+    box-shadow: 0px 10px 40px rgba(0, 0, 0, 0.15);
+
+
+    /* =========================
+       LEFT SECTION
+    ========================= */
+
+    .left {
+      flex: 1;
+
+      background:
+        linear-gradient(
+          rgba(39, 11, 96, 0.65),
+          rgba(39, 11, 96, 0.65)
+        ),
+        url("https://plus.unsplash.com/premium_vector-1728043307769-772ce775d6b5?q=80&w=725&auto=format&fit=crop");
+
+      background-size: cover;
+      background-position: center;
+
+      padding: 50px;
+
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+
+      gap: 25px;
+
+      color: white;
+
+      h1 {
+        font-size: clamp(42px, 6vw, 80px);
+        line-height: 1;
+      }
+
+      p {
+        font-size: 15px;
+        line-height: 1.6;
+      }
+
+      span {
+        font-size: 14px;
+      }
+
+      button {
+        width: 160px;
+
+        padding: 12px;
+
+        border: none;
+        border-radius: 6px;
+
         background-color: white;
-        border-radius: 10px;
-        overflow: hidden;
+        color: rebeccapurple;
 
-        .left{
-            flex: 1;
+        font-weight: 600;
 
-            background:
-            linear-gradient(
-            rgba(39,11,96,0.5),
-            rgba(39,11,96,0.5)
-            ),
-            url("https://plus.unsplash.com/premium_vector-1728043307769-772ce775d6b5?q=80&w=725&auto=format&fit=crop");
+        cursor: pointer;
 
-            background-size: cover;
-            background-position: center;
+        transition: 0.2s ease;
 
-            padding: 50px;
-
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            gap: 30px;
-
-            color: white;
-
-            h1{
-                font-size: 100px;
-                line-height: 100px;
-            }
-
-            p{
-                font-size: 14px;
-            }
-
-            span{
-                font-size: 14px;
-            }
-
-            button{
-                width: 50%;
-                padding: 10px;
-                border: none;
-                background-color: white;
-                color: rebeccapurple;
-                font-weight: bold;
-                cursor: pointer;
-            }
+        &:hover {
+          transform: translateY(-2px);
         }
-
-        .right{
-            flex: 1;
-
-            padding: 50px;
-
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            gap: 50px;
-
-            h1{
-                color: #555;
-                font-size: 40px;
-            }
-
-            form{
-                display: flex;
-                flex-direction: column;
-                gap: 30px;
-
-                input{
-                    border: none;
-                    border-bottom: 1px solid lightgray;
-                    padding: 20px 10px;
-                }
-
-                button{
-                    width: 50%;
-                    padding: 10px;
-                    border: none;
-                    background-color: #938eef;
-                    color: white;
-                    font-weight: bold;
-                    cursor: pointer;
-                }
-            }
-        }
+      }
     }
+
+
+    /* RIGHT SECTION */
+
+    .right {
+      flex: 1;
+
+      padding: 50px;
+
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+
+      gap: 40px;
+
+      h1 {
+        color: #555;
+        font-size: 42px;
+      }
+
+      form {
+        display: flex;
+        flex-direction: column;
+
+        gap: 25px;
+
+        input {
+          width: 100%;
+
+          border: none;
+          border-bottom: 1px solid lightgray;
+
+          padding: 15px 10px;
+
+          font-size: 15px;
+
+          outline: none;
+
+          &:focus {
+            border-bottom-color: #938eef;
+          }
+        }
+
+        button {
+          width: 160px;
+
+          padding: 12px;
+
+          border: none;
+          border-radius: 6px;
+
+          background-color: #938eef;
+          color: white;
+
+          font-weight: 600;
+
+          cursor: pointer;
+
+          transition: 0.2s ease;
+
+          &:hover {
+            opacity: 0.9;
+          }
+        }
+      }
+    }
+  }
+
+
+  /* TABLET */
+
+  @include tablet {
+
+    padding: 20px;
+
+    .card {
+      width: 100%;
+      min-height: 550px;
+
+      .left,
+      .right {
+        padding: 35px;
+      }
+
+      .left {
+        h1 {
+          font-size: 55px;
+        }
+      }
+    }
+  }
+
+
+  /* LARGE MOBILE */
+
+  @include mobile-large {
+
+    padding: 15px;
+
+    align-items: flex-start;
+
+    .card {
+      flex-direction: column;
+
+      min-height: auto;
+
+      .left,
+      .right {
+        flex: none;
+
+        width: 100%;
+
+        padding: 35px 25px;
+      }
+
+      .left {
+        min-height: 350px;
+
+        h1 {
+          font-size: 48px;
+        }
+      }
+
+      .right {
+        gap: 30px;
+
+        h1 {
+          font-size: 36px;
+        }
+
+        form {
+          button {
+            width: 100%;
+          }
+        }
+      }
+    }
+  }
+
+
+  /* SMALL MOBILE */
+
+  @include mobile {
+
+    padding: 10px;
+
+    .card {
+      border-radius: 12px;
+
+      .left,
+      .right {
+        padding: 30px 20px;
+      }
+
+      .left {
+        min-height: 320px;
+
+        gap: 20px;
+
+        h1 {
+          font-size: 40px;
+        }
+
+        p {
+          font-size: 13px;
+        }
+
+        button {
+          width: 100%;
+        }
+      }
+
+      .right {
+
+        h1 {
+          font-size: 32px;
+        }
+
+        form {
+          gap: 20px;
+
+          input {
+            padding: 12px 8px;
+          }
+        }
+      }
+    }
+  }
 }

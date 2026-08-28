@@ -1,73 +1,138 @@
 @import "../../style.scss";
 
-.leftbar{
-    @include themify ($themes){
+.leftbar {
+  @include themify($themes) {
     flex: 2;
+    min-width: 220px;
     position: sticky;
     top: 55px;
     height: calc(100vh - 55px);
-    overflow: scroll;
+    overflow-y: auto;
+    overflow-x: hidden;
     background-color: themed("bg");
     color: themed("textColor");
 
-    @include mobile{
-        display: none;
-        }
-
-    &::-webkit-scrollbar{
-        display: none;
+    &::-webkit-scrollbar {
+      display: none;
     }
-    .container{
-        padding: 20px;
 
-        hr{
-            margin: 10px 0px;
-            border: none;
-            height: 0.5px;
-            background-color: themed("border");
+    .container {
+      padding: 20px;
+
+      hr {
+        margin: 12px 0;
+        border: none;
+        height: 1px;
+        background-color: themed("border");
+      }
+
+      .menu {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+
+        > span {
+          font-size: 12px;
+          color: themed("textColorSoft");
+          margin-bottom: 4px;
         }
-        
-        .menu{
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
 
-            span{
-                font-size: 12px;
-            }
+        .user,
+        .item {
+          display: flex;
+          align-items: center;
+          gap: 10px;
+          min-height: 38px;
+          cursor: pointer;
+          border-radius: 6px;
+          transition: 0.2s ease;
 
-            .user{
-                display: flex;
-                align-items: center;
-                gap: 10px;
+          &:hover {
+            background-color: themed("bgSoft");
+          }
 
-                img{
-                    width: 25px;
-                    height: 25px;
-                    border-radius: 50%;
-                    object-fit: cover;
-                }
+          img {
+            width: 25px;
+            height: 25px;
+            object-fit: cover;
+            flex-shrink: 0;
+          }
 
-                span{
-                    font-size: 14px;
-                }
-    
-            }
-
-            .item{
-                display: flex;
-                align-items: center;
-                gap: 10px;
-
-                img{
-                    width: 25px;
-                    
-                }
-                span{
-                    font-size: 14px;
-                }
-            }
+          span {
+            font-size: 14px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+          }
         }
+
+        .user {
+          img {
+            border-radius: 50%;
+          }
+        }
+      }
     }
-}
+
+    /* LAPTOP */
+
+    @include laptop {
+      flex: 2;
+      min-width: 200px;
+
+      .container {
+        padding: 15px;
+      }
+    }
+
+    /* TABLET */
+
+    @include tablet {
+      flex: 0 0 70px;
+      min-width: 70px;
+
+      .container {
+        padding: 15px 10px;
+
+        hr {
+          margin: 12px 0;
+        }
+
+        .menu {
+          align-items: center;
+
+          > span {
+            display: none;
+          }
+
+          .user,
+          .item {
+            justify-content: center;
+            width: 45px;
+            height: 45px;
+            min-height: 45px;
+
+            img {
+              width: 28px;
+              height: 28px;
+            }
+
+            span {
+              display: none;
+            }
+          }
+
+          .user img {
+            border-radius: 50%;
+          }
+        }
+      }
+    }
+
+    /* MOBILE */
+
+    @include mobile-large {
+      display: none;
+    }
+  }
 }

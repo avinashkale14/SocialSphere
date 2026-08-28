@@ -1,5 +1,35 @@
-.posts{
-    display: flex;
-    flex-direction: column;
-    gap: 50px;
+@import "../../style.scss";
+
+.posts {
+  display: flex;
+  flex-direction: column;
+
+  width: 100%;
+
+  gap: 20px;
+
+  padding-bottom: 20px;
+
+
+  /* TABLET */
+
+  @include tablet {
+    gap: 16px;
+  }
+
+
+  /* MOBILE */
+
+  @include mobile-large {
+    gap: 12px;
+
+    padding-bottom: 15px;
+  }
+
+
+  /* SMALL MOBILE */
+
+  @include mobile {
+    gap: 10px;
+  }
 }
