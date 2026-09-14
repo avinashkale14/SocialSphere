@@ -1,224 +1,453 @@
 @import "../../style.scss";
 
-.comments {
-  @include themify($themes) {
+.commentsBox {
+  @include themify($themes);
+
+  width: 100%;
+
+  box-sizing: border-box;
+
+  color:
+    themed("textColor");
+
+
+  // ========================================================
+  // INPUT
+  // ========================================================
+
+  .commentInput {
+    display: flex;
+
+    align-items: center;
+
+    gap: 9px;
 
     width: 100%;
 
-    img {
-      width: 40px;
-      height: 40px;
+    margin-bottom: 14px;
 
-      border-radius: 50%;
-      object-fit: cover;
+
+    img {
+      width: 36px;
+
+      height: 36px;
 
       flex-shrink: 0;
+
+      border-radius: 50%;
+
+      object-fit: cover;
     }
 
 
-    /* WRITE COMMENT */
+    input {
+      flex: 1;
 
-    .write {
-      display: flex;
-      align-items: center;
+      min-width: 0;
 
-      gap: 12px;
+      height: 36px;
 
-      margin: 20px 0;
+      box-sizing: border-box;
 
-      width: 100%;
+      padding:
+        0
+        13px;
 
-      input {
-        flex: 1;
+      border:
+        1px solid
+        themed("border");
 
-        min-width: 0;
+      border-radius: 20px;
 
-        padding: 10px 12px;
+      outline: none;
 
-        border: 1px solid themed("border");
-        border-radius: 8px;
+      background:
+        themed("bgSoft");
 
-        background-color: transparent;
-        color: themed("textColor");
+      color:
+        themed("textColor");
 
-        outline: none;
+      font-family: inherit;
 
-        font-size: 14px;
+      font-size: 12px;
 
-        &:focus {
-          border-color: #5271ff;
-        }
+      transition:
+        border-color 0.2s ease,
+        background 0.2s ease;
+
+
+      &::placeholder {
+        color:
+          themed("textColorSoft");
       }
 
-      button {
-        border: none;
 
-        background-color: #5271ff;
-        color: white;
+      &:focus {
+        border-color: #5271ff;
 
-        padding: 10px 16px;
-
-        border-radius: 8px;
-
-        cursor: pointer;
-
-        font-size: 14px;
-
-        transition: 0.2s ease;
-
-        &:hover {
-          opacity: 0.9;
-        }
+        background:
+          themed("bg");
       }
     }
 
 
-    /* COMMENT */
+    button {
+      height: 36px;
 
-    .comment {
-      display: flex;
+      min-width: 52px;
 
-      align-items: flex-start;
+      padding:
+        0
+        12px;
 
-      gap: 12px;
+      border: none;
 
-      margin: 20px 0;
+      border-radius: 20px;
 
-      width: 100%;
+      background: #5271ff;
 
-      .info {
-        flex: 1;
+      color: #fff;
 
-        min-width: 0;
+      font-family: inherit;
 
+      font-size: 11px;
+
+      font-weight: 600;
+
+      cursor: pointer;
+
+      transition:
+        background 0.2s ease,
+        transform 0.12s ease;
+
+
+      &:hover:not(:disabled) {
+        background: #405de6;
+      }
+
+
+      &:active:not(:disabled) {
+        transform:
+          scale(0.96);
+      }
+
+
+      &:disabled {
+        opacity: 0.5;
+
+        cursor:
+          not-allowed;
+      }
+    }
+  }
+
+
+  // ========================================================
+  // COMMENTS LIST
+  // ========================================================
+
+  .commentList {
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 11px;
+
+    width: 100%;
+  }
+
+
+  // ========================================================
+  // SINGLE COMMENT
+  // ========================================================
+
+  .comment {
+    display: flex;
+
+    align-items: flex-start;
+
+    gap: 9px;
+
+    width: 100%;
+
+
+    > img {
+      width: 34px;
+
+      height: 34px;
+
+      flex-shrink: 0;
+
+      border-radius: 50%;
+
+      object-fit: cover;
+    }
+
+
+    .commentBody {
+      flex: 1;
+
+      min-width: 0;
+
+      padding:
+        8px
+        10px;
+
+      border-radius: 10px;
+
+      background:
+        themed("bgSoft");
+
+
+      .commentTop {
         display: flex;
-        flex-direction: column;
 
-        gap: 4px;
+        align-items: center;
 
-        span {
-          font-weight: 600;
-          font-size: 14px;
-        }
+        justify-content: space-between;
 
-        p {
-          margin: 0;
-
-          color: themed("textColorSoft");
-
-          font-size: 14px;
-          line-height: 1.4;
-
-          word-break: break-word;
-        }
-      }
-
-      .date {
-        flex-shrink: 0;
-
-        color: gray;
-
-        font-size: 12px;
-
-        margin-top: 3px;
-      }
-
-      .mobile-date {
-        display: none;
-      }
-    }
-
-
-    /* TABLET */
-
-    @include tablet {
-
-      .write {
-        gap: 10px;
-      }
-
-      .comment {
-        gap: 10px;
-      }
-    }
-
-
-    /* MOBILE */
-
-    @include mobile-large {
-
-      img {
-        width: 36px;
-        height: 36px;
-      }
-
-      .write {
         gap: 8px;
-
-        input {
-          padding: 9px 10px;
-        }
-
-        button {
-          padding: 9px 12px;
-        }
       }
 
-      .comment {
 
-        margin: 18px 0;
+      .commentAuthor {
+        display: flex;
 
-        .date {
-          display: none;
-        }
-
-        .mobile-date {
-          display: block !important;
-
-          font-size: 11px !important;
-          font-weight: 400 !important;
-
-          color: gray;
-        }
-      }
-    }
-
-
-    /* SMALL MOBILE */
-
-    @include mobile {
-
-      .write {
+        align-items: center;
 
         gap: 7px;
 
-        img {
-          width: 34px;
-          height: 34px;
-        }
-
-        input {
-          padding: 8px;
-          font-size: 13px;
-        }
-
-        button {
-          padding: 8px 10px;
-          font-size: 13px;
-        }
+        min-width: 0;
       }
 
-      .comment {
 
-        img {
-          width: 34px;
-          height: 34px;
+      .commentName {
+        font-size: 12px;
+
+        font-weight: 600;
+
+        color:
+          themed("textColor");
+
+        white-space: nowrap;
+
+        overflow: hidden;
+
+        text-overflow: ellipsis;
+      }
+
+
+      .commentTime {
+        font-size: 10px;
+
+        color:
+          themed("textColorSoft");
+
+        white-space: nowrap;
+      }
+
+
+      p {
+        margin:
+          4px
+          0
+          0;
+
+        font-size: 12px;
+
+        line-height: 1.45;
+
+        color:
+          themed("textColor");
+
+        word-break: break-word;
+
+        overflow-wrap: anywhere;
+      }
+
+
+      // ====================================================
+      // DELETE COMMENT
+      // ====================================================
+
+      .deleteComment {
+        width: 26px;
+
+        height: 26px;
+
+        display: flex;
+
+        align-items: center;
+
+        justify-content: center;
+
+        flex-shrink: 0;
+
+        padding: 0;
+
+        border: none;
+
+        border-radius: 50%;
+
+        background: transparent;
+
+        color:
+          themed("textColorSoft");
+
+        cursor: pointer;
+
+        transition:
+          background 0.2s ease,
+          color 0.2s ease;
+
+
+        &:hover {
+          color: #e53935;
+
+          background:
+            rgba(
+              229,
+              57,
+              53,
+              0.08
+            );
         }
 
-        .info {
-          p {
-            font-size: 13px;
-          }
+
+        &:disabled {
+          opacity: 0.5;
+
+          cursor:
+            not-allowed;
+        }
+
+
+        svg {
+          width: 17px;
+
+          height: 17px;
+        }
+      }
+    }
+  }
+
+
+  // ========================================================
+  // NO COMMENTS
+  // ========================================================
+
+  .noComments {
+    padding:
+      9px
+      0;
+
+    text-align: center;
+
+    font-size: 11px;
+
+    color:
+      themed("textColorSoft");
+  }
+
+
+  // ========================================================
+  // LOADING
+  // ========================================================
+
+  .commentsLoading,
+  .commentsError {
+    padding:
+      10px
+      0;
+
+    font-size: 12px;
+
+    text-align: center;
+
+    color:
+      themed("textColorSoft");
+  }
+
+
+  .commentsError {
+    color: #e53935;
+  }
+
+
+  // ========================================================
+  // MOBILE
+  // ========================================================
+
+  @include mobile-large {
+
+    .commentInput {
+
+      gap: 7px;
+
+
+      img {
+        width: 34px;
+
+        height: 34px;
+      }
+
+
+      input {
+        height: 34px;
+
+        font-size: 11px;
+
+        padding:
+          0
+          11px;
+      }
+
+
+      button {
+        height: 34px;
+
+        min-width: 48px;
+
+        padding:
+          0
+          10px;
+
+        font-size: 10px;
+      }
+    }
+
+
+    .comment {
+
+      gap: 7px;
+
+
+      > img {
+        width: 32px;
+
+        height: 32px;
+      }
+
+
+      .commentBody {
+
+        padding:
+          7px
+          9px;
+
+
+        .commentName {
+          font-size: 11px;
+        }
+
+
+        .commentTime {
+          font-size: 9px;
+        }
+
+
+        p {
+          font-size: 11px;
         }
       }
     }

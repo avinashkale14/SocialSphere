@@ -1,0 +1,806 @@
+@import "../../style.scss";
+
+.share {
+  @include themify($themes) {
+    width: 100%;
+
+    margin-bottom: 18px;
+
+    background-color:
+      themed("bg");
+
+    color:
+      themed("textColor");
+
+    border-radius: 16px;
+
+    box-shadow:
+      0 2px 20px -8px
+      rgba(0, 0, 0, 0.18);
+
+    overflow: visible;
+
+    transition: 0.2s ease;
+
+    // ======================================================
+    // CONTAINER
+    // ======================================================
+
+    .container {
+      padding: 20px;
+
+      // ====================================================
+      // TOP
+      // ====================================================
+
+      .top {
+        display: flex;
+
+        align-items: flex-start;
+
+        justify-content: space-between;
+
+        gap: 15px;
+
+        // ==================================================
+        // LEFT
+        // ==================================================
+
+        .left {
+          display: flex;
+
+          align-items: flex-start;
+
+          gap: 12px;
+
+          flex: 1;
+
+          min-width: 0;
+
+          img {
+            width: 42px;
+
+            height: 42px;
+
+            border-radius: 50%;
+
+            object-fit: cover;
+
+            flex-shrink: 0;
+          }
+
+          textarea {
+            width: 100%;
+
+            min-height: 45px;
+
+            resize: vertical;
+
+            border: none;
+
+            outline: none;
+
+            background: transparent;
+
+            color:
+              themed("textColor");
+
+            font-family: inherit;
+
+            font-size: 15px;
+
+            line-height: 1.5;
+
+            padding: 8px 0;
+
+            box-sizing: border-box;
+
+            &::placeholder {
+              color:
+                themed(
+                  "textColorSoft"
+                );
+            }
+          }
+        }
+
+        // ==================================================
+        // SMALL PREVIEW
+        // ==================================================
+
+        .preview {
+          position: relative;
+
+          width: 110px;
+
+          height: 75px;
+
+          flex-shrink: 0;
+
+          border-radius: 9px;
+
+          overflow: hidden;
+
+          border:
+            1px solid
+            themed("border");
+
+          background-color:
+            themed("bgSoft");
+
+          box-shadow:
+            0 2px 8px
+            rgba(
+              0,
+              0,
+              0,
+              0.12
+            );
+
+          img,
+          video {
+            display: block;
+
+            width: 100%;
+
+            height: 100%;
+
+            object-fit: cover;
+          }
+
+          video {
+            background: #000;
+          }
+
+          .remove {
+            position: absolute;
+
+            top: 5px;
+
+            right: 5px;
+
+            width: 23px;
+
+            height: 23px;
+
+            padding: 0;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            border: none;
+
+            border-radius: 50%;
+
+            background:
+              rgba(
+                0,
+                0,
+                0,
+                0.72
+              );
+
+            color: white;
+
+            cursor: pointer;
+
+            z-index: 5;
+
+            transition:
+              0.2s ease;
+
+            &:hover {
+              background:
+                rgba(
+                  0,
+                  0,
+                  0,
+                  0.95
+                );
+
+              transform:
+                scale(1.05);
+            }
+
+            svg {
+              font-size: 15px;
+            }
+          }
+        }
+      }
+
+      // ======================================================
+      // LOCATION BOX
+      // ======================================================
+
+      .locationBox {
+        display: flex;
+
+        align-items: center;
+
+        gap: 8px;
+
+        margin-top: 12px;
+
+        padding:
+          9px
+          10px;
+
+        border:
+          1px solid
+          themed("border");
+
+        border-radius: 8px;
+
+        background-color:
+          themed("bgSoft");
+
+        animation:
+          shareSlideDown
+          0.2s ease;
+
+        svg {
+          color: #2563eb;
+
+          font-size: 21px;
+
+          flex-shrink: 0;
+        }
+
+        input {
+          flex: 1;
+
+          min-width: 0;
+
+          border: none;
+
+          outline: none;
+
+          background: transparent;
+
+          color:
+            themed("textColor");
+
+          font-size: 14px;
+
+          font-family: inherit;
+
+          &::placeholder {
+            color:
+              themed(
+                "textColorSoft"
+              );
+          }
+        }
+
+        button {
+          width: 27px;
+
+          height: 27px;
+
+          border: none;
+
+          border-radius: 50%;
+
+          background: #2563eb;
+
+          color: white;
+
+          font-size: 16px;
+
+          cursor: pointer;
+
+          display: flex;
+
+          align-items: center;
+
+          justify-content: center;
+
+          transition:
+            0.2s ease;
+
+          &:hover {
+            background: #1d4ed8;
+
+            transform:
+              scale(1.05);
+          }
+        }
+      }
+
+      // ======================================================
+      // FEELING BOX
+      // ======================================================
+
+      .feelingBox {
+        display: flex;
+
+        flex-wrap: wrap;
+
+        gap: 7px;
+
+        margin-top: 12px;
+
+        padding: 9px;
+
+        border-radius: 9px;
+
+        background-color:
+          themed("bgSoft");
+
+        border:
+          1px solid
+          themed("border");
+
+        animation:
+          shareSlideDown
+          0.2s ease;
+
+        button {
+          border:
+            1px solid
+            themed("border");
+
+          background-color:
+            themed("bg");
+
+          color:
+            themed("textColor");
+
+          padding:
+            7px
+            10px;
+
+          border-radius: 7px;
+
+          cursor: pointer;
+
+          font-size: 13px;
+
+          font-family: inherit;
+
+          transition:
+            0.2s ease;
+
+          &:hover {
+            background-color:
+              #5271ff;
+
+            color: white;
+
+            border-color:
+              #5271ff;
+
+            transform:
+              translateY(-1px);
+          }
+
+          &.selected {
+            background-color:
+              #5271ff;
+
+            color: white;
+
+            border-color:
+              #5271ff;
+          }
+        }
+      }
+
+      // ======================================================
+      // HR
+      // ======================================================
+
+      hr {
+        border: none;
+
+        border-top:
+          1px solid
+          themed("border");
+
+        margin:
+          15px 0;
+      }
+
+      // ======================================================
+      // BOTTOM
+      // ======================================================
+
+      .bottom {
+        display: flex;
+
+        align-items: center;
+
+        justify-content: space-between;
+
+        gap: 15px;
+
+        // ====================================================
+        // LEFT ITEMS
+        // ====================================================
+
+        .left {
+          display: flex;
+
+          align-items: center;
+
+          gap: 20px;
+
+          flex-wrap: wrap;
+
+          min-width: 0;
+
+          // ==================================================
+          // COMMON ITEM
+          // ==================================================
+
+          .item {
+            display: flex;
+
+            align-items: center;
+
+            gap: 6px;
+
+            color:
+              themed("textColor");
+
+            font-size: 14px;
+
+            white-space: nowrap;
+
+            cursor: pointer;
+
+            transition:
+              transform 0.2s ease,
+              color 0.2s ease;
+
+            svg {
+              font-size: 20px;
+
+              flex-shrink: 0;
+
+              transition:
+                transform 0.2s ease;
+            }
+
+            &:hover {
+              transform:
+                translateY(-1px);
+
+              svg {
+                transform:
+                  scale(1.08);
+              }
+            }
+
+            &.active {
+              font-weight: 500;
+            }
+
+            input {
+              display: none;
+            }
+          }
+
+          // ==================================================
+          // IMAGE
+          // ==================================================
+
+          .imageItem {
+            svg {
+              color: #16a34a;
+            }
+
+            &:hover {
+              color: #16a34a;
+            }
+          }
+
+          // ==================================================
+          // VIDEO
+          // ==================================================
+
+          .videoItem {
+            svg {
+              color: #ef4444;
+            }
+
+            &:hover {
+              color: #ef4444;
+            }
+          }
+
+          // ==================================================
+          // LOCATION
+          // ==================================================
+
+          .locationItem {
+            svg {
+              color: #2563eb;
+            }
+
+            &:hover {
+              color: #2563eb;
+            }
+
+            &.active {
+              color: #2563eb;
+
+              svg {
+                color: #2563eb;
+              }
+            }
+          }
+
+          // ==================================================
+          // FEELING
+          // ==================================================
+
+          .feelingItem {
+            svg {
+              color: #f59e0b;
+            }
+
+            &:hover {
+              color: #f59e0b;
+            }
+
+            &.active {
+              color: #f59e0b;
+
+              svg {
+                color: #f59e0b;
+              }
+            }
+          }
+        }
+
+        // ====================================================
+        // SHARE BUTTON
+        // ====================================================
+
+        .shareButton {
+          display: flex;
+
+          align-items: center;
+
+          justify-content: center;
+
+          gap: 6px;
+
+          border: none;
+
+          background-color:
+            #5271ff;
+
+          color: white;
+
+          padding:
+            9px
+            18px;
+
+          border-radius: 7px;
+
+          font-size: 14px;
+
+          font-weight: 600;
+
+          cursor: pointer;
+
+          transition:
+            background-color 0.2s ease,
+            transform 0.2s ease;
+
+          flex-shrink: 0;
+
+          &:hover {
+            background-color:
+              #405de6;
+
+            transform:
+              translateY(-1px);
+          }
+
+          &:active {
+            transform:
+              translateY(0);
+          }
+
+          &:disabled {
+            opacity: 0.6;
+
+            cursor:
+              not-allowed;
+
+            transform: none;
+          }
+
+          svg {
+            font-size: 18px;
+          }
+        }
+      }
+    }
+
+    // ======================================================
+    // TABLET
+    // ======================================================
+
+    @include tablet {
+      margin-bottom: 16px;
+
+      .container {
+        padding: 16px;
+
+        .top {
+          .preview {
+            width: 100px;
+
+            height: 70px;
+          }
+        }
+
+        .bottom {
+          .left {
+            gap: 14px;
+          }
+        }
+      }
+    }
+
+    // ======================================================
+    // MOBILE LARGE
+    // ======================================================
+
+    @include mobile-large {
+      margin-bottom: 14px;
+
+      border-radius: 12px;
+
+      .container {
+        padding: 14px;
+
+        .top {
+          gap: 10px;
+
+          .left {
+            img {
+              width: 38px;
+
+              height: 38px;
+            }
+
+            textarea {
+              font-size: 14px;
+            }
+          }
+
+          .preview {
+            width: 90px;
+
+            height: 65px;
+          }
+        }
+
+        .bottom {
+          align-items: flex-end;
+
+          .left {
+            gap: 10px;
+
+            .item {
+              font-size: 12px;
+
+              gap: 4px;
+            }
+          }
+
+          .shareButton {
+            padding:
+              8px
+              14px;
+
+            font-size: 13px;
+          }
+        }
+      }
+    }
+
+    // ======================================================
+    // SMALL MOBILE
+    // ======================================================
+
+    @include mobile {
+      margin-bottom: 12px;
+
+      .container {
+        padding: 12px;
+
+        .top {
+          gap: 8px;
+
+          .left {
+            gap: 9px;
+
+            img {
+              width: 36px;
+
+              height: 36px;
+            }
+
+            textarea {
+              font-size: 13px;
+            }
+          }
+
+          .preview {
+            width: 75px;
+
+            height: 55px;
+          }
+        }
+
+        .bottom {
+          .left {
+            gap: 9px;
+
+            .item {
+              span {
+                display: none;
+              }
+
+              svg {
+                font-size: 21px;
+              }
+            }
+          }
+
+          .shareButton {
+            padding:
+              7px
+              12px;
+
+            font-size: 12px;
+
+            svg {
+              font-size: 16px;
+            }
+          }
+        }
+
+        .feelingBox {
+          button {
+            font-size: 12px;
+
+            padding:
+              5px
+              7px;
+          }
+        }
+      }
+    }
+  }
+}
+
+// ==========================================================
+// ANIMATION
+// ==========================================================
+
+@keyframes shareSlideDown {
+  from {
+    opacity: 0;
+
+    transform:
+      translateY(-5px);
+  }
+
+  to {
+    opacity: 1;
+
+    transform:
+      translateY(0);
+  }
+}

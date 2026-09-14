@@ -2,6 +2,7 @@
 
 .posts {
   display: flex;
+
   flex-direction: column;
 
   width: 100%;
@@ -11,14 +12,20 @@
   padding-bottom: 20px;
 
 
-  /* TABLET */
+  .posts-loading,
+  .posts-error {
+    padding: 20px;
+
+    text-align: center;
+
+    font-size: 14px;
+  }
+
 
   @include tablet {
     gap: 16px;
   }
 
-
-  /* MOBILE */
 
   @include mobile-large {
     gap: 12px;
@@ -26,8 +33,6 @@
     padding-bottom: 15px;
   }
 
-
-  /* SMALL MOBILE */
 
   @include mobile {
     gap: 10px;

@@ -1,98 +1,341 @@
 import "./leftbar.scss";
 
-import Friends from "../../assets/1.png";
-import Groups from "../../assets/2.png";
-import Market from "../../assets/3.png";
-import Watch from "../../assets/4.png";
-import Memories from "../../assets/5.png";
-import Events from "../../assets/6.png";
-import Gaming from "../../assets/7.png";
-import Gallery from "../../assets/8.png";
-import Videos from "../../assets/9.png";
-import Messages from "../../assets/10.png";
-import Fundraiser from "../../assets/11.png";
-import Tutorials from "../../assets/12.png";
-import Cources from "../../assets/13.png";
-import { AuthContext } from "../../context/authContext";
+import { Link, NavLink, useNavigate } from "react-router-dom";
 import { useContext } from "react";
 
+import HomeOutlinedIcon from "@mui/icons-material/HomeOutlined";
+import ExploreOutlinedIcon from "@mui/icons-material/ExploreOutlined";
+import AddPhotoAlternateOutlinedIcon from "@mui/icons-material/AddPhotoAlternateOutlined";
+import AutoStoriesOutlinedIcon from "@mui/icons-material/AutoStoriesOutlined";
+import ArticleOutlinedIcon from "@mui/icons-material/ArticleOutlined";
+import LogoutOutlinedIcon from "@mui/icons-material/LogoutOutlined";
+import HubOutlinedIcon from "@mui/icons-material/HubOutlined";
+import KeyboardArrowRightOutlinedIcon from "@mui/icons-material/KeyboardArrowRightOutlined";
+import ArrowForwardIosOutlinedIcon from "@mui/icons-material/ArrowForwardIosOutlined";
+
+import { AuthContext } from "../../context/authContext";
+import makeRequest from "../../axios";
+import getImageUrl from "../../utils/imageUrl";
+
 const LeftBar = () => {
+  const { currentUser, logout } = useContext(AuthContext);
+  const navigate = useNavigate();
 
-    const { currentUser } = useContext(AuthContext);
+  const profileImage =
+    getImageUrl(currentUser?.profilePic) ||
+    "https://i.pravatar.cc/150?img=12";
 
-    return (
-        <div className="leftbar">
-            <div className="container">
-                <div className="menu">
-                    <div className="user">
-                        <img src={currentUser.profilePic} 
-                         alt="" />
-                         <span>{currentUser.name}</span>
-                    </div>
-                    <div className="item">
-                        <img src={Friends} alt="" />
-                        <span>Friends</span>
-                    </div>
-                    <div className="item">
-                        <img src={Groups} alt="" />
-                        <span>Groups</span>
-                    </div>
-                    <div className="item">
-                        <img src={Market} alt="" />
-                        <span>Market</span>
-                    </div>
-                    <div className="item">
-                        <img src={Watch} alt="" />
-                        <span>Watch</span>
-                    </div>
-                    <div className="item">
-                        <img src={Memories} alt="" />
-                        <span>Memories</span>
-                    </div>
-                </div>
-                <hr />
-                <div className="menu">
-                    <span>Your shortcuts</span>
-                    <div className="item">
-                        <img src={Events} alt="" />
-                        <span>Events</span>
-                    </div>
-                    <div className="item">
-                        <img src={Gaming} alt="" />
-                        <span>Gaming</span>
-                    </div>
-                    <div className="item">
-                        <img src={Gallery} alt="" />
-                        <span>Gellery</span>
-                    </div>
-                    <div className="item">
-                        <img src={Videos} alt="" />
-                        <span>Videos</span>
-                    </div>
-                    <div className="item">
-                        <img src={Messages} alt="" />
-                        <span>Messages</span>
-                    </div>
-                </div>
-                <hr />
-                <div className="menu">
-                    <span>Others</span>
-                    <div className="item">
-                        <img src={Fundraiser} alt="" />
-                        <span>Fundraiser</span>
-                    </div>
-                    <div className="item">
-                        <img src={Tutorials} alt="" />
-                        <span>Tutorials</span>
-                    </div>
-                    <div className="item">
-                        <img src={Cources} alt="" />
-                        <span>Courses</span>
-                    </div>
-                </div>
-            </div>
+  /* =========================
+     SCROLL HELPER
+  ========================= */
+
+  const scrollToElement = (id) => {
+    setTimeout(() => {
+      const element = document.getElementById(id);
+
+      if (element) {
+        element.scrollIntoView({
+          behavior: "smooth",
+          block: "center",
+        });
+      }
+    }, 350);
+  };
+
+  /* =========================
+     CREATE POST
+  ========================= */
+
+  const handleCreatePost = () => {
+    navigate("/");
+    scrollToElement("create-post");
+  };
+
+  /* =========================
+     STORIES
+  ========================= */
+
+  const handleStories = () => {
+    navigate("/");
+    scrollToElement("stories-section");
+  };
+
+  /* =========================
+     MY POSTS
+  ========================= */
+
+  const handleMyPosts = () => {
+    if (!currentUser?.id) {
+      return;
+    }
+
+    navigate(`/profile/${currentUser.id}`);
+    scrollToElement("my-posts-section");
+  };
+
+  /* =========================
+     LOGOUT
+  ========================= */
+
+  const handleLogout = async () => {
+    try {
+      await makeRequest.post("/auth/logout");
+    } catch (error) {
+      console.log(
+        "LOGOUT ERROR:",
+        error.response?.data || error.message
+      );
+    } finally {
+      logout();
+
+      navigate("/login", {
+        replace: true,
+      });
+    }
+  };
+
+  return (
+    <aside className="leftBar">
+
+      {/* =========================
+          PROFILE
+      ========================= */}
+
+      <Link
+        to={`/profile/${currentUser?.id}`}
+        className="sidebarProfile"
+      >
+        <div className="sidebarProfileImage">
+          <img
+            src={profileImage}
+            alt={currentUser?.name || "User"}
+          />
+
+          <span className="profileStatusDot" />
         </div>
-    )
-}
+
+        <div className="sidebarProfileInfo">
+          <strong>
+            {currentUser?.name || "User"}
+          </strong>
+
+          <span>
+            @{currentUser?.username || "user"}
+          </span>
+
+          <small>
+            View your profile
+          </small>
+        </div>
+
+        <KeyboardArrowRightOutlinedIcon className="profileArrow" />
+      </Link>
+
+
+      {/* =========================
+          MAIN
+      ========================= */}
+
+      <div className="sidebarSection">
+
+        <div className="sectionTitle">
+          MAIN
+        </div>
+
+        <div className="sidebarMenu">
+
+          {/* HOME */}
+
+          <NavLink
+            to="/"
+            end
+            className={({ isActive }) =>
+              `sidebarItem mainItem ${isActive ? "active" : ""}`
+            }
+          >
+            <span className="itemIcon homeIcon">
+              <HomeOutlinedIcon />
+            </span>
+
+            <span className="itemText">
+              Home
+            </span>
+          </NavLink>
+
+
+          {/* EXPLORE */}
+
+          <NavLink
+            to="/explore"
+            className={({ isActive }) =>
+              `sidebarItem mainItem ${isActive ? "active" : ""}`
+            }
+          >
+            <span className="itemIcon exploreIcon">
+              <ExploreOutlinedIcon />
+            </span>
+
+            <span className="itemText">
+              Explore
+            </span>
+          </NavLink>
+
+        </div>
+      </div>
+
+
+      <div className="sidebarDivider" />
+
+
+      {/* =========================
+          QUICK ACCESS
+      ========================= */}
+
+      <div className="sidebarSection">
+
+        <div className="sectionTitle">
+          QUICK ACCESS
+        </div>
+
+        <div className="quickAccessMenu">
+
+          {/* CREATE POST */}
+
+          <button
+            type="button"
+            className="quickAccessItem"
+            onClick={handleCreatePost}
+          >
+            <span className="itemIcon createIcon">
+              <AddPhotoAlternateOutlinedIcon />
+            </span>
+
+            <span className="quickAccessContent">
+              <strong>
+                Create Post
+              </strong>
+
+              <small>
+                Share something new
+              </small>
+            </span>
+
+            <ArrowForwardIosOutlinedIcon className="quickAccessArrow" />
+          </button>
+
+
+          {/* STORIES */}
+
+          <button
+            type="button"
+            className="quickAccessItem"
+            onClick={handleStories}
+          >
+            <span className="itemIcon storyIcon">
+              <AutoStoriesOutlinedIcon />
+            </span>
+
+            <span className="quickAccessContent">
+              <strong>
+                Stories
+              </strong>
+
+              <small>
+                View latest stories
+              </small>
+            </span>
+
+            <ArrowForwardIosOutlinedIcon className="quickAccessArrow" />
+          </button>
+
+
+          {/* MY POSTS */}
+
+          <button
+            type="button"
+            className="quickAccessItem"
+            onClick={handleMyPosts}
+          >
+            <span className="itemIcon postIcon">
+              <ArticleOutlinedIcon />
+            </span>
+
+            <span className="quickAccessContent">
+              <strong>
+                My Posts
+              </strong>
+
+              <small>
+                View your posts
+              </small>
+            </span>
+
+            <ArrowForwardIosOutlinedIcon className="quickAccessArrow" />
+          </button>
+
+        </div>
+      </div>
+
+
+      <div className="sidebarDivider" />
+
+
+      {/* =========================
+          ACCOUNT
+      ========================= */}
+
+      <div className="sidebarSection">
+
+        <div className="sectionTitle">
+          ACCOUNT
+        </div>
+
+        <div className="sidebarMenu">
+
+          <button
+            type="button"
+            className="sidebarItem sidebarButton logoutItem"
+            onClick={handleLogout}
+          >
+            <span className="itemIcon">
+              <LogoutOutlinedIcon />
+            </span>
+
+            <span className="itemText">
+              Logout
+            </span>
+          </button>
+
+        </div>
+      </div>
+
+
+      {/* =========================
+          SOCIALSPHERE
+      ========================= */}
+
+      <div className="socialSphereCard">
+
+        <div className="socialSphereIcon">
+          <HubOutlinedIcon />
+        </div>
+
+        <div className="socialSphereInfo">
+
+          <strong>
+            SocialSphere
+          </strong>
+
+          <span>
+            Connect • Share • Discover
+          </span>
+
+        </div>
+
+      </div>
+
+    </aside>
+  );
+};
 
 export default LeftBar;

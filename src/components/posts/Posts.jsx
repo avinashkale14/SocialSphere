@@ -1,34 +1,93 @@
 import "./posts.scss";
 import Post from "../post/Post";
 
-const Posts = () => {
-  // TEMPORARY DATA
-  const posts = [
-    {
-      id: 1,
-      name: "Avinash Kale",
-      userId: 1,
-      profilePic:
-        "https://images.unsplash.com/photo-1773332611612-ffdaa753afb1?w=700&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDF8MHxmZWF0dXJlZC1waG90b3MtZmVlZHwxNXx8fGVufDB8fHx8fA%3D%3D",
-      desc: "Lorem ipsum dolor sit amet consectetur adipisicing elit.",
-      img:
-        "https://plus.unsplash.com/premium_photo-1778903613220-2092adb7af4c?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxmZWF0dXJlZC1waG90b3MtZmVlZHwxODZ8fHxlbnwwfHx8fHw%3D",
+import { useQuery } from "@tanstack/react-query";
+import makeRequest from "../../axios";
+
+const Posts = ({ userId }) => {
+
+  const {
+    isLoading,
+    error,
+    data,
+  } = useQuery({
+
+    // Home = ["posts"]
+    // Profile = ["posts", userId]
+    queryKey: userId
+      ? ["posts", userId]
+      : ["posts"],
+
+    queryFn: async () => {
+
+      const res = await makeRequest.get(
+        "/posts",
+        {
+          params: userId
+            ? { userId }
+            : {},
+        }
+      );
+
+      return res.data;
     },
-    {
-      id: 2,
-      name: "Avinash Kale",
-      userId: 2,
-      profilePic:
-        "https://images.unsplash.com/photo-1773332611612-ffdaa753afb1?w=700&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDF8MHxmZWF0dXJlZC1waG90b3MtZmVlZHwxNXx8fGVufDB8fHx8fA%3D%3D",
-      desc: "Lorem ipsum dolor sit amet consectetur adipisicing elit.",
-    },
-  ];
+
+  });
+
+  // ================= LOADING =================
+
+  if (isLoading) {
+    return (
+      <div className="postsMessage">
+        Loading posts...
+      </div>
+    );
+  }
+
+  // ================= ERROR =================
+
+  if (error) {
+
+    console.log(
+      "POSTS ERROR:",
+      error.response?.data ||
+      error.message
+    );
+
+    return (
+      <div className="postsMessage">
+        Something went wrong while loading posts!
+      </div>
+    );
+  }
+
+  // ================= NO POSTS =================
+
+  if (!data || data.length === 0) {
+
+    return (
+      <div className="postsMessage">
+        {userId
+          ? "No posts yet."
+          : "No posts available."}
+      </div>
+    );
+  }
+
+  // ================= POSTS =================
 
   return (
     <div className="posts">
-      {posts.map((post) => (
-        <Post post={post} key={post.id} />
+
+      {data.map((post) => (
+
+        <Post
+          post={post}
+          key={post.id}
+        />
+
       ))}
+
     </div>
   );
 };
