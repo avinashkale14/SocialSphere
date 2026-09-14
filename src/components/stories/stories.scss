@@ -1,227 +1,1215 @@
-@import "../../style.scss";
+/* =========================================================
+   STORIES
+========================================================= */
 
 .stories {
-  @include themify($themes) {
-    display: flex;
-    gap: 12px;
 
-    width: 100%;
-    height: 200px;
+  display: flex;
 
-    margin-bottom: 20px;
+  gap: 12px;
+
+  width: 100%;
+
+  overflow-x: auto;
+
+  padding: 8px 2px 14px;
+
+  scrollbar-width: none;
+}
+
+
+.stories::-webkit-scrollbar {
+
+  display: none;
+}
+
+
+/* =========================================================
+   STORY CARD
+========================================================= */
+
+.story {
+
+  position: relative;
+
+  flex: 0 0 110px;
+
+  height: 165px;
+
+  border-radius: 12px;
+
+  overflow: hidden;
+
+  cursor: pointer;
+
+  background: #ddd;
+
+  box-shadow:
+    0 3px 12px
+    rgba(0, 0, 0, 0.12);
+
+  transition:
+    transform 0.2s ease;
+}
+
+
+.story:hover {
+
+  transform:
+    translateY(-2px);
+}
+
+
+.story > img {
+
+  width: 100%;
+
+  height: 100%;
+
+  object-fit: cover;
+
+  display: block;
+}
+
+
+/* =========================================================
+   OVERLAY
+========================================================= */
+
+.storyOverlay {
+
+  position: absolute;
+
+  inset: 0;
+
+  background:
+    linear-gradient(
+      to top,
+      rgba(0, 0, 0, 0.7),
+      transparent 55%
+    );
+}
+
+
+/* =========================================================
+   YOUR STORY
+========================================================= */
+
+.yourStoryLabel {
+
+  position: absolute;
+
+  left: 10px;
+
+  bottom: 12px;
+
+  color: white;
+
+  font-size: 12px;
+
+  font-weight: 600;
+
+  z-index: 2;
+}
+
+
+/* =========================================================
+   ADD STORY
+========================================================= */
+
+.addStoryButton {
+
+  position: absolute;
+
+  left: 50%;
+
+  bottom: 30px;
+
+  transform:
+    translateX(-50%);
+
+  width: 34px;
+
+  height: 34px;
+
+  border-radius: 50%;
+
+  border: 3px solid white;
+
+  background: #4f6df5;
+
+  color: white;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  cursor: pointer;
+
+  z-index: 3;
+}
+
+
+.addStoryButton svg {
+
+  font-size: 22px;
+}
+
+
+/* =========================================================
+   OTHER USER
+========================================================= */
+
+.storyUser {
+
+  position: absolute;
+
+  left: 9px;
+
+  right: 7px;
+
+  bottom: 9px;
+
+  display: flex;
+
+  align-items: center;
+
+  gap: 6px;
+
+  color: white;
+
+  font-size: 11px;
+
+  font-weight: 600;
+
+  z-index: 2;
+}
+
+
+.storyUser img {
+
+  width: 27px;
+
+  height: 27px;
+
+  border-radius: 50%;
+
+  object-fit: cover;
+
+  border: 2px solid white;
+
+  flex-shrink: 0;
+}
+
+
+.storyUser span {
+
+  overflow: hidden;
+
+  white-space: nowrap;
+
+  text-overflow: ellipsis;
+}
+
+
+/* =========================================================
+   UPLOADING
+========================================================= */
+
+.storyUploading {
+
+  position: absolute;
+
+  inset: 0;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  background:
+    rgba(0, 0, 0, 0.65);
+
+  color: white;
+
+  font-size: 12px;
+
+  font-weight: 600;
+
+  z-index: 10;
+}
+
+
+/* =========================================================
+   LOADING / ERROR
+========================================================= */
+
+.storiesLoading,
+.storiesError {
+
+  padding: 12px;
+
+  font-size: 13px;
+}
+
+
+.storiesError {
+
+  color: #f44336;
+}
+
+
+/* =========================================================
+   STORY VIEWER BACKDROP
+========================================================= */
+
+.storyViewerBackdrop {
+
+  position: fixed;
+
+  inset: 0;
+
+  background:
+    rgba(0, 0, 0, 0.88);
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  z-index: 9999;
+
+  padding: 20px;
+}
+
+
+/* =========================================================
+   STORY VIEWER
+========================================================= */
+
+.storyViewer {
+
+  position: relative;
+
+  width:
+    min(420px, 92vw);
+
+  height:
+    min(720px, 90vh);
+
+  background: #111;
+
+  border-radius: 14px;
+
+  overflow: hidden;
+
+  box-shadow:
+    0 20px 60px
+    rgba(0, 0, 0, 0.45);
+}
+
+
+/* =========================================================
+   PROGRESS
+========================================================= */
+
+.storyProgress {
+
+  position: absolute;
+
+  top: 8px;
+
+  left: 12px;
+
+  right: 12px;
+
+  height: 3px;
+
+  background:
+    rgba(255, 255, 255, 0.35);
+
+  border-radius: 10px;
+
+  z-index: 20;
+}
+
+
+.storyProgressActive {
+
+  width: 100%;
+
+  height: 100%;
+
+  background: white;
+
+  border-radius: 10px;
+}
+
+
+/* =========================================================
+   HEADER
+========================================================= */
+
+.storyHeader {
+
+  position: absolute;
+
+  top: 18px;
+
+  left: 14px;
+
+  right: 14px;
+
+  z-index: 20;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: space-between;
+}
+
+
+.storyHeaderUser {
+
+  display: flex;
+
+  align-items: center;
+
+  gap: 9px;
+
+  color: white;
+}
+
+
+.storyHeaderUser > img {
+
+  width: 38px;
+
+  height: 38px;
+
+  border-radius: 50%;
+
+  object-fit: cover;
+
+  border: 2px solid white;
+}
+
+
+.storyHeaderUser > div {
+
+  display: flex;
+
+  flex-direction: column;
+}
+
+
+.storyHeaderUser strong {
+
+  font-size: 14px;
+}
+
+
+.storyHeaderUser small {
+
+  margin-top: 2px;
+
+  font-size: 10px;
+
+  opacity: 0.75;
+}
+
+
+/* =========================================================
+   HEADER ACTIONS
+========================================================= */
+
+.storyHeaderActions {
+
+  display: flex;
+
+  align-items: center;
+
+  gap: 7px;
+}
+
+
+.storyActionButton,
+.storyDeleteButton,
+.storyCloseButton {
+
+  border: none;
+
+  height: 36px;
+
+  border-radius: 50%;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  cursor: pointer;
+
+  color: white;
+}
+
+
+.storyActionButton {
+
+  width: auto;
+
+  padding: 0 11px;
+
+  gap: 5px;
+
+  background:
+    rgba(255, 255, 255, 0.15);
+
+  backdrop-filter: blur(8px);
+
+  font-size: 11px;
+}
+
+
+.storyActionButton svg {
+
+  font-size: 17px;
+}
+
+
+.storyDeleteButton {
+
+  width: 36px;
+
+  background: #f44336;
+}
+
+
+.storyDeleteButton svg {
+
+  font-size: 19px;
+}
+
+
+.storyCloseButton {
+
+  width: 36px;
+
+  background:
+    rgba(0, 0, 0, 0.55);
+}
+
+
+.storyCloseButton svg {
+
+  font-size: 21px;
+}
+
+
+/* =========================================================
+   STORY IMAGE
+========================================================= */
+
+.storyImageContainer {
+
+  width: 100%;
+
+  height: 100%;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  background: #111;
+}
+
+
+.storyMainImage {
+
+  width: 100%;
+
+  height: 100%;
+
+  object-fit: contain;
+
+  display: block;
+}
+
+
+/* =========================================================
+   NAVIGATION
+========================================================= */
+
+.storyNavigation {
+
+  position: absolute;
+
+  top: 50%;
+
+  transform:
+    translateY(-50%);
+
+  width: 42px;
+
+  height: 42px;
+
+  border: none;
+
+  border-radius: 50%;
+
+  background:
+    rgba(0, 0, 0, 0.45);
+
+  color: white;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  cursor: pointer;
+
+  z-index: 25;
+}
+
+
+.storyNavigation svg {
+
+  font-size: 28px;
+}
+
+
+.storyPrevious {
+
+  left: 12px;
+}
+
+
+.storyNext {
+
+  right: 12px;
+}
+
+
+/* =========================================================
+   VIEWERS MODAL
+========================================================= */
+
+.viewersModal {
+
+  width:
+    min(400px, 92vw);
+
+  max-height: 80vh;
+
+  background: white;
+
+  border-radius: 16px;
+
+  overflow: hidden;
+
+  box-shadow:
+    0 20px 60px
+    rgba(0, 0, 0, 0.45);
+}
+
+
+/* =========================================================
+   VIEWERS HEADER
+========================================================= */
+
+.viewersHeader {
+
+  padding: 18px;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: space-between;
+
+  border-bottom: 1px solid #eee;
+}
+
+
+.viewersHeader h3 {
+
+  margin: 0;
+
+  font-size: 18px;
+}
+
+
+.viewersHeader span {
+
+  display: block;
+
+  margin-top: 4px;
+
+  font-size: 12px;
+
+  color: #777;
+}
+
+
+.viewersHeader button {
+
+  border: none;
+
+  width: 34px;
+
+  height: 34px;
+
+  border-radius: 50%;
+
+  background: #f1f1f1;
+
+  cursor: pointer;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+}
+
+
+/* =========================================================
+   VIEWERS LIST
+========================================================= */
+
+.viewersList {
+
+  max-height: 55vh;
+
+  overflow-y: auto;
+}
+
+
+.viewerItem {
+
+  display: flex;
+
+  align-items: center;
+
+  gap: 11px;
+
+  padding: 12px 16px;
+
+  border-bottom: 1px solid #f1f1f1;
+}
+
+
+.viewerItem:hover {
+
+  background: #fafafa;
+}
+
+
+.viewerItem > img {
+
+  width: 43px;
+
+  height: 43px;
+
+  border-radius: 50%;
+
+  object-fit: cover;
+}
+
+
+.viewerItem > small {
+
+  margin-left: auto;
+
+  color: #888;
+
+  font-size: 10px;
+}
+
+
+.viewerInfo {
+
+  display: flex;
+
+  flex-direction: column;
+
+  min-width: 0;
+}
+
+
+.viewerInfo strong {
+
+  font-size: 13px;
+}
+
+
+.viewerInfo span {
+
+  margin-top: 2px;
+
+  color: #888;
+
+  font-size: 11px;
+}
+
+
+/* =========================================================
+   EMPTY / LOADING
+========================================================= */
+
+.viewersLoading,
+.noViewers {
+
+  padding: 35px 20px;
+
+  text-align: center;
+
+  color: #777;
+}
+
+
+.noViewers svg {
+
+  font-size: 35px;
+
+  opacity: 0.45;
+}
+
+
+.noViewers p {
+
+  margin-top: 10px;
+
+  font-size: 13px;
+}
+
+
+/* =========================================================
+   BACK BUTTON
+========================================================= */
+
+.backToStoryButton {
+
+  width: 100%;
+
+  padding: 13px;
+
+  border: none;
+
+  background: #4f6df5;
+
+  color: white;
+
+  font-size: 13px;
+
+  font-weight: 600;
+
+  cursor: pointer;
+}
+
+
+/* =========================================================
+   MOBILE INSTAGRAM STYLE
+========================================================= */
+
+@media (max-width: 600px) {
+
+  .stories {
+
+    gap: 13px;
+
+    padding:
+      8px 5px 20px;
+
+    overflow-x: auto;
+
+    scroll-snap-type: x proximity;
+  }
+
+
+  /* CIRCLE STORY */
+
+  .story {
+
+    flex:
+      0 0 66px;
+
+    width: 66px;
+
+    height: 66px;
+
+    border-radius: 50%;
+
+    overflow: visible;
+
+    background: transparent;
+
+    box-shadow: none;
+
+    scroll-snap-align: start;
+  }
+
+
+  .story > img {
+
+    width: 66px;
+
+    height: 66px;
+
+    border-radius: 50%;
+
+    object-fit: cover;
+
+    border: 3px solid white;
+
+    outline:
+      2px solid #1877f2;
+  }
+
+
+  .story:hover {
+
+    transform: none;
+  }
+
+
+  /* REMOVE DARK OVERLAY */
+
+  .storyOverlay {
+
+    display: none;
+  }
+
+
+  /* YOUR STORY TEXT */
+
+  .yourStoryLabel {
+
+    position: absolute;
+
+    left: 50%;
+
+    bottom: -19px;
+
+    transform:
+      translateX(-50%);
+
+    color: #333;
+
+    font-size: 9px;
+
+    font-weight: 600;
+
+    white-space: nowrap;
+
+    z-index: 5;
+  }
+
+
+  /* PLUS */
+
+  .addStoryButton {
+
+    left: auto;
+
+    right: -2px;
+
+    bottom: -2px;
+
+    transform: none;
+
+    width: 25px;
+
+    height: 25px;
+
+    border: 2px solid white;
+
+    background: #1877f2;
+
+    z-index: 10;
+  }
+
+
+  .addStoryButton svg {
+
+    font-size: 17px;
+  }
+
+
+  /* OTHER USER NAME */
+
+  .storyUser {
+
+    position: absolute;
+
+    left: 50%;
+
+    right: auto;
+
+    bottom: -19px;
+
+    transform:
+      translateX(-50%);
+
+    width: 66px;
+
+    display: block;
+
+    text-align: center;
+
+    color: #333;
+
+    font-size: 9px;
+
+    font-weight: 500;
+
+    z-index: 5;
+  }
+
+
+  .storyUser img {
+
+    display: none;
+  }
+
+
+  .storyUser span {
+
+    display: block;
+
+    width: 66px;
 
     overflow: hidden;
 
-    /* DESKTOP STORIES */
+    text-overflow: ellipsis;
 
-    .story {
-      flex: 1;
-      min-width: 0;
+    white-space: nowrap;
+  }
 
-      height: 200px;
 
-      border-radius: 12px;
-      overflow: hidden;
+  /* UPLOADING */
 
-      position: relative;
-      cursor: pointer;
+  .storyUploading {
 
-      background-color: themed("bg");
+    border-radius: 50%;
 
-      transition: transform 0.2s ease;
+    font-size: 8px;
+  }
 
-      &:hover {
-        transform: translateY(-3px);
-      }
 
-      img {
-        width: 100%;
-        height: 100%;
+  /* =====================================================
+     FULL SCREEN STORY VIEWER
+  ===================================================== */
 
-        object-fit: cover;
-        display: block;
-      }
+  .storyViewerBackdrop {
 
-      /* Dark gradient behind story name */
-      &::after {
-        content: "";
-        position: absolute;
+    position: fixed;
 
-        left: 0;
-        right: 0;
-        bottom: 0;
+    inset: 0;
 
-        height: 45%;
+    padding: 0;
 
-        background: linear-gradient(
-          transparent,
-          rgba(0, 0, 0, 0.65)
-        );
+    background: #000;
 
-        pointer-events: none;
-      }
+    z-index: 10000;
+  }
 
-      span {
-        position: absolute;
 
-        bottom: 12px;
-        left: 10px;
-        right: 10px;
+  .storyViewer {
 
-        color: white;
+    width: 100vw;
 
-        font-weight: 600;
-        font-size: 13px;
+    height: 100vh;
 
-        white-space: nowrap;
-        overflow: hidden;
-        text-overflow: ellipsis;
+    max-height: none;
 
-        z-index: 2;
-      }
+    border-radius: 0;
 
-      /* Add Story Button */
-      button {
-        position: absolute;
+    background: #000;
 
-        bottom: 42px;
-        left: 10px;
+    box-shadow: none;
+  }
 
-        width: 34px;
-        height: 34px;
 
-        border: 3px solid white;
-        border-radius: 50%;
+  .storyMainImage {
 
-        background-color: #5271ff;
-        color: white;
+    width: 100%;
 
-        cursor: pointer;
+    height: 100%;
 
-        font-size: 25px;
-        line-height: 1;
+    object-fit: contain;
+  }
 
-        display: flex;
-        align-items: center;
-        justify-content: center;
 
-        z-index: 3;
-      }
-    }
+  .storyProgress {
 
-    /* TABLET + MOBILE
-       INSTAGRAM STYLE STORIES */
+    top: 8px;
 
-    @include tablet {
-      height: 82px;
+    left: 10px;
 
-      gap: 14px;
+    right: 10px;
+  }
 
-      overflow-x: auto;
-      overflow-y: hidden;
 
-      padding: 6px 4px;
+  .storyHeader {
 
-      scrollbar-width: none;
+    top: 18px;
 
-      &::-webkit-scrollbar {
-        display: none;
-      }
+    left: 10px;
 
-      .story {
-        flex: 0 0 64px;
+    right: 10px;
+  }
 
-        width: 64px;
-        height: 64px;
 
-        border-radius: 50%;
+  .storyHeaderUser > img {
 
-        overflow: visible;
+    width: 34px;
 
-        background: linear-gradient(
-          135deg,
-          #5271ff,
-          #8b5cf6,
-          #ec4899
-        );
+    height: 34px;
+  }
 
-        padding: 3px;
 
-        border: none;
+  .storyHeaderUser strong {
 
-        &:hover {
-          transform: none;
-        }
+    font-size: 12px;
+  }
 
-        &::after {
-          display: none;
-        }
 
-        img {
-          width: 100%;
-          height: 100%;
+  .storyHeaderUser small {
 
-          border-radius: 50%;
+    font-size: 9px;
+  }
 
-          object-fit: cover;
 
-          border: 2px solid themed("bg");
-        }
+  .storyHeaderActions {
 
-        span {
-          display: none;
-        }
+    gap: 5px;
+  }
 
-        /* Add Story Button */
-        button {
-          width: 28px;
-          height: 28px;
 
-          bottom: -3px;
-          right: -3px;
+  .storyActionButton {
 
-          left: auto;
-          top: auto;
+    width: 34px;
 
-          border: 2px solid themed("bg");
+    height: 34px;
 
-          border-radius: 50%;
+    padding: 0;
 
-          background-color: #5271ff;
-          color: white;
+    justify-content: center;
+  }
 
-          font-size: 20px;
-          font-weight: 500;
 
-          z-index: 5;
-        }
-      }
-    }
+  .storyActionButton span {
 
-    /* SMALL MOBILE */
+    display: none;
+  }
 
-    @include mobile {
-      height: 76px;
 
-      gap: 12px;
+  .storyDeleteButton,
+  .storyCloseButton {
 
-      padding: 6px 3px;
+    width: 34px;
 
-      .story {
-        flex: 0 0 58px;
+    height: 34px;
+  }
 
-        width: 58px;
-        height: 58px;
 
-        padding: 3px;
+  /* NEXT PREVIOUS */
 
-        button {
-          width: 26px;
-          height: 26px;
+  .storyNavigation {
 
-          font-size: 18px;
-        }
-      }
-    }
+    width: 38px;
+
+    height: 38px;
+
+    background:
+      rgba(255, 255, 255, 0.14);
+
+    backdrop-filter: blur(6px);
+  }
+
+
+  .storyPrevious {
+
+    left: 8px;
+  }
+
+
+  .storyNext {
+
+    right: 8px;
+  }
+
+
+  /* =====================================================
+     VIEWERS MOBILE
+  ===================================================== */
+
+  .viewersModal {
+
+    width: 92vw;
+
+    max-height: 75vh;
+
+    border-radius: 18px;
+  }
+
+
+  .viewersHeader {
+
+    padding: 15px;
+  }
+
+
+  .viewersHeader h3 {
+
+    font-size: 16px;
+  }
+
+
+  .viewerItem {
+
+    padding:
+      11px 14px;
+  }
+
+
+  .viewerItem > img {
+
+    width: 40px;
+
+    height: 40px;
+  }
+
+
+  .backToStoryButton {
+
+    padding: 14px;
+  }
+}
+
+/* =========================================================
+   FINAL STORIES → SHARE SPACING
+   ========================================================= */
+
+.stories {
+  margin-bottom: 14px;
+}
+
+@media (max-width: 600px) {
+
+  .stories {
+    margin-bottom: 20px;
+    padding-bottom: 22px;
   }
 }

@@ -1,58 +1,145 @@
 import "./login.scss";
-import { Link } from "react-router-dom";
-import { useContext } from "react";
+
+import { useContext, useState } from "react";
+import { useNavigate } from "react-router-dom";
+
+import makeRequest from "../../axios";
 import { AuthContext } from "../../context/authContext";
 
 const Login = () => {
+  const [inputs, setInputs] = useState({
+    username: "",
+    password: "",
+  });
+
+  const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
+
   const { login } = useContext(AuthContext);
 
-  const handleLogin = (e) => {
+  const navigate = useNavigate();
+
+  const handleChange = (e) => {
+    setInputs((previous) => ({
+      ...previous,
+      [e.target.name]: e.target.value,
+    }));
+  };
+
+  const handleLogin = async (e) => {
     e.preventDefault();
-    login();
+
+    setError("");
+
+    if (!inputs.username || !inputs.password) {
+      setError("Please enter username and password.");
+      return;
+    }
+
+    try {
+      setLoading(true);
+
+      const res = await makeRequest.post(
+        "/auth/login",
+        inputs
+      );
+
+      console.log("LOGIN RESPONSE:", res.data);
+
+      login(res.data);
+
+      navigate("/", {
+        replace: true,
+      });
+    } catch (err) {
+      console.log(
+        "LOGIN ERROR:",
+        err.response?.data || err.message
+      );
+
+      setError(
+        typeof err.response?.data === "string"
+          ? err.response.data
+          : "Login failed. Please check your username and password."
+      );
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
     <div className="login">
       <div className="card">
 
-        {/* LEFT SIDE */}
+        {/* =========================
+            LEFT SECTION
+        ========================= */}
+
         <div className="left">
-          <h1>Welcome Back.</h1>
+          <h1>SocialSphere</h1>
 
           <p>
-            Connect with people, share your thoughts, and discover what is
-            happening around you with SocialSphere.
+            Connect with friends, share moments,
+            and discover new stories.
           </p>
 
-          <span>Don't have an account?</span>
+          <span>
+            Don't have an account?
+          </span>
 
-          <Link to="/register">
-            <button type="button">Register</button>
-          </Link>
+          <button
+            type="button"
+            onClick={() => navigate("/register")}
+          >
+            Register
+          </button>
         </div>
 
+        {/* =========================
+            RIGHT SECTION
+        ========================= */}
 
-        {/* RIGHT SIDE */}
         <div className="right">
+
           <h1>Login</h1>
 
           <form onSubmit={handleLogin}>
+
             <input
               type="text"
+              name="username"
               placeholder="Username"
-              required
+              value={inputs.username}
+              onChange={handleChange}
+              autoComplete="username"
             />
 
             <input
               type="password"
+              name="password"
               placeholder="Password"
-              required
+              value={inputs.password}
+              onChange={handleChange}
+              autoComplete="current-password"
             />
 
-            <button type="submit">
-              Login
+            {error && (
+              <div className="error">
+                {error}
+              </div>
+            )}
+
+            <button
+              type="submit"
+              disabled={loading}
+            >
+              {loading
+                ? "Logging in..."
+                : "Login"}
             </button>
+
           </form>
+
         </div>
 
       </div>

@@ -8,6 +8,7 @@
 
 .login {
   min-height: 100vh;
+  width: 100%;
 
   padding: 30px 20px;
 
@@ -17,8 +18,11 @@
   align-items: center;
   justify-content: center;
 
+  overflow-x: hidden;
+
   .card {
     width: min(100%, 1000px);
+
     min-height: 600px;
 
     display: flex;
@@ -29,7 +33,9 @@
 
     overflow: hidden;
 
-    box-shadow: 0px 10px 40px rgba(0, 0, 0, 0.15);
+    box-shadow:
+      0px 10px 40px
+      rgba(0, 0, 0, 0.15);
 
 
     /* =========================
@@ -47,31 +53,44 @@
         url("https://plus.unsplash.com/premium_vector-1728043307769-772ce775d6b5?q=80&w=725&auto=format&fit=crop");
 
       background-size: cover;
+
       background-position: center;
 
       padding: 50px;
 
       display: flex;
+
       flex-direction: column;
+
       justify-content: center;
 
       gap: 25px;
 
       color: white;
 
+
       h1 {
-        font-size: clamp(42px, 6vw, 80px);
+        font-size: clamp(
+          42px,
+          6vw,
+          80px
+        );
+
         line-height: 1;
       }
 
+
       p {
         font-size: 15px;
+
         line-height: 1.6;
       }
+
 
       span {
         font-size: 14px;
       }
+
 
       button {
         width: 160px;
@@ -79,9 +98,11 @@
         padding: 12px;
 
         border: none;
+
         border-radius: 6px;
 
         background-color: white;
+
         color: rebeccapurple;
 
         font-weight: 600;
@@ -90,14 +111,18 @@
 
         transition: 0.2s ease;
 
+
         &:hover {
-          transform: translateY(-2px);
+          transform:
+            translateY(-2px);
         }
       }
     }
 
 
-    /* RIGHT SECTION */
+    /* =========================
+       RIGHT SECTION
+    ========================= */
 
     .right {
       flex: 1;
@@ -105,27 +130,36 @@
       padding: 50px;
 
       display: flex;
+
       flex-direction: column;
+
       justify-content: center;
 
       gap: 40px;
 
+
       h1 {
         color: #555;
+
         font-size: 42px;
       }
 
+
       form {
         display: flex;
+
         flex-direction: column;
 
         gap: 25px;
+
 
         input {
           width: 100%;
 
           border: none;
-          border-bottom: 1px solid lightgray;
+
+          border-bottom:
+            1px solid lightgray;
 
           padding: 15px 10px;
 
@@ -133,10 +167,37 @@
 
           outline: none;
 
+          background: transparent;
+
+
           &:focus {
-            border-bottom-color: #938eef;
+            border-bottom-color:
+              #938eef;
+          }
+
+
+          &:-webkit-autofill,
+          &:-webkit-autofill:hover,
+          &:-webkit-autofill:focus {
+            -webkit-box-shadow:
+              0 0 0 1000px white inset;
+
+            -webkit-text-fill-color:
+              #333;
           }
         }
+
+
+        .error {
+          margin-top: -8px;
+
+          color: #d93025;
+
+          font-size: 12px;
+
+          line-height: 1.4;
+        }
+
 
         button {
           width: 160px;
@@ -144,9 +205,12 @@
           padding: 12px;
 
           border: none;
+
           border-radius: 6px;
 
-          background-color: #938eef;
+          background-color:
+            #938eef;
+
           color: white;
 
           font-weight: 600;
@@ -155,8 +219,16 @@
 
           transition: 0.2s ease;
 
+
           &:hover {
             opacity: 0.9;
+          }
+
+
+          &:disabled {
+            opacity: 0.6;
+
+            cursor: not-allowed;
           }
         }
       }
@@ -164,22 +236,29 @@
   }
 
 
-  /* TABLET */
+  /* =========================
+     TABLET
+  ========================= */
 
   @include tablet {
 
     padding: 20px;
 
+
     .card {
       width: 100%;
+
       min-height: 550px;
+
 
       .left,
       .right {
         padding: 35px;
       }
 
+
       .left {
+
         h1 {
           font-size: 55px;
         }
@@ -188,46 +267,127 @@
   }
 
 
-  /* LARGE MOBILE */
+  /* =========================
+     MOBILE LARGE
+  ========================= */
 
   @include mobile-large {
 
-    padding: 15px;
+    min-height: 100dvh;
 
-    align-items: flex-start;
+    padding: 20px 14px;
+
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
 
     .card {
-      flex-direction: column;
+      width: 100%;
+
+      max-width: 420px;
 
       min-height: auto;
 
+      margin: auto;
+
+      display: flex;
+
+      flex-direction: column;
+
+      border-radius: 14px;
+
+
       .left,
       .right {
-        flex: none;
-
         width: 100%;
 
-        padding: 35px 25px;
+        flex: none;
       }
+
+
+      /* LEFT */
 
       .left {
-        min-height: 350px;
+        min-height: 265px;
+
+        padding: 28px 22px;
+
+        justify-content: center;
+
+        gap: 14px;
+
 
         h1 {
-          font-size: 48px;
+          font-size: 34px;
+
+          line-height: 1.05;
+        }
+
+
+        p {
+          max-width: 360px;
+
+          font-size: 12px;
+
+          line-height: 1.5;
+        }
+
+
+        span {
+          font-size: 11px;
+        }
+
+
+        button {
+          width: 100%;
+
+          padding: 10px;
+
+          font-size: 12px;
         }
       }
 
+
+      /* RIGHT */
+
       .right {
-        gap: 30px;
+        padding:
+          24px 22px 28px;
+
+        gap: 20px;
+
 
         h1 {
-          font-size: 36px;
+          font-size: 28px;
         }
 
+
         form {
+          gap: 16px;
+
+
+          input {
+            padding: 12px 8px;
+
+            font-size: 13px;
+          }
+
+
           button {
             width: 100%;
+
+            padding: 11px;
+
+            font-size: 12px;
+          }
+
+
+          .error {
+            font-size: 11px;
           }
         }
       }
@@ -235,49 +395,186 @@
   }
 
 
-  /* SMALL MOBILE */
+  /* =========================
+     SMALL MOBILE
+  ========================= */
 
   @include mobile {
 
-    padding: 10px;
+    min-height: 100dvh;
+
+    padding: 12px 8px;
+
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
 
     .card {
-      border-radius: 12px;
+      width: 100%;
 
-      .left,
-      .right {
-        padding: 30px 20px;
-      }
+      max-width: 390px;
+
+      min-height: auto;
+
+      margin: auto;
+
+      border-radius: 11px;
+
 
       .left {
-        min-height: 320px;
 
-        gap: 20px;
+        min-height: 235px;
+
+        padding:
+          24px 18px;
+
+        gap: 12px;
+
 
         h1 {
-          font-size: 40px;
+          font-size: 29px;
         }
 
+
         p {
-          font-size: 13px;
+          font-size: 11px;
+
+          line-height: 1.45;
         }
+
+
+        span {
+          font-size: 10px;
+        }
+
 
         button {
           width: 100%;
+
+          padding: 9px;
+
+          font-size: 11px;
         }
       }
 
+
       .right {
 
+        padding:
+          22px 18px 24px;
+
+        gap: 17px;
+
+
         h1 {
-          font-size: 32px;
+          font-size: 25px;
         }
 
+
         form {
-          gap: 20px;
+          gap: 14px;
+
 
           input {
-            padding: 12px 8px;
+            padding:
+              11px 7px;
+
+            font-size: 12px;
+          }
+
+
+          button {
+            width: 100%;
+
+            padding: 10px;
+
+            font-size: 11px;
+          }
+        }
+      }
+    }
+  }
+
+
+  /* =========================
+     VERY SMALL PHONES
+  ========================= */
+
+  @media (max-width: 350px) {
+
+    padding: 8px 6px;
+
+
+    .card {
+
+      max-width: 340px;
+
+
+      .left {
+
+        min-height: 220px;
+
+        padding:
+          21px 16px;
+
+
+        h1 {
+          font-size: 26px;
+        }
+
+
+        p {
+          font-size: 10px;
+
+          line-height: 1.4;
+        }
+
+
+        span {
+          font-size: 9px;
+        }
+
+
+        button {
+          padding: 8px;
+
+          font-size: 10px;
+        }
+      }
+
+
+      .right {
+
+        padding:
+          20px 16px 22px;
+
+
+        h1 {
+          font-size: 23px;
+        }
+
+
+        form {
+
+          gap: 12px;
+
+
+          input {
+            padding:
+              10px 6px;
+
+            font-size: 11px;
+          }
+
+
+          button {
+            padding: 9px;
+
+            font-size: 10px;
           }
         }
       }
