@@ -8,7 +8,6 @@ import {
 import HomeOutlinedIcon from "@mui/icons-material/HomeOutlined";
 import DarkModeOutlinedIcon from "@mui/icons-material/DarkModeOutlined";
 import WbSunnyOutlinedIcon from "@mui/icons-material/WbSunnyOutlined";
-import GridViewOutlinedIcon from "@mui/icons-material/GridViewOutlined";
 import MenuOutlinedIcon from "@mui/icons-material/MenuOutlined";
 import NotificationsOutlinedIcon from "@mui/icons-material/NotificationsOutlined";
 import EmailOutlinedIcon from "@mui/icons-material/EmailOutlined";
@@ -320,7 +319,8 @@ const Navbar = () => {
   // ======================================================
 
   const handleSearchClick = () => {
-    // Search and Quick Menu must never stay open together.
+    // Search, hamburger menu and RightBar page must never
+    // stay open together on mobile.
     setMenuOpen(false);
     setSearchOpen(true);
 
@@ -354,23 +354,18 @@ const Navbar = () => {
   };
 
   // ======================================================
-  // EXPLORE / GRID
-  // ======================================================
+// NOTIFICATIONS
+// ======================================================
 
-  const handleGridClick = () => {
-    setSearchOpen(false);
+const handleNotificationClick = () => {
+  setSearchOpen(false);
+  setSearchText("");
+  setSearchUsers([]);
+  setMenuOpen(false);
+  setDesktopSearchFocused(false);
 
-    // Explore stays a separate navbar action on mobile.
-    // It must NOT control the hamburger menu.
-    if (window.innerWidth <= 768) {
-      setMenuOpen(false);
-      navigate("/explore");
-      return;
-    }
-
-    // Desktop behaviour remains unchanged.
-    setMenuOpen((previous) => !previous);
-  };
+  navigate("/notifications");
+};
 
   // ======================================================
   // SCROLL TO ELEMENT AFTER NAVIGATION
@@ -491,8 +486,7 @@ const Navbar = () => {
     // ----------------------------------------------
 
     if (type === "notifications") {
-      // Notifications will be connected
-      // in the Notifications module.
+      handleNotificationClick();
       return;
     }
   };
@@ -573,15 +567,15 @@ const Navbar = () => {
           </button>
 
 
-          {/* GRID */}
+          {/* NOTIFICATIONS */}
 
           <button
             type="button"
-            className="nav-icon grid-icon"
-            onClick={handleGridClick}
-            aria-label="Explore"
+            className="nav-icon notification-mobile-icon"
+            onClick={handleNotificationClick}
+            aria-label="Notifications"
           >
-            <GridViewOutlinedIcon />
+            <NotificationsOutlinedIcon />
           </button>
 
         </div>
@@ -821,6 +815,7 @@ const Navbar = () => {
         <button
           type="button"
           className="right-icon notification-icon"
+          onClick={handleNotificationClick}
           aria-label="Notifications"
         >
           <NotificationsOutlinedIcon />
@@ -1104,7 +1099,9 @@ const Navbar = () => {
           <Link
             to={`/profile/${currentUser?.id}`}
             className="mobileProfileCard"
-            onClick={() => setMenuOpen(false)}
+            onClick={() => {
+              setMenuOpen(false);
+                      }}
           >
             <img
               src={profileImage}
@@ -1274,6 +1271,7 @@ const Navbar = () => {
 
         </div>
       )}
+
 
     </nav>
   );

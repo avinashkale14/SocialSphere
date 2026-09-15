@@ -4,7 +4,7 @@ import { Link, NavLink, useNavigate } from "react-router-dom";
 import { useContext } from "react";
 
 import HomeOutlinedIcon from "@mui/icons-material/HomeOutlined";
-import ExploreOutlinedIcon from "@mui/icons-material/ExploreOutlined";
+import NotificationsNoneOutlinedIcon from "@mui/icons-material/NotificationsNoneOutlined";
 import AddPhotoAlternateOutlinedIcon from "@mui/icons-material/AddPhotoAlternateOutlined";
 import AutoStoriesOutlinedIcon from "@mui/icons-material/AutoStoriesOutlined";
 import ArticleOutlinedIcon from "@mui/icons-material/ArticleOutlined";
@@ -12,13 +12,19 @@ import LogoutOutlinedIcon from "@mui/icons-material/LogoutOutlined";
 import HubOutlinedIcon from "@mui/icons-material/HubOutlined";
 import KeyboardArrowRightOutlinedIcon from "@mui/icons-material/KeyboardArrowRightOutlined";
 import ArrowForwardIosOutlinedIcon from "@mui/icons-material/ArrowForwardIosOutlined";
+import DarkModeOutlinedIcon from "@mui/icons-material/DarkModeOutlined";
+import WbSunnyOutlinedIcon from "@mui/icons-material/WbSunnyOutlined";
 
 import { AuthContext } from "../../context/authContext";
+import { DarkModeContext } from "../../context/darkModeContext";
+
 import makeRequest from "../../axios";
 import getImageUrl from "../../utils/imageUrl";
 
 const LeftBar = () => {
   const { currentUser, logout } = useContext(AuthContext);
+  const { toggle, darkMode } = useContext(DarkModeContext);
+
   const navigate = useNavigate();
 
   const profileImage =
@@ -70,6 +76,7 @@ const LeftBar = () => {
     }
 
     navigate(`/profile/${currentUser.id}`);
+
     scrollToElement("my-posts-section");
   };
 
@@ -150,7 +157,9 @@ const LeftBar = () => {
             to="/"
             end
             className={({ isActive }) =>
-              `sidebarItem mainItem ${isActive ? "active" : ""}`
+              `sidebarItem mainItem ${
+                isActive ? "active" : ""
+              }`
             }
           >
             <span className="itemIcon homeIcon">
@@ -163,20 +172,50 @@ const LeftBar = () => {
           </NavLink>
 
 
-          {/* EXPLORE */}
+          {/* =========================
+              DARK MODE
+          ========================= */}
 
-          <NavLink
-            to="/explore"
-            className={({ isActive }) =>
-              `sidebarItem mainItem ${isActive ? "active" : ""}`
+          <button
+            type="button"
+            className="sidebarItem sidebarButton themeToggleItem"
+            onClick={toggle}
+            aria-label={
+              darkMode
+                ? "Switch to light mode"
+                : "Switch to dark mode"
             }
           >
-            <span className="itemIcon exploreIcon">
-              <ExploreOutlinedIcon />
+            <span className="itemIcon themeToggleIcon">
+              {darkMode ? (
+                <WbSunnyOutlinedIcon />
+              ) : (
+                <DarkModeOutlinedIcon />
+              )}
             </span>
 
             <span className="itemText">
-              Explore
+              {darkMode ? "Light Mode" : "Dark Mode"}
+            </span>
+          </button>
+
+
+          {/* NOTIFICATIONS */}
+
+          <NavLink
+            to="/notifications"
+            className={({ isActive }) =>
+              `sidebarItem mainItem ${
+                isActive ? "active" : ""
+              }`
+            }
+          >
+            <span className="itemIcon notificationIcon">
+              <NotificationsNoneOutlinedIcon />
+            </span>
+
+            <span className="itemText">
+              Notifications
             </span>
           </NavLink>
 

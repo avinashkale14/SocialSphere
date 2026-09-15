@@ -354,11 +354,33 @@
     background: rgba(79, 109, 245, 0.09);
   }
 
-  .exploreIcon {
-    color: #7c4dff;
-
-    background: rgba(124, 77, 255, 0.09);
+  .notificationIcon {
+    color: #ef8c00;
+    background: rgba(239, 140, 0, 0.09);
   }
+
+  /* =========================
+   DARK / LIGHT MODE
+========================= */
+
+.themeToggleItem {
+  color: themed("textColor");
+
+  .themeToggleIcon {
+    color: #6b7280;
+    background: rgba(107, 114, 128, 0.09);
+  }
+
+  &:hover {
+    color: #4f6df5;
+    background: themed("bgSoft");
+
+    .themeToggleIcon {
+      color: #4f6df5;
+      background: rgba(79, 109, 245, 0.11);
+    }
+  }
+}
 
 
   /* =========================

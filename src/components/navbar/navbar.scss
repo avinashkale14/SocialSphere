@@ -1303,10 +1303,6 @@
     height: 20px;
   }
 
-  .navbar .grid-icon {
-    display: none;
-  }
-
   .navbar .desktop-search {
     width: 180px;
     height: 36px;
@@ -1344,7 +1340,7 @@
   /* =======================================================
      MOBILE HAMBURGER
      Target order:
-     Hamburger | Logo | Home | Explore | Search | Profile
+     Hamburger | Logo | Home | Notifications | Search | Profile
   ======================================================= */
 
   .navbar .mobile-menu-button {
@@ -1406,7 +1402,7 @@
     display: grid;
 
     /*
-      Hamburger | Logo | Home | Explore | Search | Profile
+      Hamburger | Logo | Home | Notifications | Search | Profile
     */
 
     grid-template-columns:
@@ -1519,16 +1515,15 @@
   }
 
 
-  /* EXPLORE / GRID
-     Always visible on mobile. It is independent
-     from the hamburger menu.
+  /* NOTIFICATIONS
+     Mobile notification icon opens the existing RightBar
+     as a full page below the navbar.
   */
 
-  .navbar .grid-icon {
+  .navbar .notification-mobile-icon {
     grid-column: 4;
     display: flex !important;
   }
-
 
   /* =======================================================
      DESKTOP SEARCH OFF

@@ -6,6 +6,7 @@ import {
   RouterProvider,
   Outlet,
   Navigate,
+  useLocation,
 } from "react-router-dom";
 
 import Navbar from "./components/navbar/Navbar";
@@ -14,7 +15,7 @@ import RightBar from "./components/rightbar/RightBar";
 
 import Home from "./pages/home/Home";
 import Profile from "./pages/profile/Profile";
-import Explore from "./pages/explore/Explore";
+import Notifications from "./pages/notifications/Notifications";
 
 import "./style.scss";
 
@@ -27,22 +28,27 @@ function App() {
   const { darkMode } = useContext(DarkModeContext);
 
   const Layout = () => {
-    return (
-      <div className={`theme-${darkMode ? "dark" : "light"}`}>
-        <Navbar />
+  const location = useLocation();
 
-        <div className="main-layout">
-          <LeftBar />
+  const isNotificationsPage =
+    location.pathname === "/notifications";
 
-          <main className="main-content">
-            <Outlet />
-          </main>
+  return (
+    <div className={`theme-${darkMode ? "dark" : "light"}`}>
+      <Navbar />
 
-          <RightBar />
-        </div>
+      <div className="main-layout">
+        <LeftBar />
+
+        <main className="main-content">
+          <Outlet />
+        </main>
+
+        {!isNotificationsPage && <RightBar />}
       </div>
-    );
-  };
+    </div>
+  );
+};
 
   const ProtectedRoute = ({ children }) => {
     if (!currentUser) {
@@ -72,8 +78,8 @@ function App() {
         },
 
         {
-          path: "explore",
-          element: <Explore />,
+          path: "notifications",
+          element: <Notifications />,
         },
       ],
     },
