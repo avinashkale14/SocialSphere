@@ -12,6 +12,8 @@ import {
 import TrendingUpOutlinedIcon from "@mui/icons-material/TrendingUpOutlined";
 import FavoriteBorderOutlinedIcon from "@mui/icons-material/FavoriteBorderOutlined";
 import CommentOutlinedIcon from "@mui/icons-material/CommentOutlined";
+import PeopleOutlineOutlinedIcon from "@mui/icons-material/PeopleOutlineOutlined";
+import NotificationsNoneOutlinedIcon from "@mui/icons-material/NotificationsNoneOutlined";
 
 import { AuthContext } from "../../context/authContext";
 import makeRequest from "../../axios";
@@ -284,14 +286,22 @@ const RightBar = () => {
 
         <div className="cardHeader">
 
-          <div>
-            <h3>
-              Suggestions For You
-            </h3>
+          <div className="standardTitleWrapper">
 
-            <span className="cardSubtitle">
-              People you may know
-            </span>
+            <div className="standardTitleIcon suggestionsTitleIcon">
+              <PeopleOutlineOutlinedIcon />
+            </div>
+
+            <div>
+              <h3>
+                Suggestions For You
+              </h3>
+
+              <span className="cardSubtitle">
+                People you may know
+              </span>
+            </div>
+
           </div>
 
           {suggestions.length > 0 && (
@@ -459,14 +469,22 @@ const RightBar = () => {
 
         <div className="cardHeader">
 
-          <div>
-            <h3>
-              Latest Activities
-            </h3>
+          <div className="standardTitleWrapper">
 
-            <span className="cardSubtitle">
-              Recent updates
-            </span>
+            <div className="standardTitleIcon activitiesTitleIcon">
+              <NotificationsNoneOutlinedIcon />
+            </div>
+
+            <div>
+              <h3>
+                Latest Activities
+              </h3>
+
+              <span className="cardSubtitle">
+                Recent updates
+              </span>
+            </div>
+
           </div>
 
         </div>

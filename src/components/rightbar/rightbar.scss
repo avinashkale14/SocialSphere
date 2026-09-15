@@ -114,6 +114,47 @@
   }
 
 
+  /* =====================================================
+     STANDARD CARD TITLE ICONS
+     Suggestions + Latest Activities
+  ===================================================== */
+
+  .standardTitleWrapper {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    min-width: 0;
+  }
+
+  .standardTitleIcon {
+    width: 32px;
+    height: 32px;
+    flex: 0 0 32px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 9px;
+    box-sizing: border-box;
+  }
+
+  .standardTitleIcon svg {
+    width: 17px;
+    height: 17px;
+  }
+
+  .suggestionsTitleIcon {
+    background: rgba(79, 109, 245, 0.10);
+    color: #4f6df5;
+  }
+
+  .activitiesTitleIcon {
+    background: rgba(245, 158, 11, 0.10);
+    color: #f59e0b;
+  }
+
+
   .cardSubtitle {
     display: block;
 
@@ -773,6 +814,16 @@
   ===================================================== */
 
   .theme-dark & {
+    .suggestionsTitleIcon {
+      background: rgba(125, 150, 255, 0.10);
+      color: #7d96ff;
+    }
+
+    .activitiesTitleIcon {
+      background: rgba(245, 158, 11, 0.10);
+      color: #f5a623;
+    }
+
     .trendingTitleIcon {
       background:
         rgba(255, 255, 255, 0.07);
@@ -813,6 +864,18 @@
       10px
       25px
       5px;
+  }
+
+
+  .rightBar .standardTitleIcon {
+    width: 30px;
+    height: 30px;
+    flex-basis: 30px;
+  }
+
+  .rightBar .standardTitleIcon svg {
+    width: 16px;
+    height: 16px;
   }
 
 
