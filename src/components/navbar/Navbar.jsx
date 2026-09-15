@@ -10,8 +10,6 @@ import DarkModeOutlinedIcon from "@mui/icons-material/DarkModeOutlined";
 import WbSunnyOutlinedIcon from "@mui/icons-material/WbSunnyOutlined";
 import MenuOutlinedIcon from "@mui/icons-material/MenuOutlined";
 import NotificationsOutlinedIcon from "@mui/icons-material/NotificationsOutlined";
-import EmailOutlinedIcon from "@mui/icons-material/EmailOutlined";
-import PersonOutlinedIcon from "@mui/icons-material/PersonOutlined";
 import SearchOutlinedIcon from "@mui/icons-material/SearchOutlined";
 import HistoryOutlinedIcon from "@mui/icons-material/HistoryOutlined";
 import PersonSearchOutlinedIcon from "@mui/icons-material/PersonSearchOutlined";
@@ -793,34 +791,6 @@ const handleNotificationClick = () => {
       ================================================== */}
 
       <div className="right">
-
-        <button
-          type="button"
-          className="right-icon person-icon"
-          aria-label="People"
-        >
-          <PersonOutlinedIcon />
-        </button>
-
-
-        <button
-          type="button"
-          className="right-icon message-icon"
-          aria-label="Messages"
-        >
-          <EmailOutlinedIcon />
-        </button>
-
-
-        <button
-          type="button"
-          className="right-icon notification-icon"
-          onClick={handleNotificationClick}
-          aria-label="Notifications"
-        >
-          <NotificationsOutlinedIcon />
-        </button>
-
 
         {/* PROFILE */}
 

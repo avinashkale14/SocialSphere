@@ -1,12 +1,10 @@
 import "./profile.scss";
 
-import FacebookTwoToneIcon from "@mui/icons-material/FacebookTwoTone";
 import LinkedInIcon from "@mui/icons-material/LinkedIn";
 import InstagramIcon from "@mui/icons-material/Instagram";
-import TwitterIcon from "@mui/icons-material/Twitter";
 import PlaceIcon from "@mui/icons-material/Place";
 import LanguageIcon from "@mui/icons-material/Language";
-import EmailOutlinedIcon from "@mui/icons-material/EmailOutlined";
+import GitHubIcon from "@mui/icons-material/GitHub";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import LinkOutlinedIcon from "@mui/icons-material/LinkOutlined";
 import ContentCopyOutlinedIcon from "@mui/icons-material/ContentCopyOutlined";
@@ -36,6 +34,16 @@ import {
 import makeRequest from "../../axios";
 import { AuthContext } from "../../context/authContext";
 
+// Make profile links open as external websites even when the user enters
+// a bare domain such as avinashkale.in instead of https://avinashkale.in.
+const normalizeExternalUrl = (url) => {
+  if (!url) return "";
+  const value = url.trim();
+  if (!value) return "";
+  if (/^(https?:|mailto:|tel:)/i.test(value)) return value;
+  return `https://${value}`;
+};
+
 const Profile = () => {
   const {
     currentUser,
@@ -59,10 +67,9 @@ const Profile = () => {
   const [website, setWebsite] = useState("");
 
   // SOCIAL LINKS
-  const [facebook, setFacebook] = useState("");
   const [instagram, setInstagram] = useState("");
-  const [twitter, setTwitter] = useState("");
   const [linkedin, setLinkedin] = useState("");
+  const [github, setGithub] = useState("");
 
   // IMAGE STATES
   const [profileFile, setProfileFile] = useState(null);
@@ -318,10 +325,9 @@ const handleUnfollowFromMenu = () => {
       setWebsite(data.website || "");
 
       // SOCIAL LINKS
-      setFacebook(data.facebook || "");
       setInstagram(data.instagram || "");
-      setTwitter(data.twitter || "");
       setLinkedin(data.linkedin || "");
+      setGithub(data.github || "");
 
       // IMAGES
       setProfilePreview(
@@ -344,10 +350,9 @@ const handleUnfollowFromMenu = () => {
     setWebsite(data?.website || "");
 
     // SOCIAL LINKS
-    setFacebook(data?.facebook || "");
     setInstagram(data?.instagram || "");
-    setTwitter(data?.twitter || "");
     setLinkedin(data?.linkedin || "");
+    setGithub(data?.github || "");
 
     // RESET FILES
     setProfileFile(null);
@@ -376,10 +381,9 @@ const handleUnfollowFromMenu = () => {
     setCoverFile(null);
 
     // RESET SOCIAL LINKS
-    setFacebook(data?.facebook || "");
     setInstagram(data?.instagram || "");
-    setTwitter(data?.twitter || "");
     setLinkedin(data?.linkedin || "");
+    setGithub(data?.github || "");
 
     // RESET IMAGES
     setProfilePreview(
@@ -498,10 +502,9 @@ const handleUnfollowFromMenu = () => {
           website: website.trim(),
 
           // SOCIAL LINKS
-          facebook: facebook.trim(),
-          instagram: instagram.trim(),
-          twitter: twitter.trim(),
-          linkedin: linkedin.trim(),
+          instagram: normalizeExternalUrl(instagram),
+          linkedin: normalizeExternalUrl(linkedin),
+          github: normalizeExternalUrl(github),
 
           // IMAGES
           profilePic,
@@ -740,59 +743,7 @@ const handleUnfollowFromMenu = () => {
       <div className="profileContainer">
 
         {/* ======================================
-            SOCIAL LINKS
-        ====================================== */}
-
-        <div className="left">
-
-          {data.facebook && (
-            <a
-              href={data.facebook}
-              target="_blank"
-              rel="noopener noreferrer"
-              title="Facebook"
-            >
-              <FacebookTwoToneIcon />
-            </a>
-          )}
-
-          {data.instagram && (
-            <a
-              href={data.instagram}
-              target="_blank"
-              rel="noopener noreferrer"
-              title="Instagram"
-            >
-              <InstagramIcon />
-            </a>
-          )}
-
-          {data.twitter && (
-            <a
-              href={data.twitter}
-              target="_blank"
-              rel="noopener noreferrer"
-              title="Twitter / X"
-            >
-              <TwitterIcon />
-            </a>
-          )}
-
-          {data.linkedin && (
-            <a
-              href={data.linkedin}
-              target="_blank"
-              rel="noopener noreferrer"
-              title="LinkedIn"
-            >
-              <LinkedInIcon />
-            </a>
-          )}
-
-        </div>
-
-        {/* ======================================
-            CENTER
+            PROFILE CONTENT
         ====================================== */}
 
         <div className="center">
@@ -801,52 +752,26 @@ const handleUnfollowFromMenu = () => {
             {data.name}
           </span>
 
-          <div className="info">
+          {data.city && (
+            <div className="locationInfo">
+              <PlaceIcon />
+              <span>{data.city}</span>
+            </div>
+          )}
 
-            {data.city && (
-              <div className="item">
-                <PlaceIcon />
-
-                <span>
-                  {data.city}
-                </span>
-              </div>
-            )}
-
-            {data.website && (
-              <div className="item">
-                <LanguageIcon />
-
-                <span>
-                  {data.website}
-                </span>
-              </div>
-            )}
-
-          </div>
-
-          {/* ====================================
-              UPDATE / FOLLOW
-          ==================================== */}
-
-          {Number(currentUser?.id) ===
-          Number(userId) ? (
-
+          {/* UPDATE / FOLLOW */}
+          {Number(currentUser?.id) === Number(userId) ? (
             <button
               className="updateBtn"
               onClick={openEditProfile}
             >
               Update
             </button>
-
           ) : (
-
             <button
               className="followBtn"
               onClick={handleFollow}
-              disabled={
-                followMutation.isPending
-              }
+              disabled={followMutation.isPending}
             >
               {followMutation.isPending
                 ? "Please wait..."
@@ -854,21 +779,64 @@ const handleUnfollowFromMenu = () => {
                 ? "Following"
                 : "Follow"}
             </button>
-
           )}
+
+          {/* SOCIAL + WEBSITE ICONS */}
+          <div className="profileSocials">
+
+            {data.instagram && (
+              <a
+                href={normalizeExternalUrl(data.instagram)}
+                target="_blank"
+                rel="noopener noreferrer"
+                title="Instagram"
+                aria-label="Instagram"
+              >
+                <InstagramIcon />
+              </a>
+            )}
+
+            {data.website && (
+              <a
+                href={normalizeExternalUrl(data.website)}
+                target="_blank"
+                rel="noopener noreferrer"
+                title="My Website"
+                aria-label="My Website"
+              >
+                <LanguageIcon />
+              </a>
+            )}
+
+            {data.linkedin && (
+              <a
+                href={normalizeExternalUrl(data.linkedin)}
+                target="_blank"
+                rel="noopener noreferrer"
+                title="LinkedIn"
+                aria-label="LinkedIn"
+              >
+                <LinkedInIcon />
+              </a>
+            )}
+
+            {data.github && (
+              <a
+                href={normalizeExternalUrl(data.github)}
+                target="_blank"
+                rel="noopener noreferrer"
+                title="GitHub"
+                aria-label="GitHub"
+              >
+                <GitHubIcon />
+              </a>
+            )}
+
+          </div>
 
         </div>
 
-        {/* ======================================
-            RIGHT ACTIONS
-        ====================================== */}
-
-      <div className="right">
-
-        <EmailOutlinedIcon
-          className="actionIcon"
-        />
-
+        {/* PROFILE MORE MENU - TOP RIGHT */}
         <div className="profileActionsMenu">
 
           <button
@@ -879,6 +847,7 @@ const handleUnfollowFromMenu = () => {
               setMenuOpen((prev) => !prev);
             }}
             aria-label="More profile actions"
+            title="More options"
           >
             <MoreVertIcon />
           </button>
@@ -886,7 +855,6 @@ const handleUnfollowFromMenu = () => {
           {menuOpen && (
             <div className="profileMenu">
 
-              {/* SHARE PROFILE */}
               <button
                 type="button"
                 onClick={handleShareProfile}
@@ -895,7 +863,6 @@ const handleUnfollowFromMenu = () => {
                 <span>Share Profile</span>
               </button>
 
-              {/* COPY PROFILE LINK */}
               <button
                 type="button"
                 onClick={handleCopyProfileLink}
@@ -904,7 +871,6 @@ const handleUnfollowFromMenu = () => {
                 <span>Copy Profile Link</span>
               </button>
 
-              {/* UNFOLLOW */}
               {Number(currentUser?.id) !== Number(userId) &&
                 isFollowing && (
                   <>
@@ -930,8 +896,6 @@ const handleUnfollowFromMenu = () => {
           )}
 
         </div>
-
-      </div>
 
       </div>
 
@@ -1122,27 +1086,6 @@ const handleUnfollowFromMenu = () => {
             </div>
 
             {/* ==================================
-                FACEBOOK
-            ================================== */}
-
-            <div className="formGroup">
-
-              <label>
-                Facebook
-              </label>
-
-              <input
-                type="text"
-                value={facebook}
-                onChange={(e) =>
-                  setFacebook(e.target.value)
-                }
-                placeholder="https://facebook.com/username"
-              />
-
-            </div>
-
-            {/* ==================================
                 INSTAGRAM
             ================================== */}
 
@@ -1164,27 +1107,6 @@ const handleUnfollowFromMenu = () => {
             </div>
 
             {/* ==================================
-                TWITTER / X
-            ================================== */}
-
-            <div className="formGroup">
-
-              <label>
-                Twitter / X
-              </label>
-
-              <input
-                type="text"
-                value={twitter}
-                onChange={(e) =>
-                  setTwitter(e.target.value)
-                }
-                placeholder="https://x.com/username"
-              />
-
-            </div>
-
-            {/* ==================================
                 LINKEDIN
             ================================== */}
 
@@ -1201,6 +1123,27 @@ const handleUnfollowFromMenu = () => {
                   setLinkedin(e.target.value)
                 }
                 placeholder="https://linkedin.com/in/username"
+              />
+
+            </div>
+
+            {/* ==================================
+                GITHUB
+            ================================== */}
+
+            <div className="formGroup">
+
+              <label>
+                GitHub
+              </label>
+
+              <input
+                type="text"
+                value={github}
+                onChange={(e) =>
+                  setGithub(e.target.value)
+                }
+                placeholder="https://github.com/username"
               />
 
             </div>

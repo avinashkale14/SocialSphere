@@ -61,224 +61,156 @@
 
   .profileContainer {
     width: calc(100% - 80px);
-
     margin: 90px 40px 25px;
-
     min-height: 190px;
-
-    padding: 30px 35px;
-
+    padding: 30px 50px;
     border-radius: 16px;
-
     background-color: themed("bg");
-
     color: themed("textColor");
-
-    box-shadow:
-      0 5px 25px rgba(0, 0, 0, 0.08);
-
+    box-shadow: 0 5px 25px rgba(0, 0, 0, 0.08);
     display: flex;
-
     align-items: center;
-
-    justify-content: space-between;
-
-    gap: 25px;
-
-
-    /* ========================================
-       SOCIAL
-    ======================================== */
-
-    .left {
-      flex: 1;
-
-      min-width: 0;
-
-      display: flex;
-
-      align-items: center;
-
-      gap: 15px;
-
-      a {
-        width: 34px;
-        height: 34px;
-
-        color: themed("textColor");
-
-        display: flex;
-
-        align-items: center;
-
-        justify-content: center;
-
-        border-radius: 50%;
-
-        text-decoration: none;
-
-        transition:
-          transform 0.2s ease,
-          background 0.2s ease,
-          color 0.2s ease;
-
-        &:hover {
-          transform:
-            translateY(-3px)
-            scale(1.08);
-
-          background: themed("bgSoft");
-        }
-
-        svg {
-          font-size: 27px;
-        }
-      }
-    }
-
-
-    /* ========================================
-       CENTER
-    ======================================== */
-
-    .center {
-      flex: 2;
-
-      display: flex;
-
-      flex-direction: column;
-
-      align-items: center;
-
-      justify-content: center;
-
-      gap: 12px;
-
-      text-align: center;
-
-
-      .name {
-        font-size: 28px;
-
-        font-weight: 700;
-
-        color: themed("textColor");
-
-        word-break: break-word;
-      }
-
-
-      .info {
-        display: flex;
-
-        align-items: center;
-
-        justify-content: center;
-
-        gap: 25px;
-
-        flex-wrap: wrap;
-
-
-        .item {
-          display: flex;
-
-          align-items: center;
-
-          gap: 6px;
-
-          color: themed("textColorSoft");
-
-
-          svg {
-            font-size: 19px;
-          }
-
-
-          span {
-            font-size: 14px;
-
-            word-break: break-word;
-          }
-        }
-      }
-
-
-      button {
-        border: none;
-
-        padding: 10px 28px;
-
-        border-radius: 7px;
-
-        color: white;
-
-        background-color: #5271ff;
-
-        font-size: 14px;
-
-        font-weight: 600;
-
-        cursor: pointer;
-
-        transition: 0.2s ease;
-
-
-        &:hover {
-          opacity: 0.9;
-
-          transform:
-            translateY(-1px);
-        }
-
-
-        &:disabled {
-          opacity: 0.6;
-
-          cursor: not-allowed;
-
-          transform: none;
-        }
-      }
-    }
-
-
-    /* ========================================
-       RIGHT ACTIONS
-    ======================================== */
-
-    .right {
-      flex: 1;
-
-      display: flex;
-
-      align-items: center;
-
-      justify-content: flex-end;
-
-      gap: 18px;
-
-
-      .actionIcon {
-        font-size: 23px;
-
-        cursor: pointer;
-
-        color: themed("textColorSoft");
-
-        transition:
-          transform 0.2s ease,
-          color 0.2s ease;
-
-        &:hover {
-          transform: scale(1.1);
-
-          color: themed("textColor");
-        }
-      }
-    }
+    justify-content: center;
+    position: relative;
+    box-sizing: border-box;
   }
 
+  /* ========================================
+     PROFILE CONTENT
+  ======================================== */
+
+  .profileContainer .center {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    text-align: center;
+  }
+
+  .profileContainer .center .name {
+    font-size: 28px;
+    font-weight: 700;
+    color: themed("textColor");
+    word-break: break-word;
+  }
+
+  .profileContainer .locationInfo {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    color: themed("textColorSoft");
+    margin-top: -2px;
+  }
+
+  .profileContainer .locationInfo svg {
+    font-size: 19px;
+  }
+
+  .profileContainer .locationInfo span {
+    font-size: 14px;
+    word-break: break-word;
+  }
+
+  .profileContainer .center button {
+    border: none;
+    padding: 10px 28px;
+    border-radius: 7px;
+    color: white;
+    background-color: #5271ff;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: 0.2s ease;
+  }
+
+  .profileContainer .center button:hover {
+    opacity: 0.9;
+    transform: translateY(-1px);
+  }
+
+  .profileContainer .center button:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    transform: none;
+  }
+
+  /* ========================================
+     SOCIAL + WEBSITE ICONS
+  ======================================== */
+
+  .profileSocials {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 18px;
+    margin-top: 4px;
+    flex-wrap: wrap;
+  }
+
+  .profileSocials a {
+    width: 34px;
+    height: 34px;
+    color: themed("textColor");
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    text-decoration: none;
+    transition:
+      transform 0.2s ease,
+      background 0.2s ease,
+      color 0.2s ease;
+  }
+
+  .profileSocials a:hover {
+    transform: translateY(-3px) scale(1.08);
+    background: themed("bgSoft");
+  }
+
+  .profileSocials a svg {
+    font-size: 27px;
+  }
+
+  /* ========================================
+     PROFILE MORE ACTIONS - TOP RIGHT
+  ======================================== */
+
+  .profileActionsMenu {
+    position: absolute;
+    top: 18px;
+    right: 18px;
+    display: flex;
+    align-items: center;
+    z-index: 20;
+  }
+
+  .profileActionsMenu .moreButton {
+    width: 34px;
+    height: 34px;
+    padding: 0;
+    border: none;
+    border-radius: 50%;
+    background: transparent;
+    color: themed("textColorSoft");
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: 0.2s ease;
+  }
+
+  .profileActionsMenu .moreButton:hover {
+    background: themed("bgSoft");
+    color: themed("textColor");
+    transform: scale(1.05);
+  }
+
+  .profileActionsMenu .moreButton svg {
+    font-size: 23px;
+  }
 
   /* ==========================================
      EDIT OVERLAY
@@ -779,378 +711,41 @@
   }
 
 
-  /* ==========================================
-     LAPTOP
-  ========================================== */
-
-  @include laptop {
-
-    .profileContainer {
-      width: calc(100% - 50px);
-
-      margin-left: 25px;
-
-      margin-right: 25px;
-    }
-  }
-
-
-  /* ==========================================
-     TABLET
-  ========================================== */
-
-  @include tablet {
-
-    .images {
-      height: 250px;
-
-
-      .profilePic {
-        width: 130px;
-
-        height: 130px;
-
-        bottom: -65px;
-      }
-    }
-
-
-    .profileContainer {
-      width: calc(100% - 40px);
-
-      margin: 80px 20px 25px;
-
-      padding: 25px;
-
-      gap: 18px;
-    }
-
-
-    .profileContainer .left {
-      gap: 11px;
-    }
-
-
-    .profileContainer .left a {
-      width: 31px;
-      height: 31px;
-    }
-
-
-    .profileContainer .left a svg {
-      font-size: 24px;
-    }
-
-
-    .profileContainer .center .name {
-      font-size: 25px;
-    }
-
-
-    .profileContainer .center .info {
-      gap: 15px;
-    }
-  }
-
-
-  /* ==========================================
-     MOBILE
-  ========================================== */
-
-  @include mobile-large {
-
-    .images {
-      height: 220px;
-
-
-      .profilePic {
-        width: 120px;
-
-        height: 120px;
-
-        bottom: -60px;
-      }
-    }
-
-
-    .profileContainer {
-      width: calc(100% - 24px);
-
-      margin: 75px 12px 20px;
-
-      padding: 25px 15px;
-
-      flex-direction: column;
-
-      gap: 20px;
-    }
-
-
-    .profileContainer .left {
-      order: 2;
-
-      flex: none;
-
-      justify-content: center;
-
-      gap: 14px;
-    }
-
-
-    .profileContainer .left a {
-      width: 35px;
-      height: 35px;
-    }
-
-
-    .profileContainer .left a svg {
-      font-size: 27px;
-    }
-
-
-    .profileContainer .center {
-      order: 1;
-
-      width: 100%;
-
-      flex: none;
-    }
-
-
-    .profileContainer .center .name {
-      font-size: 24px;
-    }
-
-
-    .profileContainer .center .info {
-      flex-direction: column;
-
-      gap: 8px;
-    }
-
-
-    .profileContainer .right {
-      order: 3;
-
-      flex: none;
-
-      justify-content: center;
-
-      gap: 20px;
-    }
-
-
-    .editOverlay {
-      padding: 10px;
-    }
-
-
-    .editModal {
-      padding: 20px;
-
-      max-height: 94vh;
-    }
-  }
-
-
-  /* ==========================================
-     SMALL MOBILE
-  ========================================== */
-
-  @include mobile {
-
-    .images {
-      height: 180px;
-
-
-      .profilePic {
-        width: 100px;
-
-        height: 100px;
-
-        bottom: -50px;
-
-        border-width: 4px;
-      }
-    }
-
-
-    .profileContainer {
-      width: calc(100% - 16px);
-
-      margin: 65px 8px 15px;
-
-      padding: 20px 10px;
-
-      border-radius: 12px;
-
-      gap: 17px;
-    }
-
-
-    .profileContainer .left {
-      gap: 12px;
-    }
-
-
-    .profileContainer .left a {
-      width: 32px;
-      height: 32px;
-    }
-
-
-    .profileContainer .left a svg {
-      font-size: 24px;
-    }
-
-
-    .profileContainer .center .name {
-      font-size: 22px;
-    }
-
-
-    .profileContainer .center .info .item span {
-      font-size: 12px;
-    }
-
-
-    .profileContainer .center button {
-      width: 100%;
-
-      max-width: 200px;
-    }
-
-
-    .profileContainer .right {
-      gap: 18px;
-    }
-
-
-    .profileContainer .right .actionIcon {
-      font-size: 21px;
-    }
-
-
-    .editModal {
-      padding: 16px;
-
-      border-radius: 14px;
-    }
-
-
-    .editHeader h2 {
-      font-size: 19px;
-    }
-
-
-    .coverPreview {
-      height: 120px;
-    }
-
-
-    .editProfileImage {
-      width: 100px;
-
-      height: 100px;
-    }
-
-
-    .formGroup {
-      margin-bottom: 13px;
-
-      gap: 6px;
-    }
-
-
-    .formGroup label {
-      font-size: 12px;
-    }
-
-
-    .formGroup input {
-      padding: 10px 11px;
-
-      font-size: 13px;
-    }
-
-
-    .editActions {
-      margin-top: 20px;
-
-
-      button {
-        flex: 1;
-
-        padding: 10px 12px;
-
-        font-size: 13px;
-      }
-    }
-  }
 }
 
 /* =========================================================
    PROFILE MORE ACTIONS MENU
 ========================================================= */
 
-.profileActionsMenu {
-  position: relative;
-  display: flex;
-  align-items: center;
-}
-
-.profileActionsMenu .moreButton {
-  border: none;
-  background: transparent;
-  cursor: pointer;
-}
-
-.profileActionsMenu .moreButton:hover {
-  background: themed("bgSoft");
-}
-
 .profileMenu {
   position: absolute;
-  top: calc(100% + 8px);
+  top: 40px;
   right: 0;
-
   width: 190px;
   padding: 6px;
-
   background: themed("bg");
   border: 1px solid themed("border");
   border-radius: 12px;
-
   box-shadow: 0 10px 28px rgba(0, 0, 0, 0.12);
-
   z-index: 50;
-
   animation: profileMenuOpen 0.16s ease;
 }
 
 .profileMenu button {
   width: 100%;
   min-height: 38px;
-
   display: flex;
   align-items: center;
-
   gap: 10px;
-
   padding: 8px 10px;
-
   border: none;
   border-radius: 8px;
-
   background: transparent;
   color: themed("textColor");
-
   font-size: 11px;
   font-weight: 550;
-
   text-align: left;
   cursor: pointer;
-
   transition:
     background 0.16s ease,
     color 0.16s ease;
@@ -1163,7 +758,6 @@
 .profileMenu button svg {
   width: 17px;
   height: 17px;
-
   flex-shrink: 0;
 }
 
@@ -1173,9 +767,7 @@
 
 .profileMenuDivider {
   height: 1px;
-
   margin: 5px 4px;
-
   background: themed("border");
 }
 
@@ -1204,32 +796,175 @@
   }
 }
 
-
 /* =========================================================
-   MOBILE
+   RESPONSIVE PROFILE ACTIONS
 ========================================================= */
 
-@media (max-width: 600px) {
+@include laptop {
+  .profileContainer {
+    width: calc(100% - 50px);
+    margin-left: 25px;
+    margin-right: 25px;
+  }
+}
+
+@include tablet {
+  .profileContainer {
+    width: calc(100% - 40px);
+    margin: 80px 20px 25px;
+    padding: 25px 35px;
+  }
+
+  .profileContainer .center .name {
+    font-size: 25px;
+  }
+}
+
+@include mobile-large {
+  .profileContainer {
+    width: calc(100% - 24px);
+    margin: 75px 12px 20px;
+    padding: 25px 15px;
+  }
+
+  .profileContainer .center .name {
+    font-size: 24px;
+  }
+
+  .profileSocials {
+    gap: 14px;
+  }
+
+  .profileSocials a {
+    width: 35px;
+    height: 35px;
+  }
+
+  .profileSocials a svg {
+    font-size: 27px;
+  }
+
+  .profileActionsMenu {
+    top: 14px;
+    right: 14px;
+  }
+
+  .editOverlay {
+    padding: 10px;
+  }
+
+  .editModal {
+    padding: 20px;
+    max-height: 94vh;
+  }
+}
+
+@include mobile {
+  .profileContainer {
+    width: calc(100% - 16px);
+    margin: 65px 8px 15px;
+    padding: 20px 10px;
+    border-radius: 12px;
+    gap: 17px;
+  }
+
+  .profileContainer .center .name {
+    font-size: 22px;
+  }
+
+  .profileContainer .locationInfo span {
+    font-size: 12px;
+  }
+
+  .profileContainer .center button {
+    width: 100%;
+    max-width: 200px;
+  }
+
+  .profileSocials {
+    gap: 12px;
+  }
+
+  .profileSocials a {
+    width: 32px;
+    height: 32px;
+  }
+
+  .profileSocials a svg {
+    font-size: 24px;
+  }
+
+  .profileActionsMenu {
+    top: 10px;
+    right: 10px;
+  }
+
+  .profileActionsMenu .moreButton {
+    width: 32px;
+    height: 32px;
+  }
+
+  .profileActionsMenu .moreButton svg {
+    font-size: 21px;
+  }
 
   .profileMenu {
     width: 175px;
     right: 0;
-
-    top: calc(100% + 6px);
-
+    top: 36px;
     border-radius: 11px;
   }
 
   .profileMenu button {
     min-height: 36px;
-
     padding: 7px 9px;
-
     font-size: 10px;
   }
 
   .profileMenu button svg {
     width: 16px;
     height: 16px;
+  }
+
+  .editModal {
+    padding: 16px;
+    border-radius: 14px;
+  }
+
+  .editHeader h2 {
+    font-size: 19px;
+  }
+
+  .coverPreview {
+    height: 120px;
+  }
+
+  .editProfileImage {
+    width: 100px;
+    height: 100px;
+  }
+
+  .formGroup {
+    margin-bottom: 13px;
+    gap: 6px;
+  }
+
+  .formGroup label {
+    font-size: 12px;
+  }
+
+  .formGroup input {
+    padding: 10px 11px;
+    font-size: 13px;
+  }
+
+  .editActions {
+    margin-top: 20px;
+  }
+
+  .editActions button {
+    flex: 1;
+    padding: 10px 12px;
+    font-size: 13px;
   }
 }

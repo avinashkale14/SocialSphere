@@ -24,10 +24,9 @@ export const getUser = (req, res) => {
       profilePic,
       city,
       website,
-      facebook,
       instagram,
-      twitter,
-      linkedin
+      linkedin,
+      github
     FROM users
     WHERE id = ?
   `;
@@ -48,7 +47,7 @@ export const getUser = (req, res) => {
 
 
 // ========================================
-// GET ALL USERS FOR RIGHTBAR / EXPLORE
+// GET ALL USERS FOR RIGHTBAR
 // ========================================
 
 export const getUsers = (req, res) => {
@@ -128,9 +127,7 @@ export const getActivities = (req, res) => {
       SELECT *
       FROM (
 
-        /* ==================================
-           PROFILE UPDATED
-        ================================== */
+        /* PROFILE UPDATED */
 
         SELECT
           u.id AS activityId,
@@ -152,9 +149,7 @@ export const getActivities = (req, res) => {
         UNION ALL
 
 
-        /* ==================================
-           NEW POST
-        ================================== */
+        /* NEW POST */
 
         SELECT
           p.id AS activityId,
@@ -177,9 +172,7 @@ export const getActivities = (req, res) => {
         UNION ALL
 
 
-        /* ==================================
-           NEW STORY
-        ================================== */
+        /* NEW STORY */
 
         SELECT
           s.id AS activityId,
@@ -204,9 +197,7 @@ export const getActivities = (req, res) => {
         UNION ALL
 
 
-        /* ==================================
-           NEW COMMENT
-        ================================== */
+        /* NEW COMMENT */
 
         SELECT
           c.id AS activityId,
@@ -229,9 +220,7 @@ export const getActivities = (req, res) => {
         UNION ALL
 
 
-        /* ==================================
-           SOMEONE FOLLOWED CURRENT USER
-        ================================== */
+        /* SOMEONE FOLLOWED CURRENT USER */
 
         SELECT
           r.followerUserId AS activityId,
@@ -285,15 +274,12 @@ export const updateUser = (req, res) => {
   jwt.verify(token, JWT_SECRET, (err, userInfo) => {
     if (err) {
       console.log("UPDATE USER JWT ERROR:", err);
-
       return res.status(403).json("Token is not valid!");
     }
 
     const userId = req.params.id;
 
-    // --------------------------------
     // ONLY OWNER CAN UPDATE
-    // --------------------------------
 
     if (Number(userId) !== Number(userInfo.id)) {
       return res
@@ -301,9 +287,7 @@ export const updateUser = (req, res) => {
         .json("You can update only your own profile!");
     }
 
-    // --------------------------------
     // GET EXISTING IMAGES
-    // --------------------------------
 
     const getUserQuery = `
       SELECT
@@ -319,7 +303,6 @@ export const updateUser = (req, res) => {
       (err, userData) => {
         if (err) {
           console.log("GET EXISTING USER ERROR:", err);
-
           return res.status(500).json(err);
         }
 
@@ -333,9 +316,7 @@ export const updateUser = (req, res) => {
         const existingCoverPic =
           userData[0].coverPic;
 
-        // --------------------------------
-        // KEEP OLD IMAGE
-        // --------------------------------
+        // KEEP OLD IMAGE IF NO NEW IMAGE IS PROVIDED
 
         const profilePic =
           req.body.profilePic ||
@@ -347,9 +328,12 @@ export const updateUser = (req, res) => {
           existingCoverPic ||
           null;
 
-        // --------------------------------
         // UPDATE PROFILE
-        // --------------------------------
+        // ONLY:
+        // website
+        // instagram
+        // linkedin
+        // github
 
         const q = `
           UPDATE users
@@ -357,12 +341,12 @@ export const updateUser = (req, res) => {
             name = ?,
             city = ?,
             website = ?,
-            facebook = ?,
             instagram = ?,
-            twitter = ?,
             linkedin = ?,
+            github = ?,
             profilePic = ?,
-            coverPic = ?
+            coverPic = ?,
+            updatedAt = NOW()
           WHERE id = ?
         `;
 
@@ -371,10 +355,9 @@ export const updateUser = (req, res) => {
           req.body.city?.trim() || null,
           req.body.website?.trim() || null,
 
-          req.body.facebook?.trim() || null,
           req.body.instagram?.trim() || null,
-          req.body.twitter?.trim() || null,
           req.body.linkedin?.trim() || null,
+          req.body.github?.trim() || null,
 
           profilePic,
           coverPic,
@@ -385,7 +368,6 @@ export const updateUser = (req, res) => {
         db.query(q, values, (err) => {
           if (err) {
             console.log("UPDATE USER ERROR:", err);
-
             return res.status(500).json(err);
           }
 
