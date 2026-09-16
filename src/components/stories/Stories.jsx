@@ -2,6 +2,7 @@ import "./stories.scss";
 
 import {
   useContext,
+  useEffect,
   useRef,
   useState,
 } from "react";
@@ -37,12 +38,30 @@ const Stories = () => {
   const fileRef =
     useRef(null);
 
+  const [previewFile, setPreviewFile] =
+    useState(null);
+
+  const [previewUrl, setPreviewUrl] =
+    useState("");
 
   const [selectedStory, setSelectedStory] =
     useState(null);
 
   const [viewerOpen, setViewerOpen] =
     useState(false);
+
+
+  /* =====================================================
+     PREVIEW URL CLEANUP
+  ===================================================== */
+
+  useEffect(() => {
+    return () => {
+      if (previewUrl) {
+        URL.revokeObjectURL(previewUrl);
+      }
+    };
+  }, [previewUrl]);
 
 
   /* =====================================================
@@ -142,6 +161,8 @@ const Stories = () => {
           queryKey: ["stories"],
         });
 
+        setPreviewFile(null);
+        setPreviewUrl("");
 
         if (fileRef.current) {
           fileRef.current.value = "";
@@ -246,14 +267,14 @@ const Stories = () => {
 
 
   /* =====================================================
-     HANDLE UPLOAD
+     HANDLE FILE SELECT
+     SHOW PREVIEW FIRST
   ===================================================== */
 
   const handleFileChange = (e) => {
 
     const file =
       e.target.files?.[0];
-
 
     if (!file) {
       return;
@@ -291,8 +312,47 @@ const Stories = () => {
     }
 
 
+    // Create local preview only.
+    // Story is NOT uploaded yet.
+    const objectUrl =
+      URL.createObjectURL(file);
+
+    setPreviewFile(file);
+    setPreviewUrl(objectUrl);
+  };
+
+
+  /* =====================================================
+     CANCEL STORY PREVIEW
+  ===================================================== */
+
+  const cancelStoryPreview = () => {
+
+    if (previewUrl) {
+      URL.revokeObjectURL(previewUrl);
+    }
+
+    setPreviewFile(null);
+    setPreviewUrl("");
+
+    if (fileRef.current) {
+      fileRef.current.value = "";
+    }
+  };
+
+
+  /* =====================================================
+     CONFIRM STORY UPLOAD
+  ===================================================== */
+
+  const confirmStoryUpload = () => {
+
+    if (!previewFile) {
+      return;
+    }
+
     uploadStoryMutation.mutate(
-      file
+      previewFile
     );
   };
 
@@ -667,6 +727,122 @@ const Stories = () => {
           ))}
 
       </div>
+
+
+      {/* =================================================
+          STORY PREVIEW
+      ================================================= */}
+
+      {previewFile &&
+        previewUrl && (
+
+        <div
+          className="storyPreviewBackdrop"
+          onClick={cancelStoryPreview}
+        >
+
+          <div
+            className="storyPreviewModal"
+            onClick={(e) =>
+              e.stopPropagation()
+            }
+          >
+
+            <div className="storyPreviewHeader">
+
+              <div>
+                <h3>
+                  Preview Story
+                </h3>
+
+                <span>
+                  Check your photo before uploading
+                </span>
+              </div>
+
+              <button
+                type="button"
+                className="storyPreviewClose"
+                onClick={cancelStoryPreview}
+                disabled={
+                  uploadStoryMutation.isPending
+                }
+                aria-label="Close preview"
+              >
+                <CloseIcon />
+              </button>
+
+            </div>
+
+
+            <div className="storyPreviewImageWrap">
+
+              <img
+                src={previewUrl}
+                alt="Story preview"
+                className="storyPreviewImage"
+              />
+
+            </div>
+
+
+            <div className="storyPreviewInfo">
+
+              <strong>
+                {previewFile.name}
+              </strong>
+
+              <span>
+                {(
+                  previewFile.size /
+                  (1024 * 1024)
+                ).toFixed(2)} MB
+              </span>
+
+            </div>
+
+
+            {uploadStoryMutation.isPending && (
+
+              <div className="storyPreviewUploading">
+                Uploading story...
+              </div>
+
+            )}
+
+
+            <div className="storyPreviewActions">
+
+              <button
+                type="button"
+                className="storyPreviewCancel"
+                onClick={cancelStoryPreview}
+                disabled={
+                  uploadStoryMutation.isPending
+                }
+              >
+                Cancel
+              </button>
+
+              <button
+                type="button"
+                className="storyPreviewUpload"
+                onClick={confirmStoryUpload}
+                disabled={
+                  uploadStoryMutation.isPending
+                }
+              >
+                {uploadStoryMutation.isPending
+                  ? "Uploading..."
+                  : "Upload Story"}
+              </button>
+
+            </div>
+
+          </div>
+
+        </div>
+      )}
 
 
       {/* =================================================

@@ -1,33 +1,42 @@
-// ========================================
+// ======================================================
 // IMAGE URL HELPER
-// ========================================
+// ======================================================
 
 export const getImageUrl = (image) => {
   if (!image) {
     return "";
   }
 
-  // Already a complete URL
+  const imageValue = String(image).trim();
+
+  if (!imageValue) {
+    return "";
+  }
+
+  // Already complete URL
   if (
-    image.startsWith("http://") ||
-    image.startsWith("https://") ||
-    image.startsWith("blob:") ||
-    image.startsWith("data:")
+    imageValue.startsWith("http://") ||
+    imageValue.startsWith("https://") ||
+    imageValue.startsWith("blob:") ||
+    imageValue.startsWith("data:")
   ) {
-    return image;
+    return imageValue;
   }
 
   // Local uploaded image from backend
-  return `http://localhost:8800/upload/${image}`;
+  return `http://localhost:8800/upload/${imageValue}`;
 };
 
 
-// ========================================
+// ======================================================
 // DEFAULT AVATAR PLACEHOLDER
-// ========================================
+// ======================================================
 
-export const getAvatarPlaceholder = (name = "User") => {
-  const cleanName = String(name || "User").trim();
+export const getAvatarPlaceholder = (
+  name = "User"
+) => {
+  const cleanName =
+    String(name || "User").trim();
 
   const words = cleanName
     .split(/\s+/)
@@ -40,10 +49,14 @@ export const getAvatarPlaceholder = (name = "User") => {
       words[0].charAt(0) +
       words[words.length - 1].charAt(0);
   } else if (words.length === 1) {
-    initials = words[0].charAt(0);
+    initials =
+      words[0].slice(0, 2);
   }
 
-  initials = initials.toUpperCase();
+  initials = initials
+    .toUpperCase()
+    .replace(/[^A-Z0-9]/g, "")
+    .slice(0, 2) || "U";
 
   const svg = `
     <svg
@@ -52,6 +65,7 @@ export const getAvatarPlaceholder = (name = "User") => {
       height="200"
       viewBox="0 0 200 200"
     >
+
       <rect
         width="200"
         height="200"
@@ -81,16 +95,20 @@ export const getAvatarPlaceholder = (name = "User") => {
       >
         ${initials}
       </text>
+
     </svg>
   `;
 
-  return `data:image/svg+xml;charset=UTF-8,${encodeURIComponent(svg)}`;
+  return (
+    `data:image/svg+xml;charset=UTF-8,` +
+    encodeURIComponent(svg)
+  );
 };
 
 
-// ========================================
+// ======================================================
 // DEFAULT COVER PLACEHOLDER
-// ========================================
+// ======================================================
 
 export const getCoverPlaceholder = () => {
   const svg = `
@@ -109,6 +127,7 @@ export const getCoverPlaceholder = () => {
           x2="1"
           y2="1"
         >
+
           <stop
             offset="0%"
             stop-color="#f3f5ff"
@@ -123,6 +142,7 @@ export const getCoverPlaceholder = () => {
             offset="100%"
             stop-color="#f8f9ff"
           />
+
         </linearGradient>
       </defs>
 
@@ -215,12 +235,15 @@ export const getCoverPlaceholder = () => {
     </svg>
   `;
 
-  return `data:image/svg+xml;charset=UTF-8,${encodeURIComponent(svg)}`;
+  return (
+    `data:image/svg+xml;charset=UTF-8,` +
+    encodeURIComponent(svg)
+  );
 };
 
 
-// ========================================
+// ======================================================
 // DEFAULT EXPORT
-// ========================================
+// ======================================================
 
 export default getImageUrl;

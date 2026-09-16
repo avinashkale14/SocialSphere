@@ -31,9 +31,8 @@ export const getPosts = (req, res) => {
         ON u.id = p.userId
     `;
 
-    let values = [];
+    const values = [];
 
-    // Profile page request
     if (req.query.userId) {
       q += ` WHERE p.userId = ? `;
       values.push(req.query.userId);
@@ -52,7 +51,6 @@ export const getPosts = (req, res) => {
   });
 };
 
-
 // ======================================================
 // ADD POST
 // ======================================================
@@ -69,44 +67,15 @@ export const addPost = (req, res) => {
       return res.status(403).json("Token is not valid!");
     }
 
-    // ------------------------------------------
-    // GET POST DATA
-    // ------------------------------------------
+    const desc = req.body.desc?.trim() || "";
+    const img = req.body.img || null;
+    const video = req.body.video || null;
+    const location = req.body.location?.trim() || null;
+    const feeling = req.body.feeling || null;
 
-    const desc =
-      req.body.desc?.trim() || "";
-
-    const img =
-      req.body.img || null;
-
-    const video =
-      req.body.video || null;
-
-    const location =
-      req.body.location?.trim() || null;
-
-    const feeling =
-      req.body.feeling || null;
-
-    // ------------------------------------------
-    // EMPTY POST CHECK
-    // ------------------------------------------
-
-    if (
-      !desc &&
-      !img &&
-      !video &&
-      !location &&
-      !feeling
-    ) {
-      return res
-        .status(400)
-        .json("Post cannot be empty!");
+    if (!desc && !img && !video && !location && !feeling) {
+      return res.status(400).json("Post cannot be empty!");
     }
-
-    // ------------------------------------------
-    // INSERT POST
-    // ------------------------------------------
 
     const q = `
       INSERT INTO posts
@@ -133,38 +102,27 @@ export const addPost = (req, res) => {
 
     db.query(q, values, (err, data) => {
       if (err) {
-        console.log(
-          "ADD POST ERROR:",
-          err
-        );
-
-        return res
-          .status(500)
-          .json(err);
+        console.log("ADD POST ERROR:", err);
+        return res.status(500).json(err);
       }
 
-      // ------------------------------------------
-      // CREATE ACTIVITY
-      // ------------------------------------------
-
+      // POST activity is global.
       createActivity(
         userInfo.id,
         "post",
         null,
-        data.insertId
+        data.insertId,
+        null,
+        null
       );
 
       return res.status(201).json({
-        message:
-          "Post created successfully!",
-
-        postId:
-          data.insertId,
+        message: "Post created successfully!",
+        postId: data.insertId,
       });
     });
   });
 };
-
 
 // ======================================================
 // EDIT POST
@@ -179,35 +137,17 @@ export const editPost = (req, res) => {
 
   jwt.verify(token, JWT_SECRET, (err, userInfo) => {
     if (err) {
-      return res
-        .status(403)
-        .json("Token is not valid!");
+      return res.status(403).json("Token is not valid!");
     }
 
-    const postId =
-      req.params.id;
+    const postId = Number(req.params.id);
+    const desc = req.body.desc;
 
-    const desc =
-      req.body.desc;
-
-    // ------------------------------------------
-    // DESCRIPTION CHECK
-    // ------------------------------------------
-
-    if (
-      desc === undefined ||
-      desc === null
-    ) {
-      return res
-        .status(400)
-        .json(
-          "Post description is required!"
-        );
+    if (desc === undefined || desc === null) {
+      return res.status(400).json(
+        "Post description is required!"
+      );
     }
-
-    // ------------------------------------------
-    // CHECK POST OWNER
-    // ------------------------------------------
 
     const checkQuery = `
       SELECT userId
@@ -215,82 +155,59 @@ export const editPost = (req, res) => {
       WHERE id = ?
     `;
 
-    db.query(
-      checkQuery,
-      [postId],
-      (err, data) => {
-        if (err) {
-          console.log(
-            "CHECK EDIT POST ERROR:",
-            err
-          );
+    db.query(checkQuery, [postId], (err, data) => {
+      if (err) {
+        console.log("CHECK EDIT POST ERROR:", err);
+        return res.status(500).json(err);
+      }
 
-          return res
-            .status(500)
-            .json(err);
-        }
+      if (data.length === 0) {
+        return res.status(404).json("Post not found!");
+      }
 
-        if (data.length === 0) {
-          return res
-            .status(404)
-            .json("Post not found!");
-        }
-
-        if (
-          Number(data[0].userId) !==
-          Number(userInfo.id)
-        ) {
-          return res
-            .status(403)
-            .json(
-              "You can edit only your own post!"
-            );
-        }
-
-        // --------------------------------------
-        // UPDATE POST
-        // --------------------------------------
-
-        const updateQuery = `
-          UPDATE posts
-          SET \`desc\` = ?
-          WHERE id = ?
-        `;
-
-        db.query(
-          updateQuery,
-          [
-            desc.trim(),
-            postId,
-          ],
-          (err) => {
-            if (err) {
-              console.log(
-                "EDIT POST ERROR:",
-                err
-              );
-
-              return res
-                .status(500)
-                .json(err);
-            }
-
-            return res
-              .status(200)
-              .json({
-                message:
-                  "Post updated successfully!",
-              });
-          }
+      if (Number(data[0].userId) !== Number(userInfo.id)) {
+        return res.status(403).json(
+          "You can edit only your own post!"
         );
       }
-    );
+
+      const updateQuery = `
+        UPDATE posts
+        SET \`desc\` = ?
+        WHERE id = ?
+      `;
+
+      db.query(
+        updateQuery,
+        [
+          desc.trim(),
+          postId,
+        ],
+        (err) => {
+          if (err) {
+            console.log("EDIT POST ERROR:", err);
+            return res.status(500).json(err);
+          }
+
+          return res.status(200).json({
+            message: "Post updated successfully!",
+          });
+        }
+      );
+    });
   });
 };
 
-
 // ======================================================
 // DELETE POST
+// ======================================================
+// Deletes:
+// - all comments
+// - all likes
+// - post activity
+// - like activities
+// - comment activities
+// - finally the post
 // ======================================================
 
 export const deletePost = (req, res) => {
@@ -302,17 +219,14 @@ export const deletePost = (req, res) => {
 
   jwt.verify(token, JWT_SECRET, (err, userInfo) => {
     if (err) {
-      return res
-        .status(403)
-        .json("Token is not valid!");
+      return res.status(403).json("Token is not valid!");
     }
 
-    const postId =
-      req.params.id;
+    const postId = Number(req.params.id);
 
-    // ------------------------------------------
-    // CHECK POST OWNER
-    // ------------------------------------------
+    if (!postId) {
+      return res.status(400).json("Post ID is required!");
+    }
 
     const checkQuery = `
       SELECT userId
@@ -320,150 +234,108 @@ export const deletePost = (req, res) => {
       WHERE id = ?
     `;
 
-    db.query(
-      checkQuery,
-      [postId],
-      (err, data) => {
-        if (err) {
-          console.log(
-            "CHECK DELETE POST ERROR:",
-            err
-          );
+    db.query(checkQuery, [postId], (err, data) => {
+      if (err) {
+        console.log("CHECK DELETE POST ERROR:", err);
+        return res.status(500).json(err);
+      }
 
-          return res
-            .status(500)
-            .json(err);
-        }
+      if (data.length === 0) {
+        return res.status(404).json("Post not found!");
+      }
 
-        if (data.length === 0) {
-          return res
-            .status(404)
-            .json("Post not found!");
-        }
-
-        if (
-          Number(data[0].userId) !==
-          Number(userInfo.id)
-        ) {
-          return res
-            .status(403)
-            .json(
-              "You can delete only your own post!"
-            );
-        }
-
-        // --------------------------------------
-        // DELETE COMMENTS
-        // --------------------------------------
-
-        const deleteCommentsQuery = `
-          DELETE FROM comments
-          WHERE postId = ?
-        `;
-
-        db.query(
-          deleteCommentsQuery,
-          [postId],
-          (err) => {
-            if (err) {
-              console.log(
-                "DELETE COMMENTS ERROR:",
-                err
-              );
-
-              return res
-                .status(500)
-                .json(err);
-            }
-
-            // ----------------------------------
-            // DELETE LIKES
-            // ----------------------------------
-
-            const deleteLikesQuery = `
-              DELETE FROM likes
-              WHERE postId = ?
-            `;
-
-            db.query(
-              deleteLikesQuery,
-              [postId],
-              (err) => {
-                if (err) {
-                  console.log(
-                    "DELETE LIKES ERROR:",
-                    err
-                  );
-
-                  return res
-                    .status(500)
-                    .json(err);
-                }
-
-                // ------------------------------
-                // DELETE ACTIVITIES
-                // ------------------------------
-
-                const deleteActivityQuery = `
-                  DELETE FROM activities
-                  WHERE postId = ?
-                  AND type = 'post'
-                `;
-
-                db.query(
-                  deleteActivityQuery,
-                  [postId],
-                  (err) => {
-                    if (err) {
-                      console.log(
-                        "DELETE POST ACTIVITY ERROR:",
-                        err
-                      );
-
-                      return res
-                        .status(500)
-                        .json(err);
-                    }
-
-                    // ------------------------------
-                    // DELETE POST
-                    // ------------------------------
-
-                    const deletePostQuery = `
-                      DELETE FROM posts
-                      WHERE id = ?
-                    `;
-
-                    db.query(
-                      deletePostQuery,
-                      [postId],
-                      (err) => {
-                        if (err) {
-                          console.log(
-                            "DELETE POST ERROR:",
-                            err
-                          );
-
-                          return res
-                            .status(500)
-                            .json(err);
-                        }
-
-                        return res
-                          .status(200)
-                          .json({
-                            message:
-                              "Post deleted successfully!",
-                          });
-                      }
-                    );
-                  }
-                );
-              }
-            );
-          }
+      if (Number(data[0].userId) !== Number(userInfo.id)) {
+        return res.status(403).json(
+          "You can delete only your own post!"
         );
       }
-    );
+
+      // First remove every activity connected to this post.
+      // This includes:
+      // post + like + comment activities.
+      const deleteActivitiesQuery = `
+        DELETE FROM activities
+        WHERE postId = ?
+      `;
+
+      db.query(
+        deleteActivitiesQuery,
+        [postId],
+        (activityErr) => {
+          if (activityErr) {
+            console.log(
+              "DELETE POST ACTIVITIES ERROR:",
+              activityErr
+            );
+            return res.status(500).json(activityErr);
+          }
+
+          // Remove comments.
+          const deleteCommentsQuery = `
+            DELETE FROM comments
+            WHERE postId = ?
+          `;
+
+          db.query(
+            deleteCommentsQuery,
+            [postId],
+            (commentErr) => {
+              if (commentErr) {
+                console.log(
+                  "DELETE POST COMMENTS ERROR:",
+                  commentErr
+                );
+                return res.status(500).json(commentErr);
+              }
+
+              // Remove likes.
+              const deleteLikesQuery = `
+                DELETE FROM likes
+                WHERE postId = ?
+              `;
+
+              db.query(
+                deleteLikesQuery,
+                [postId],
+                (likeErr) => {
+                  if (likeErr) {
+                    console.log(
+                      "DELETE POST LIKES ERROR:",
+                      likeErr
+                    );
+                    return res.status(500).json(likeErr);
+                  }
+
+                  // Finally remove the post.
+                  const deletePostQuery = `
+                    DELETE FROM posts
+                    WHERE id = ?
+                  `;
+
+                  db.query(
+                    deletePostQuery,
+                    [postId],
+                    (err) => {
+                      if (err) {
+                        console.log(
+                          "DELETE POST ERROR:",
+                          err
+                        );
+                        return res.status(500).json(err);
+                      }
+
+                      return res.status(200).json({
+                        message:
+                          "Post and related activities deleted successfully!",
+                      });
+                    }
+                  );
+                }
+              );
+            }
+          );
+        }
+      );
+    });
   });
 };

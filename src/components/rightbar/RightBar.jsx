@@ -1,13 +1,17 @@
 import "./rightbar.scss";
 
-import { useContext, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import {
+  useContext,
+  useState,
+} from "react";
 
 import {
   useMutation,
   useQuery,
   useQueryClient,
 } from "@tanstack/react-query";
+
+import { useNavigate } from "react-router-dom";
 
 import TrendingUpOutlinedIcon from "@mui/icons-material/TrendingUpOutlined";
 import FavoriteBorderOutlinedIcon from "@mui/icons-material/FavoriteBorderOutlined";
@@ -16,6 +20,7 @@ import PeopleOutlineOutlinedIcon from "@mui/icons-material/PeopleOutlineOutlined
 import NotificationsNoneOutlinedIcon from "@mui/icons-material/NotificationsNoneOutlined";
 
 import { AuthContext } from "../../context/authContext";
+
 import makeRequest from "../../axios";
 
 import {
@@ -23,17 +28,36 @@ import {
   getAvatarPlaceholder,
 } from "../../utils/imageUrl";
 
+
 const RightBar = () => {
-  const { currentUser } = useContext(AuthContext);
 
-  const navigate = useNavigate();
-  const queryClient = useQueryClient();
+  const { currentUser } =
+    useContext(AuthContext);
 
-  const [showAllSuggestions, setShowAllSuggestions] = useState(false);
-  const [showAllActivities, setShowAllActivities] = useState(false);
+  const navigate =
+    useNavigate();
+
+  const queryClient =
+    useQueryClient();
+
 
   // ======================================================
-  // GET USERS / SUGGESTIONS
+  // SHOW ALL STATES
+  // ======================================================
+
+  const [
+    showAllSuggestions,
+    setShowAllSuggestions,
+  ] = useState(false);
+
+  const [
+    showAllActivities,
+    setShowAllActivities,
+  ] = useState(false);
+
+
+  // ======================================================
+  // USERS / SUGGESTIONS
   // ======================================================
 
   const {
@@ -41,18 +65,28 @@ const RightBar = () => {
     error: usersError,
     data: usersData,
   } = useQuery({
-    queryKey: ["rightbarUsers"],
+
+    queryKey: [
+      "rightbarUsers",
+    ],
 
     queryFn: async () => {
-      const res = await makeRequest.get("/users");
+
+      const res =
+        await makeRequest.get(
+          "/users"
+        );
+
       return res.data;
     },
 
     enabled: !!currentUser,
+
   });
 
+
   // ======================================================
-  // GET ACTIVITIES
+  // ACTIVITIES
   // ======================================================
 
   const {
@@ -60,19 +94,30 @@ const RightBar = () => {
     error: activitiesError,
     data: activitiesData,
   } = useQuery({
-    queryKey: ["activities"],
+
+    queryKey: [
+      "activities",
+    ],
 
     queryFn: async () => {
-      const res = await makeRequest.get("/activities");
+
+      const res =
+        await makeRequest.get(
+          "/activities"
+        );
+
       return res.data;
     },
 
     enabled: !!currentUser,
+
     refetchInterval: 30000,
+
   });
 
+
   // ======================================================
-  // GET LATEST POST
+  // LATEST POST
   // ======================================================
 
   const {
@@ -80,147 +125,255 @@ const RightBar = () => {
     error: latestPostError,
     data: latestPostData,
   } = useQuery({
-    queryKey: ["latestPost"],
+
+    queryKey: [
+      "latestPost",
+    ],
 
     queryFn: async () => {
-      const res = await makeRequest.get("/trending");
+
+      const res =
+        await makeRequest.get(
+          "/trending"
+        );
+
       return res.data;
     },
 
     enabled: !!currentUser,
+
     refetchInterval: 30000,
+
   });
+
 
   // ======================================================
   // FOLLOW
   // ======================================================
 
-  const followMutation = useMutation({
-    mutationFn: async (userId) => {
-      return makeRequest.post("/relationships", {
-        userId,
-      });
-    },
+  const followMutation =
+    useMutation({
 
-    onSuccess: () => {
-      queryClient.invalidateQueries({
-        queryKey: ["rightbarUsers"],
-      });
+      mutationFn: async (
+        userId
+      ) => {
 
-      queryClient.invalidateQueries({
-        queryKey: ["activities"],
-      });
-    },
+        return makeRequest.post(
+          "/relationships",
+          {
+            userId,
+          }
+        );
+      },
 
-    onError: (error) => {
-      console.log(
-        "FOLLOW ERROR:",
-        error.response?.data || error.message
-      );
-    },
-  });
+      onSuccess: () => {
+
+        queryClient.invalidateQueries({
+          queryKey: [
+            "rightbarUsers",
+          ],
+        });
+
+        queryClient.invalidateQueries({
+          queryKey: [
+            "activities",
+          ],
+        });
+
+      },
+
+      onError: (error) => {
+
+        console.log(
+          "FOLLOW ERROR:",
+          error.response?.data ||
+            error.message
+        );
+
+      },
+
+    });
+
 
   // ======================================================
   // UNFOLLOW
   // ======================================================
 
-  const unfollowMutation = useMutation({
-    mutationFn: async (userId) => {
-      return makeRequest.delete(
-        `/relationships?userId=${userId}`
-      );
-    },
+  const unfollowMutation =
+    useMutation({
 
-    onSuccess: () => {
-      queryClient.invalidateQueries({
-        queryKey: ["rightbarUsers"],
-      });
+      mutationFn: async (
+        userId
+      ) => {
 
-      queryClient.invalidateQueries({
-        queryKey: ["activities"],
-      });
-    },
+        return makeRequest.delete(
+          `/relationships?userId=${userId}`
+        );
 
-    onError: (error) => {
-      console.log(
-        "UNFOLLOW ERROR:",
-        error.response?.data || error.message
-      );
-    },
-  });
+      },
+
+      onSuccess: () => {
+
+        queryClient.invalidateQueries({
+          queryKey: [
+            "rightbarUsers",
+          ],
+        });
+
+        queryClient.invalidateQueries({
+          queryKey: [
+            "activities",
+          ],
+        });
+
+      },
+
+      onError: (error) => {
+
+        console.log(
+          "UNFOLLOW ERROR:",
+          error.response?.data ||
+            error.message
+        );
+
+      },
+
+    });
+
 
   // ======================================================
   // FOLLOW / UNFOLLOW
   // ======================================================
 
-  const handleFollow = (person) => {
-    if (!person?.id) return;
+  const handleFollow = (
+    person
+  ) => {
+
+    if (!person?.id) {
+      return;
+    }
 
     if (person.following) {
-      unfollowMutation.mutate(person.id);
+
+      unfollowMutation.mutate(
+        person.id
+      );
+
     } else {
-      followMutation.mutate(person.id);
+
+      followMutation.mutate(
+        person.id
+      );
+
     }
+
   };
+
 
   // ======================================================
   // RELATIVE TIME
   // ======================================================
 
-  const getRelativeTime = (date) => {
-    if (!date) return "";
+  const getRelativeTime = (
+    date
+  ) => {
 
-    const activityDate = new Date(date);
-    const now = new Date();
+    if (!date) {
+      return "";
+    }
+
+    const activityDate =
+      new Date(date);
+
+    const now =
+      new Date();
 
     const diff =
-      now.getTime() - activityDate.getTime();
+      now.getTime() -
+      activityDate.getTime();
 
-    const seconds = Math.floor(diff / 1000);
+    const seconds =
+      Math.floor(
+        diff / 1000
+      );
 
-    if (seconds < 10) return "Just now";
+
+    if (seconds < 10) {
+      return "Just now";
+    }
+
 
     if (seconds < 60) {
       return `${seconds}s ago`;
     }
 
-    const minutes = Math.floor(seconds / 60);
+
+    const minutes =
+      Math.floor(
+        seconds / 60
+      );
+
 
     if (minutes < 60) {
       return `${minutes}m ago`;
     }
 
-    const hours = Math.floor(minutes / 60);
+
+    const hours =
+      Math.floor(
+        minutes / 60
+      );
+
 
     if (hours < 24) {
       return `${hours}h ago`;
     }
 
-    const days = Math.floor(hours / 24);
+
+    const days =
+      Math.floor(
+        hours / 24
+      );
+
 
     if (days < 7) {
       return `${days}d ago`;
     }
 
-    const weeks = Math.floor(days / 7);
+
+    const weeks =
+      Math.floor(
+        days / 7
+      );
+
 
     if (weeks < 4) {
       return `${weeks}w ago`;
     }
 
-    return activityDate.toLocaleDateString("en-IN", {
-      day: "numeric",
-      month: "short",
-      year: "numeric",
-    });
+
+    return activityDate.toLocaleDateString(
+      "en-IN",
+      {
+        day: "numeric",
+        month: "short",
+        year: "numeric",
+      }
+    );
+
   };
+
 
   // ======================================================
   // ACTIVITY ICON
   // ======================================================
 
-  const getActivityIcon = (type) => {
+  const getActivityIcon = (
+    type
+  ) => {
+
     switch (type) {
+
       case "follow":
         return "👥";
 
@@ -235,38 +388,72 @@ const RightBar = () => {
 
       default:
         return "•";
+
     }
+
   };
 
-  const suggestions = usersData || [];
-  const activities = activitiesData || [];
-  const latestPost = (latestPostData || [])[0] || null;
 
   // ======================================================
-  // AVATAR HELPER
+  // DATA
   // ======================================================
 
-  const avatar = (image, name) => {
+  const suggestions =
+    usersData || [];
+
+  const activities =
+    activitiesData || [];
+
+  const latestPost =
+    (latestPostData || [])[0] ||
+    null;
+
+
+  // ======================================================
+  // AVATAR
+  // ======================================================
+
+  const avatar = (
+    image,
+    name
+  ) => {
+
     return (
       getImageUrl(image) ||
       getAvatarPlaceholder(name)
     );
+
   };
 
+
   // ======================================================
-  // VISIBLE ITEMS
+  // VISIBLE SUGGESTIONS
+  // DEFAULT = 3
+  // VIEW ALL = EVERYTHING
   // ======================================================
 
-  const visibleSuggestions = showAllSuggestions
-    ? suggestions
-    : suggestions.slice(0, 3);
+  const visibleSuggestions =
+    showAllSuggestions
+      ? suggestions
+      : suggestions.slice(0, 3);
 
-  const visibleActivities = showAllActivities
-    ? activities
-    : activities.slice(0, 4);
+
+  // ======================================================
+  // VISIBLE ACTIVITIES
+  // DEFAULT = 3
+  // VIEW ALL = EVERYTHING
+  // ======================================================
+
+  const visibleActivities =
+    showAllActivities
+      ? activities
+      : activities.slice(0, 3);
+
 
   return (
+
     <aside className="rightBar">
+
 
       {/* ==================================================
           SUGGESTIONS
@@ -279,20 +466,28 @@ const RightBar = () => {
           <div className="standardTitleWrapper">
 
             <div className="standardTitleIcon suggestionsTitleIcon">
+
               <PeopleOutlineOutlinedIcon />
+
             </div>
 
             <div>
-              <h3>Suggestions For You</h3>
+
+              <h3>
+                Suggestions For You
+              </h3>
 
               <span className="cardSubtitle">
                 People you may know
               </span>
+
             </div>
 
           </div>
 
+
           {suggestions.length > 3 && (
+
             <button
               type="button"
               className="seeAllButton"
@@ -302,44 +497,70 @@ const RightBar = () => {
                 )
               }
             >
+
               {showAllSuggestions
                 ? "Show Less"
                 : "View All"}
+
             </button>
+
           )}
 
         </div>
 
-        {/* Loading */}
 
         {usersLoading && (
+
           <div className="emptyState">
-            <div className="emptyIcon">⏳</div>
-            <span>Loading suggestions...</span>
+
+            <div className="emptyIcon">
+              ⏳
+            </div>
+
+            <span>
+              Loading suggestions...
+            </span>
+
           </div>
+
         )}
 
-        {/* Error */}
 
         {usersError && (
+
           <div className="emptyState">
-            <div className="emptyIcon">⚠️</div>
-            <span>Unable to load suggestions</span>
+
+            <div className="emptyIcon">
+              ⚠️
+            </div>
+
+            <span>
+              Unable to load suggestions
+            </span>
+
           </div>
+
         )}
 
-        {/* Empty */}
 
         {!usersLoading &&
           !usersError &&
           suggestions.length === 0 && (
+
             <div className="emptyState">
-              <div className="emptyIcon">👥</div>
-              <span>No more suggestions</span>
+
+              <div className="emptyIcon">
+                👥
+              </div>
+
+              <span>
+                No more suggestions
+              </span>
+
             </div>
+
           )}
 
-        {/* Suggestions */}
 
         {!usersLoading &&
           !usersError &&
@@ -347,84 +568,107 @@ const RightBar = () => {
 
             <div className="suggestionList">
 
-              {visibleSuggestions.map((person) => (
-
-                <div
-                  className="suggestionItem"
-                  key={person.id}
-                >
-
-                  <img
-                    src={avatar(
-                      person.profilePic,
-                      person.name ||
-                        person.username ||
-                        "User"
-                    )}
-                    alt={
-                      person.name ||
-                      person.username ||
-                      "User"
-                    }
-                    onClick={() =>
-                      navigate(
-                        `/profile/${person.id}`
-                      )
-                    }
-                  />
+              {visibleSuggestions.map(
+                (person) => (
 
                   <div
-                    className="suggestionInfo"
-                    onClick={() =>
-                      navigate(
-                        `/profile/${person.id}`
-                      )
-                    }
+                    className="suggestionItem"
+                    key={person.id}
                   >
-                    <strong
-                      title={
+
+                    <img
+                      src={avatar(
+                        person.profilePic,
                         person.name ||
-                        person.username
+                          person.username ||
+                          "User"
+                      )}
+
+                      alt={
+                        person.name ||
+                        person.username ||
+                        "User"
+                      }
+
+                      onClick={() =>
+                        navigate(
+                          `/profile/${person.id}`
+                        )
+                      }
+                    />
+
+
+                    <div
+                      className="suggestionInfo"
+                      onClick={() =>
+                        navigate(
+                          `/profile/${person.id}`
+                        )
                       }
                     >
-                      {person.name ||
-                        person.username ||
-                        "User"}
-                    </strong>
 
-                    <span>
-                      {person.city ||
-                        (person.following
-                          ? "Following"
-                          : "Suggested for you")}
-                    </span>
+                      <strong
+                        title={
+                          person.name ||
+                          person.username
+                        }
+                      >
+
+                        {person.name ||
+                          person.username ||
+                          "User"}
+
+                      </strong>
+
+
+                      <span>
+
+                        {person.city ||
+                          (
+                            person.following
+                              ? "Following"
+                              : "Suggested for you"
+                          )}
+
+                      </span>
+
+                    </div>
+
+
+                    <button
+                      type="button"
+
+                      className={`followButton ${
+                        person.following
+                          ? "following"
+                          : ""
+                      }`}
+
+                      onClick={() =>
+                        handleFollow(
+                          person
+                        )
+                      }
+
+                      disabled={
+                        followMutation.isPending ||
+                        unfollowMutation.isPending
+                      }
+                    >
+
+                      {person.following
+                        ? "Following"
+                        : "Follow"}
+
+                    </button>
+
                   </div>
 
-                  <button
-                    type="button"
-                    className={`followButton ${
-                      person.following
-                        ? "following"
-                        : ""
-                    }`}
-                    onClick={() =>
-                      handleFollow(person)
-                    }
-                    disabled={
-                      followMutation.isPending ||
-                      unfollowMutation.isPending
-                    }
-                  >
-                    {person.following
-                      ? "Following"
-                      : "Follow"}
-                  </button>
-
-                </div>
-
-              ))}
+                )
+              )}
 
             </div>
+
           )}
 
       </section>
@@ -441,20 +685,28 @@ const RightBar = () => {
           <div className="standardTitleWrapper">
 
             <div className="standardTitleIcon activitiesTitleIcon">
+
               <NotificationsNoneOutlinedIcon />
+
             </div>
 
             <div>
-              <h3>Latest Activities</h3>
+
+              <h3>
+                Latest Activities
+              </h3>
 
               <span className="cardSubtitle">
                 Recent updates
               </span>
+
             </div>
 
           </div>
 
-          {activities.length > 4 && (
+
+          {activities.length > 3 && (
+
             <button
               type="button"
               className="seeAllButton"
@@ -464,44 +716,70 @@ const RightBar = () => {
                 )
               }
             >
+
               {showAllActivities
                 ? "Show Less"
                 : "View All"}
+
             </button>
+
           )}
 
         </div>
 
-        {/* Loading */}
 
         {activitiesLoading && (
+
           <div className="emptyState">
-            <div className="emptyIcon">⏳</div>
-            <span>Loading activities...</span>
+
+            <div className="emptyIcon">
+              ⏳
+            </div>
+
+            <span>
+              Loading activities...
+            </span>
+
           </div>
+
         )}
 
-        {/* Error */}
 
         {activitiesError && (
+
           <div className="emptyState">
-            <div className="emptyIcon">⚠️</div>
-            <span>Unable to load activities</span>
+
+            <div className="emptyIcon">
+              ⚠️
+            </div>
+
+            <span>
+              Unable to load activities
+            </span>
+
           </div>
+
         )}
 
-        {/* Empty */}
 
         {!activitiesLoading &&
           !activitiesError &&
           activities.length === 0 && (
+
             <div className="emptyState">
-              <div className="emptyIcon">✦</div>
-              <span>No recent activities</span>
+
+              <div className="emptyIcon">
+                ✦
+              </div>
+
+              <span>
+                No recent activities
+              </span>
+
             </div>
+
           )}
 
-        {/* Activities */}
 
         {!activitiesLoading &&
           !activitiesError &&
@@ -509,52 +787,62 @@ const RightBar = () => {
 
             <div className="activityList">
 
-              {visibleActivities.map((activity) => (
+              {visibleActivities.map(
+                (activity) => (
 
-                <div
-                  className="activityItem"
-                  key={`${activity.activityType}-${activity.activityId}`}
-                >
+                  <div
+                    className="activityItem"
+                    key={`${activity.activityType}-${activity.activityId}`}
+                  >
 
-                  <div className="activityAvatar">
+                    <div className="activityAvatar">
 
-                    <img
-                      src={avatar(
-                        activity.profilePic,
-                        activity.name || "User"
-                      )}
-                      alt={
-                        activity.name || "User"
-                      }
-                    />
+                      <img
+                        src={avatar(
+                          activity.profilePic,
+                          activity.name ||
+                            "User"
+                        )}
 
-                    <span className="activityBadge">
-                      {getActivityIcon(
-                        activity.activityType
-                      )}
-                    </span>
+                        alt={
+                          activity.name ||
+                          "User"
+                        }
+                      />
+
+
+                      <span className="activityBadge">
+
+                        {getActivityIcon(
+                          activity.activityType
+                        )}
+
+                      </span>
+
+                    </div>
+
+
+                    <div className="activityInfo">
+
+                      <strong>
+                        {activity.activityText}
+                      </strong>
+
+                      <span>
+                        {getRelativeTime(
+                          activity.activityTime
+                        )}
+                      </span>
+
+                    </div>
 
                   </div>
 
-                  <div className="activityInfo">
-
-                    <strong>
-                      {activity.activityText}
-                    </strong>
-
-                    <span>
-                      {getRelativeTime(
-                        activity.activityTime
-                      )}
-                    </span>
-
-                  </div>
-
-                </div>
-
-              ))}
+                )
+              )}
 
             </div>
+
           )}
 
       </section>
@@ -571,51 +859,80 @@ const RightBar = () => {
           <div className="trendingTitleWrapper">
 
             <div className="trendingTitleIcon">
+
               <TrendingUpOutlinedIcon />
+
             </div>
 
             <div>
-              <h3>Latest Post</h3>
+
+              <h3>
+                Latest Post
+              </h3>
 
               <span className="cardSubtitle">
                 Newest post right now
               </span>
+
             </div>
 
           </div>
 
         </div>
 
-        {/* Loading */}
 
         {latestPostLoading && (
+
           <div className="emptyState">
-            <div className="emptyIcon">⏳</div>
-            <span>Loading latest post...</span>
+
+            <div className="emptyIcon">
+              ⏳
+            </div>
+
+            <span>
+              Loading latest post...
+            </span>
+
           </div>
+
         )}
 
-        {/* Error */}
 
         {latestPostError && (
+
           <div className="emptyState">
-            <div className="emptyIcon">⚠️</div>
-            <span>Unable to load latest post</span>
+
+            <div className="emptyIcon">
+              ⚠️
+            </div>
+
+            <span>
+              Unable to load latest post
+            </span>
+
           </div>
+
         )}
 
-        {/* Empty */}
 
         {!latestPostLoading &&
           !latestPostError &&
           !latestPost && (
+
             <div className="emptyState">
-              <div className="emptyIcon">📝</div>
-              <span>No latest post yet</span>
+
+              <div className="emptyIcon">
+                📝
+              </div>
+
+              <span>
+                No latest post yet
+              </span>
+
             </div>
+
           )}
 
-        {/* Latest Post */}
 
         {!latestPostLoading &&
           !latestPostError &&
@@ -638,7 +955,8 @@ const RightBar = () => {
 
                 <div className="trendingContent">
 
-                  {/* Author */}
+
+                  {/* AUTHOR */}
 
                   <div className="trendingAuthor">
 
@@ -649,6 +967,7 @@ const RightBar = () => {
                           latestPost.username ||
                           "User"
                       )}
+
                       alt={
                         latestPost.name ||
                         latestPost.username ||
@@ -656,17 +975,22 @@ const RightBar = () => {
                       }
                     />
 
+
                     <div>
 
                       <strong>
+
                         {latestPost.name ||
                           latestPost.username ||
                           "User"}
+
                       </strong>
 
                       <span>
+
                         @{latestPost.username ||
                           "user"}
+
                       </span>
 
                     </div>
@@ -674,35 +998,43 @@ const RightBar = () => {
                   </div>
 
 
-                  {/* Image */}
+                  {/* IMAGE */}
 
                   {latestPost.img && (
+
                     <img
                       className="trendingPostImage"
+
                       src={getImageUrl(
                         latestPost.img
                       )}
+
                       alt="Latest post"
                     />
+
                   )}
 
 
-                  {/* Video */}
+                  {/* VIDEO */}
 
                   {!latestPost.img &&
                     latestPost.video && (
+
                       <video
                         className="trendingPostImage"
+
                         src={getImageUrl(
                           latestPost.video
                         )}
+
                         muted
                         playsInline
                       />
+
                     )}
 
 
-                  {/* Description */}
+                  {/* DESCRIPTION */}
 
                   <p className="trendingDescription">
 
@@ -718,24 +1050,31 @@ const RightBar = () => {
                   </p>
 
 
-                  {/* Stats */}
+                  {/* STATS */}
 
                   <div className="trendingStats">
 
                     <span>
+
                       <FavoriteBorderOutlinedIcon />
 
                       {Number(
-                        latestPost.likesCount || 0
+                        latestPost.likesCount ||
+                          0
                       )}
+
                     </span>
 
+
                     <span>
+
                       <CommentOutlinedIcon />
 
                       {Number(
-                        latestPost.commentsCount || 0
+                        latestPost.commentsCount ||
+                          0
                       )}
+
                     </span>
 
                   </div>
@@ -745,12 +1084,17 @@ const RightBar = () => {
               </div>
 
             </div>
+
           )}
 
       </section>
 
+
     </aside>
+
   );
+
 };
+
 
 export default RightBar;
