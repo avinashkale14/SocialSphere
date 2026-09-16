@@ -17,7 +17,11 @@ import NotificationsNoneOutlinedIcon from "@mui/icons-material/NotificationsNone
 
 import { AuthContext } from "../../context/authContext";
 import makeRequest from "../../axios";
-import getImageUrl from "../../utils/imageUrl";
+
+import {
+  getImageUrl,
+  getAvatarPlaceholder,
+} from "../../utils/imageUrl";
 
 const RightBar = () => {
   const { currentUser } = useContext(AuthContext);
@@ -38,15 +42,15 @@ const RightBar = () => {
 
     queryFn: async () => {
       const res = await makeRequest.get("/users");
-
       return res.data;
     },
 
     enabled: !!currentUser,
   });
 
+
   // ======================================================
-  // GET LATEST ACTIVITIES
+  // GET ACTIVITIES
   // ======================================================
 
   const {
@@ -58,15 +62,14 @@ const RightBar = () => {
 
     queryFn: async () => {
       const res = await makeRequest.get("/activities");
-
       return res.data;
     },
 
     enabled: !!currentUser,
 
-    // Refresh every 30 seconds
     refetchInterval: 30000,
   });
+
 
   // ======================================================
   // GET TRENDING POSTS
@@ -81,25 +84,27 @@ const RightBar = () => {
 
     queryFn: async () => {
       const res = await makeRequest.get("/trending");
-
       return res.data;
     },
 
     enabled: !!currentUser,
 
-    // Refresh every 30 seconds
     refetchInterval: 30000,
   });
 
+
   // ======================================================
-  // FOLLOW USER
+  // FOLLOW
   // ======================================================
 
   const followMutation = useMutation({
     mutationFn: async (userId) => {
-      return makeRequest.post("/relationships", {
-        userId,
-      });
+      return makeRequest.post(
+        "/relationships",
+        {
+          userId,
+        }
+      );
     },
 
     onSuccess: () => {
@@ -110,22 +115,20 @@ const RightBar = () => {
       queryClient.invalidateQueries({
         queryKey: ["activities"],
       });
-
-      queryClient.invalidateQueries({
-        queryKey: ["trendingPosts"],
-      });
     },
 
     onError: (error) => {
       console.log(
         "FOLLOW ERROR:",
-        error.response?.data || error.message
+        error.response?.data ||
+          error.message
       );
     },
   });
 
+
   // ======================================================
-  // UNFOLLOW USER
+  // UNFOLLOW
   // ======================================================
 
   const unfollowMutation = useMutation({
@@ -143,22 +146,20 @@ const RightBar = () => {
       queryClient.invalidateQueries({
         queryKey: ["activities"],
       });
-
-      queryClient.invalidateQueries({
-        queryKey: ["trendingPosts"],
-      });
     },
 
     onError: (error) => {
       console.log(
         "UNFOLLOW ERROR:",
-        error.response?.data || error.message
+        error.response?.data ||
+          error.message
       );
     },
   });
 
+
   // ======================================================
-  // HANDLE FOLLOW / UNFOLLOW
+  // FOLLOW / UNFOLLOW
   // ======================================================
 
   const handleFollow = (person) => {
@@ -173,6 +174,7 @@ const RightBar = () => {
     }
   };
 
+
   // ======================================================
   // RELATIVE TIME
   // ======================================================
@@ -182,14 +184,17 @@ const RightBar = () => {
       return "";
     }
 
-    const activityDate = new Date(date);
+    const activityDate =
+      new Date(date);
+
     const now = new Date();
 
     const diff =
       now.getTime() -
       activityDate.getTime();
 
-    const seconds = Math.floor(diff / 1000);
+    const seconds =
+      Math.floor(diff / 1000);
 
     if (seconds < 10) {
       return "Just now";
@@ -199,25 +204,29 @@ const RightBar = () => {
       return `${seconds}s ago`;
     }
 
-    const minutes = Math.floor(seconds / 60);
+    const minutes =
+      Math.floor(seconds / 60);
 
     if (minutes < 60) {
       return `${minutes}m ago`;
     }
 
-    const hours = Math.floor(minutes / 60);
+    const hours =
+      Math.floor(minutes / 60);
 
     if (hours < 24) {
       return `${hours}h ago`;
     }
 
-    const days = Math.floor(hours / 24);
+    const days =
+      Math.floor(hours / 24);
 
     if (days < 7) {
       return `${days}d ago`;
     }
 
-    const weeks = Math.floor(days / 7);
+    const weeks =
+      Math.floor(days / 7);
 
     if (weeks < 4) {
       return `${weeks}w ago`;
@@ -233,9 +242,9 @@ const RightBar = () => {
     );
   };
 
+
   // ======================================================
   // ACTIVITY ICON
-  // ONLY 4 ACTIVITIES
   // ======================================================
 
   const getActivityIcon = (type) => {
@@ -257,9 +266,6 @@ const RightBar = () => {
     }
   };
 
-  // ======================================================
-  // DATA
-  // ======================================================
 
   const suggestions =
     usersData || [];
@@ -270,6 +276,19 @@ const RightBar = () => {
   const trendingPosts =
     trendingData || [];
 
+
+  // ======================================================
+  // AVATAR HELPER
+  // ======================================================
+
+  const avatar = (image, name) => {
+    return (
+      getImageUrl(image) ||
+      getAvatarPlaceholder(name)
+    );
+  };
+
+
   // ======================================================
   // RENDER
   // ======================================================
@@ -279,7 +298,6 @@ const RightBar = () => {
 
       {/* ==================================================
           SUGGESTIONS
-          EXISTING UI - KEPT SAME
       ================================================== */}
 
       <section className="rightCard suggestionsCard">
@@ -314,6 +332,7 @@ const RightBar = () => {
 
         </div>
 
+
         {/* Loading */}
 
         {usersLoading && (
@@ -330,6 +349,7 @@ const RightBar = () => {
           </div>
         )}
 
+
         {/* Error */}
 
         {usersError && (
@@ -345,6 +365,7 @@ const RightBar = () => {
 
           </div>
         )}
+
 
         {/* Empty */}
 
@@ -364,7 +385,8 @@ const RightBar = () => {
             </div>
           )}
 
-        {/* Suggestions List */}
+
+        {/* Suggestions */}
 
         {!usersLoading &&
           !usersError &&
@@ -382,12 +404,12 @@ const RightBar = () => {
                   >
 
                     <img
-                      src={
-                        getImageUrl(
-                          person.profilePic
-                        ) ||
-                        "https://i.pravatar.cc/150?img=12"
-                      }
+                      src={avatar(
+                        person.profilePic,
+                        person.name ||
+                          person.username ||
+                          "User"
+                      )}
                       alt={
                         person.name ||
                         person.username ||
@@ -399,6 +421,7 @@ const RightBar = () => {
                         )
                       }
                     />
+
 
                     <div
                       className="suggestionInfo"
@@ -429,6 +452,7 @@ const RightBar = () => {
 
                     </div>
 
+
                     <button
                       type="button"
                       className={`followButton ${
@@ -454,7 +478,6 @@ const RightBar = () => {
                 ))}
 
             </div>
-
           )}
 
       </section>
@@ -462,7 +485,6 @@ const RightBar = () => {
 
       {/* ==================================================
           LATEST ACTIVITIES
-          EXISTING UI - KEPT SAME
       ================================================== */}
 
       <section className="rightCard">
@@ -476,6 +498,7 @@ const RightBar = () => {
             </div>
 
             <div>
+
               <h3>
                 Latest Activities
               </h3>
@@ -483,11 +506,13 @@ const RightBar = () => {
               <span className="cardSubtitle">
                 Recent updates
               </span>
+
             </div>
 
           </div>
 
         </div>
+
 
         {/* Loading */}
 
@@ -505,6 +530,7 @@ const RightBar = () => {
           </div>
         )}
 
+
         {/* Error */}
 
         {activitiesError && (
@@ -521,11 +547,13 @@ const RightBar = () => {
           </div>
         )}
 
-        {/* No Activities */}
+
+        {/* Empty */}
 
         {!activitiesLoading &&
           !activitiesError &&
           activities.length === 0 && (
+
             <div className="emptyState">
 
               <div className="emptyIcon">
@@ -538,6 +566,7 @@ const RightBar = () => {
 
             </div>
           )}
+
 
         {/* Activities */}
 
@@ -559,12 +588,11 @@ const RightBar = () => {
                     <div className="activityAvatar">
 
                       <img
-                        src={
-                          getImageUrl(
-                            activity.profilePic
-                          ) ||
-                          "https://i.pravatar.cc/150?img=12"
-                        }
+                        src={avatar(
+                          activity.profilePic,
+                          activity.name ||
+                            "User"
+                        )}
                         alt={
                           activity.name ||
                           "User"
@@ -578,6 +606,7 @@ const RightBar = () => {
                       </span>
 
                     </div>
+
 
                     <div className="activityInfo">
 
@@ -598,7 +627,6 @@ const RightBar = () => {
                 ))}
 
             </div>
-
           )}
 
       </section>
@@ -606,7 +634,6 @@ const RightBar = () => {
 
       {/* ==================================================
           TRENDING POSTS
-          NEW FEATURE
       ================================================== */}
 
       <section className="rightCard trendingCard">
@@ -620,6 +647,7 @@ const RightBar = () => {
             </div>
 
             <div>
+
               <h3>
                 Trending Posts
               </h3>
@@ -627,6 +655,7 @@ const RightBar = () => {
               <span className="cardSubtitle">
                 Popular right now
               </span>
+
             </div>
 
           </div>
@@ -685,7 +714,6 @@ const RightBar = () => {
               </span>
 
             </div>
-
           )}
 
 
@@ -711,8 +739,6 @@ const RightBar = () => {
                     }
                   >
 
-                    {/* Rank */}
-
                     <div className="trendingRank">
                       {index + 1}
                     </div>
@@ -725,12 +751,12 @@ const RightBar = () => {
                       <div className="trendingAuthor">
 
                         <img
-                          src={
-                            getImageUrl(
-                              post.profilePic
-                            ) ||
-                            "https://i.pravatar.cc/150?img=12"
-                          }
+                          src={avatar(
+                            post.profilePic,
+                            post.name ||
+                              post.username ||
+                              "User"
+                          )}
                           alt={
                             post.name ||
                             "User"
@@ -755,24 +781,28 @@ const RightBar = () => {
                       </div>
 
 
-                      {/* Post Image */}
+                      {/* Image */}
 
                       {post.img && (
                         <img
                           className="trendingPostImage"
-                          src={getImageUrl(post.img)}
+                          src={getImageUrl(
+                            post.img
+                          )}
                           alt="Trending post"
                         />
                       )}
 
 
-                      {/* Post Video */}
+                      {/* Video */}
 
                       {!post.img &&
                         post.video && (
                           <video
                             className="trendingPostImage"
-                            src={getImageUrl(post.video)}
+                            src={getImageUrl(
+                              post.video
+                            )}
                             muted
                             playsInline
                           />
@@ -824,7 +854,6 @@ const RightBar = () => {
                 ))}
 
             </div>
-
           )}
 
       </section>

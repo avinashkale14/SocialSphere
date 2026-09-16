@@ -21,6 +21,9 @@ import AddIcon from "@mui/icons-material/Add";
 
 import { AuthContext } from "../../context/authContext";
 import makeRequest from "../../axios";
+import {
+  getAvatarPlaceholder,
+} from "../../utils/imageUrl";
 
 
 const Stories = () => {
@@ -556,9 +559,14 @@ const Stories = () => {
         >
 
           <img
-            src={getImageUrl(
-              currentUser?.profilePic
-            )}
+            src={
+              getImageUrl(
+                currentUser?.profilePic
+              ) ||
+              getAvatarPlaceholder(
+                currentUser?.name
+              )
+            }
             alt="Your Story"
           />
 
@@ -641,6 +649,9 @@ const Stories = () => {
                 <img
                   src={getImageUrl(
                     story.profilePic
+                  ) ||
+                  getAvatarPlaceholder(
+                    story.name
                   )}
                   alt={story.name}
                 />
@@ -695,6 +706,9 @@ const Stories = () => {
                   <img
                     src={getImageUrl(
                       selectedStory.profilePic
+                    ) ||
+                    getAvatarPlaceholder(
+                      selectedStory.name
                     )}
                     alt={
                       selectedStory.name
@@ -952,6 +966,9 @@ const Stories = () => {
                         <img
                           src={getImageUrl(
                             viewer.profilePic
+                          ) ||
+                          getAvatarPlaceholder(
+                            viewer.name
                           )}
                           alt={
                             viewer.name

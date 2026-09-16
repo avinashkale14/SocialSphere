@@ -22,7 +22,9 @@ import LogoutOutlinedIcon from "@mui/icons-material/LogoutOutlined";
 import { DarkModeContext } from "../../context/darkModeContext";
 import { AuthContext } from "../../context/authContext";
 
-import getImageUrl from "../../utils/imageUrl";
+import getImageUrl, {
+  getAvatarPlaceholder,
+} from "../../utils/imageUrl";
 import makeRequest from "../../axios";
 
 import {
@@ -93,7 +95,7 @@ const Navbar = () => {
 
   const profileImage =
     getImageUrl(currentUser?.profilePic) ||
-    "https://i.pravatar.cc/150?img=12";
+    getAvatarPlaceholder(currentUser?.name);
 
   // ======================================================
   // CLOSE MOBILE MENU ON OUTSIDE CLICK
@@ -653,7 +655,7 @@ const handleNotificationClick = () => {
                             getImageUrl(
                               user.profilePic
                             ) ||
-                            "https://i.pravatar.cc/150?img=12"
+                            getAvatarPlaceholder(user.name)
                           }
                           alt={
                             user.name ||
@@ -724,7 +726,7 @@ const handleNotificationClick = () => {
                             getImageUrl(
                               user.profilePic
                             ) ||
-                            "https://i.pravatar.cc/150?img=12"
+                            getAvatarPlaceholder(user.name)
                           }
                           alt={
                             user.name ||
@@ -930,7 +932,7 @@ const handleNotificationClick = () => {
                             getImageUrl(
                               user.profilePic
                             ) ||
-                            "https://i.pravatar.cc/150?img=12"
+                            getAvatarPlaceholder(user.name)
                           }
                           alt={
                             user.name ||
@@ -995,7 +997,7 @@ const handleNotificationClick = () => {
                             getImageUrl(
                               user.profilePic
                             ) ||
-                            "https://i.pravatar.cc/150?img=12"
+                            getAvatarPlaceholder(user.name)
                           }
                           alt={
                             user.name ||

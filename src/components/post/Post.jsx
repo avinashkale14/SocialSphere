@@ -26,7 +26,9 @@ import ContentCopyOutlinedIcon from "@mui/icons-material/ContentCopyOutlined";
 import { AuthContext } from "../../context/authContext";
 import makeRequest from "../../axios";
 import Comments from "../comments/Comments";
-import getImageUrl from "../../utils/imageUrl";
+import getImageUrl, {
+  getAvatarPlaceholder,
+} from "../../utils/imageUrl";
 
 
 // ==========================================================
@@ -122,7 +124,7 @@ const Post = ({ post }) => {
 
   const profilePic =
     getImageUrl(post?.profilePic) ||
-    "https://i.pravatar.cc/150?img=12";
+    getAvatarPlaceholder(post?.name);
 
 
   // ========================================================

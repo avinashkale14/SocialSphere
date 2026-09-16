@@ -14,7 +14,10 @@ import CameraAltIcon from "@mui/icons-material/CameraAlt";
 import PhotoCameraIcon from "@mui/icons-material/PhotoCamera";
 
 import Posts from "../../components/posts/Posts";
-import getImageUrl from "../../utils/imageUrl";
+import getImageUrl, {
+  getAvatarPlaceholder,
+  getCoverPlaceholder,
+} from "../../utils/imageUrl";
 
 import {
   useContext,
@@ -719,7 +722,7 @@ const handleUnfollowFromMenu = () => {
         <img
           src={
             getImageUrl(data.coverPic) ||
-            "https://images.unsplash.com/photo-1500534623283-312aade485b7"
+            getCoverPlaceholder()
           }
           alt="cover"
           className="cover"
@@ -728,7 +731,7 @@ const handleUnfollowFromMenu = () => {
         <img
           src={
             getImageUrl(data.profilePic) ||
-            "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde"
+            getAvatarPlaceholder(data?.name)
           }
           alt="profile"
           className="profilePic"
@@ -943,7 +946,7 @@ const handleUnfollowFromMenu = () => {
                 <img
                   src={
                     profilePreview ||
-                    "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde"
+                    getAvatarPlaceholder(data?.name)
                   }
                   alt="profile preview"
                 />
@@ -992,9 +995,10 @@ const handleUnfollowFromMenu = () => {
 
                 ) : (
 
-                  <div className="noCover">
-                    No Cover Image
-                  </div>
+                  <img
+                    src={getCoverPlaceholder()}
+                    alt="cover placeholder"
+                  />
 
                 )}
 

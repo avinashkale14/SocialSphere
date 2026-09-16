@@ -19,7 +19,9 @@ import { AuthContext } from "../../context/authContext";
 import { DarkModeContext } from "../../context/darkModeContext";
 
 import makeRequest from "../../axios";
-import getImageUrl from "../../utils/imageUrl";
+import getImageUrl, {
+  getAvatarPlaceholder,
+} from "../../utils/imageUrl";
 
 const LeftBar = () => {
   const { currentUser, logout } = useContext(AuthContext);
@@ -29,7 +31,7 @@ const LeftBar = () => {
 
   const profileImage =
     getImageUrl(currentUser?.profilePic) ||
-    "https://i.pravatar.cc/150?img=12";
+    getAvatarPlaceholder(currentUser?.name);
 
   /* =========================
      SCROLL HELPER

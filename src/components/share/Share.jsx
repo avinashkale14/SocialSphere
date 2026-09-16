@@ -21,7 +21,9 @@ import SendIcon from "@mui/icons-material/Send";
 
 import { AuthContext } from "../../context/authContext";
 import makeRequest from "../../axios";
-import getImageUrl from "../../utils/imageUrl";
+import getImageUrl, {
+  getAvatarPlaceholder,
+} from "../../utils/imageUrl";
 
 
 const Share = () => {
@@ -536,7 +538,7 @@ const Share = () => {
     getImageUrl(
       currentUser?.profilePic
     ) ||
-    "https://i.pravatar.cc/150?img=12";
+    getAvatarPlaceholder(currentUser?.name);
 
 
   // =====================================================
