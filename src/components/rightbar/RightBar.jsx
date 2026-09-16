@@ -1,6 +1,6 @@
 import "./rightbar.scss";
 
-import { useContext } from "react";
+import { useContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 import {
@@ -29,6 +29,9 @@ const RightBar = () => {
   const navigate = useNavigate();
   const queryClient = useQueryClient();
 
+  const [showAllSuggestions, setShowAllSuggestions] = useState(false);
+  const [showAllActivities, setShowAllActivities] = useState(false);
+
   // ======================================================
   // GET USERS / SUGGESTIONS
   // ======================================================
@@ -48,7 +51,6 @@ const RightBar = () => {
     enabled: !!currentUser,
   });
 
-
   // ======================================================
   // GET ACTIVITIES
   // ======================================================
@@ -66,21 +68,19 @@ const RightBar = () => {
     },
 
     enabled: !!currentUser,
-
     refetchInterval: 30000,
   });
 
-
   // ======================================================
-  // GET TRENDING POSTS
+  // GET LATEST POST
   // ======================================================
 
   const {
-    isLoading: trendingLoading,
-    error: trendingError,
-    data: trendingData,
+    isLoading: latestPostLoading,
+    error: latestPostError,
+    data: latestPostData,
   } = useQuery({
-    queryKey: ["trendingPosts"],
+    queryKey: ["latestPost"],
 
     queryFn: async () => {
       const res = await makeRequest.get("/trending");
@@ -88,10 +88,8 @@ const RightBar = () => {
     },
 
     enabled: !!currentUser,
-
     refetchInterval: 30000,
   });
-
 
   // ======================================================
   // FOLLOW
@@ -99,12 +97,9 @@ const RightBar = () => {
 
   const followMutation = useMutation({
     mutationFn: async (userId) => {
-      return makeRequest.post(
-        "/relationships",
-        {
-          userId,
-        }
-      );
+      return makeRequest.post("/relationships", {
+        userId,
+      });
     },
 
     onSuccess: () => {
@@ -120,12 +115,10 @@ const RightBar = () => {
     onError: (error) => {
       console.log(
         "FOLLOW ERROR:",
-        error.response?.data ||
-          error.message
+        error.response?.data || error.message
       );
     },
   });
-
 
   // ======================================================
   // UNFOLLOW
@@ -151,21 +144,17 @@ const RightBar = () => {
     onError: (error) => {
       console.log(
         "UNFOLLOW ERROR:",
-        error.response?.data ||
-          error.message
+        error.response?.data || error.message
       );
     },
   });
-
 
   // ======================================================
   // FOLLOW / UNFOLLOW
   // ======================================================
 
   const handleFollow = (person) => {
-    if (!person?.id) {
-      return;
-    }
+    if (!person?.id) return;
 
     if (person.following) {
       unfollowMutation.mutate(person.id);
@@ -174,74 +163,57 @@ const RightBar = () => {
     }
   };
 
-
   // ======================================================
   // RELATIVE TIME
   // ======================================================
 
   const getRelativeTime = (date) => {
-    if (!date) {
-      return "";
-    }
+    if (!date) return "";
 
-    const activityDate =
-      new Date(date);
-
+    const activityDate = new Date(date);
     const now = new Date();
 
     const diff =
-      now.getTime() -
-      activityDate.getTime();
+      now.getTime() - activityDate.getTime();
 
-    const seconds =
-      Math.floor(diff / 1000);
+    const seconds = Math.floor(diff / 1000);
 
-    if (seconds < 10) {
-      return "Just now";
-    }
+    if (seconds < 10) return "Just now";
 
     if (seconds < 60) {
       return `${seconds}s ago`;
     }
 
-    const minutes =
-      Math.floor(seconds / 60);
+    const minutes = Math.floor(seconds / 60);
 
     if (minutes < 60) {
       return `${minutes}m ago`;
     }
 
-    const hours =
-      Math.floor(minutes / 60);
+    const hours = Math.floor(minutes / 60);
 
     if (hours < 24) {
       return `${hours}h ago`;
     }
 
-    const days =
-      Math.floor(hours / 24);
+    const days = Math.floor(hours / 24);
 
     if (days < 7) {
       return `${days}d ago`;
     }
 
-    const weeks =
-      Math.floor(days / 7);
+    const weeks = Math.floor(days / 7);
 
     if (weeks < 4) {
       return `${weeks}w ago`;
     }
 
-    return activityDate.toLocaleDateString(
-      "en-IN",
-      {
-        day: "numeric",
-        month: "short",
-        year: "numeric",
-      }
-    );
+    return activityDate.toLocaleDateString("en-IN", {
+      day: "numeric",
+      month: "short",
+      year: "numeric",
+    });
   };
-
 
   // ======================================================
   // ACTIVITY ICON
@@ -266,16 +238,9 @@ const RightBar = () => {
     }
   };
 
-
-  const suggestions =
-    usersData || [];
-
-  const activities =
-    activitiesData || [];
-
-  const trendingPosts =
-    trendingData || [];
-
+  const suggestions = usersData || [];
+  const activities = activitiesData || [];
+  const latestPost = (latestPostData || [])[0] || null;
 
   // ======================================================
   // AVATAR HELPER
@@ -288,10 +253,17 @@ const RightBar = () => {
     );
   };
 
+  // ======================================================
+  // VISIBLE ITEMS
+  // ======================================================
 
-  // ======================================================
-  // RENDER
-  // ======================================================
+  const visibleSuggestions = showAllSuggestions
+    ? suggestions
+    : suggestions.slice(0, 3);
+
+  const visibleActivities = showAllActivities
+    ? activities
+    : activities.slice(0, 4);
 
   return (
     <aside className="rightBar">
@@ -311,9 +283,7 @@ const RightBar = () => {
             </div>
 
             <div>
-              <h3>
-                Suggestions For You
-              </h3>
+              <h3>Suggestions For You</h3>
 
               <span className="cardSubtitle">
                 People you may know
@@ -322,50 +292,41 @@ const RightBar = () => {
 
           </div>
 
-          {suggestions.length > 0 && (
-            <span className="seeAllButton">
-              {suggestions.length === 1
-                ? "1 Person"
-                : `${suggestions.length} People`}
-            </span>
+          {suggestions.length > 3 && (
+            <button
+              type="button"
+              className="seeAllButton"
+              onClick={() =>
+                setShowAllSuggestions(
+                  !showAllSuggestions
+                )
+              }
+            >
+              {showAllSuggestions
+                ? "Show Less"
+                : "View All"}
+            </button>
           )}
 
         </div>
-
 
         {/* Loading */}
 
         {usersLoading && (
           <div className="emptyState">
-
-            <div className="emptyIcon">
-              ⏳
-            </div>
-
-            <span>
-              Loading suggestions...
-            </span>
-
+            <div className="emptyIcon">⏳</div>
+            <span>Loading suggestions...</span>
           </div>
         )}
-
 
         {/* Error */}
 
         {usersError && (
           <div className="emptyState">
-
-            <div className="emptyIcon">
-              ⚠️
-            </div>
-
-            <span>
-              Unable to load suggestions
-            </span>
-
+            <div className="emptyIcon">⚠️</div>
+            <span>Unable to load suggestions</span>
           </div>
         )}
-
 
         {/* Empty */}
 
@@ -373,109 +334,95 @@ const RightBar = () => {
           !usersError &&
           suggestions.length === 0 && (
             <div className="emptyState">
-
-              <div className="emptyIcon">
-                👥
-              </div>
-
-              <span>
-                No more suggestions
-              </span>
-
+              <div className="emptyIcon">👥</div>
+              <span>No more suggestions</span>
             </div>
           )}
-
 
         {/* Suggestions */}
 
         {!usersLoading &&
           !usersError &&
-          suggestions.length > 0 && (
+          visibleSuggestions.length > 0 && (
 
             <div className="suggestionList">
 
-              {suggestions
-                .slice(0, 4)
-                .map((person) => (
+              {visibleSuggestions.map((person) => (
 
-                  <div
-                    className="suggestionItem"
-                    key={person.id}
-                  >
+                <div
+                  className="suggestionItem"
+                  key={person.id}
+                >
 
-                    <img
-                      src={avatar(
-                        person.profilePic,
-                        person.name ||
-                          person.username ||
-                          "User"
-                      )}
-                      alt={
-                        person.name ||
+                  <img
+                    src={avatar(
+                      person.profilePic,
+                      person.name ||
                         person.username ||
                         "User"
-                      }
-                      onClick={() =>
-                        navigate(
-                          `/profile/${person.id}`
-                        )
-                      }
-                    />
+                    )}
+                    alt={
+                      person.name ||
+                      person.username ||
+                      "User"
+                    }
+                    onClick={() =>
+                      navigate(
+                        `/profile/${person.id}`
+                      )
+                    }
+                  />
 
-
-                    <div
-                      className="suggestionInfo"
-                      onClick={() =>
-                        navigate(
-                          `/profile/${person.id}`
-                        )
-                      }
-                    >
-
-                      <strong
-                        title={
-                          person.name ||
-                          person.username
-                        }
-                      >
-                        {person.name ||
-                          person.username ||
-                          "User"}
-                      </strong>
-
-                      <span>
-                        {person.city ||
-                          (person.following
-                            ? "Following"
-                            : "Suggested for you")}
-                      </span>
-
-                    </div>
-
-
-                    <button
-                      type="button"
-                      className={`followButton ${
-                        person.following
-                          ? "following"
-                          : ""
-                      }`}
-                      onClick={() =>
-                        handleFollow(person)
-                      }
-                      disabled={
-                        followMutation.isPending ||
-                        unfollowMutation.isPending
+                  <div
+                    className="suggestionInfo"
+                    onClick={() =>
+                      navigate(
+                        `/profile/${person.id}`
+                      )
+                    }
+                  >
+                    <strong
+                      title={
+                        person.name ||
+                        person.username
                       }
                     >
-                      {person.following
-                        ? "Following"
-                        : "Follow"}
-                    </button>
+                      {person.name ||
+                        person.username ||
+                        "User"}
+                    </strong>
 
+                    <span>
+                      {person.city ||
+                        (person.following
+                          ? "Following"
+                          : "Suggested for you")}
+                    </span>
                   </div>
 
-                ))}
+                  <button
+                    type="button"
+                    className={`followButton ${
+                      person.following
+                        ? "following"
+                        : ""
+                    }`}
+                    onClick={() =>
+                      handleFollow(person)
+                    }
+                    disabled={
+                      followMutation.isPending ||
+                      unfollowMutation.isPending
+                    }
+                  >
+                    {person.following
+                      ? "Following"
+                      : "Follow"}
+                  </button>
+
+                </div>
+
+              ))}
 
             </div>
           )}
@@ -498,133 +445,114 @@ const RightBar = () => {
             </div>
 
             <div>
-
-              <h3>
-                Latest Activities
-              </h3>
+              <h3>Latest Activities</h3>
 
               <span className="cardSubtitle">
                 Recent updates
               </span>
-
             </div>
 
           </div>
 
-        </div>
+          {activities.length > 4 && (
+            <button
+              type="button"
+              className="seeAllButton"
+              onClick={() =>
+                setShowAllActivities(
+                  !showAllActivities
+                )
+              }
+            >
+              {showAllActivities
+                ? "Show Less"
+                : "View All"}
+            </button>
+          )}
 
+        </div>
 
         {/* Loading */}
 
         {activitiesLoading && (
           <div className="emptyState">
-
-            <div className="emptyIcon">
-              ⏳
-            </div>
-
-            <span>
-              Loading activities...
-            </span>
-
+            <div className="emptyIcon">⏳</div>
+            <span>Loading activities...</span>
           </div>
         )}
-
 
         {/* Error */}
 
         {activitiesError && (
           <div className="emptyState">
-
-            <div className="emptyIcon">
-              ⚠️
-            </div>
-
-            <span>
-              Unable to load activities
-            </span>
-
+            <div className="emptyIcon">⚠️</div>
+            <span>Unable to load activities</span>
           </div>
         )}
-
 
         {/* Empty */}
 
         {!activitiesLoading &&
           !activitiesError &&
           activities.length === 0 && (
-
             <div className="emptyState">
-
-              <div className="emptyIcon">
-                ✦
-              </div>
-
-              <span>
-                No recent activities
-              </span>
-
+              <div className="emptyIcon">✦</div>
+              <span>No recent activities</span>
             </div>
           )}
-
 
         {/* Activities */}
 
         {!activitiesLoading &&
           !activitiesError &&
-          activities.length > 0 && (
+          visibleActivities.length > 0 && (
 
             <div className="activityList">
 
-              {activities
-                .slice(0, 5)
-                .map((activity) => (
+              {visibleActivities.map((activity) => (
 
-                  <div
-                    className="activityItem"
-                    key={`${activity.activityType}-${activity.activityId}`}
-                  >
+                <div
+                  className="activityItem"
+                  key={`${activity.activityType}-${activity.activityId}`}
+                >
 
-                    <div className="activityAvatar">
+                  <div className="activityAvatar">
 
-                      <img
-                        src={avatar(
-                          activity.profilePic,
-                          activity.name ||
-                            "User"
-                        )}
-                        alt={
-                          activity.name ||
-                          "User"
-                        }
-                      />
+                    <img
+                      src={avatar(
+                        activity.profilePic,
+                        activity.name || "User"
+                      )}
+                      alt={
+                        activity.name || "User"
+                      }
+                    />
 
-                      <span className="activityBadge">
-                        {getActivityIcon(
-                          activity.activityType
-                        )}
-                      </span>
-
-                    </div>
-
-
-                    <div className="activityInfo">
-
-                      <strong>
-                        {activity.activityText}
-                      </strong>
-
-                      <span>
-                        {getRelativeTime(
-                          activity.activityTime
-                        )}
-                      </span>
-
-                    </div>
+                    <span className="activityBadge">
+                      {getActivityIcon(
+                        activity.activityType
+                      )}
+                    </span>
 
                   </div>
 
-                ))}
+                  <div className="activityInfo">
+
+                    <strong>
+                      {activity.activityText}
+                    </strong>
+
+                    <span>
+                      {getRelativeTime(
+                        activity.activityTime
+                      )}
+                    </span>
+
+                  </div>
+
+                </div>
+
+              ))}
 
             </div>
           )}
@@ -633,7 +561,7 @@ const RightBar = () => {
 
 
       {/* ==================================================
-          TRENDING POSTS
+          LATEST POST
       ================================================== */}
 
       <section className="rightCard trendingCard">
@@ -647,211 +575,174 @@ const RightBar = () => {
             </div>
 
             <div>
-
-              <h3>
-                Trending Posts
-              </h3>
+              <h3>Latest Post</h3>
 
               <span className="cardSubtitle">
-                Popular right now
+                Newest post right now
               </span>
-
             </div>
 
           </div>
 
         </div>
 
-
         {/* Loading */}
 
-        {trendingLoading && (
+        {latestPostLoading && (
           <div className="emptyState">
-
-            <div className="emptyIcon">
-              ⏳
-            </div>
-
-            <span>
-              Loading trending posts...
-            </span>
-
+            <div className="emptyIcon">⏳</div>
+            <span>Loading latest post...</span>
           </div>
         )}
-
 
         {/* Error */}
 
-        {trendingError && (
+        {latestPostError && (
           <div className="emptyState">
-
-            <div className="emptyIcon">
-              ⚠️
-            </div>
-
-            <span>
-              Unable to load trending posts
-            </span>
-
+            <div className="emptyIcon">⚠️</div>
+            <span>Unable to load latest post</span>
           </div>
         )}
 
-
         {/* Empty */}
 
-        {!trendingLoading &&
-          !trendingError &&
-          trendingPosts.length === 0 && (
-
+        {!latestPostLoading &&
+          !latestPostError &&
+          !latestPost && (
             <div className="emptyState">
-
-              <div className="emptyIcon">
-                📈
-              </div>
-
-              <span>
-                No trending posts yet
-              </span>
-
+              <div className="emptyIcon">📝</div>
+              <span>No latest post yet</span>
             </div>
           )}
 
+        {/* Latest Post */}
 
-        {/* Trending Posts */}
+        {!latestPostLoading &&
+          !latestPostError &&
+          latestPost && (
 
-        {!trendingLoading &&
-          !trendingError &&
-          trendingPosts.length > 0 && (
+            <div
+              className="trendingList"
+              onClick={() =>
+                navigate(
+                  `/profile/${latestPost.userId}`
+                )
+              }
+            >
 
-            <div className="trendingList">
+              <div className="trendingItem">
 
-              {trendingPosts
-                .slice(0, 5)
-                .map((post, index) => (
+                <div className="trendingRank">
+                  1
+                </div>
 
-                  <div
-                    className="trendingItem"
-                    key={post.id}
-                    onClick={() =>
-                      navigate(
-                        `/profile/${post.userId}`
-                      )
-                    }
-                  >
+                <div className="trendingContent">
 
-                    <div className="trendingRank">
-                      {index + 1}
-                    </div>
+                  {/* Author */}
 
+                  <div className="trendingAuthor">
 
-                    <div className="trendingContent">
-
-                      {/* Author */}
-
-                      <div className="trendingAuthor">
-
-                        <img
-                          src={avatar(
-                            post.profilePic,
-                            post.name ||
-                              post.username ||
-                              "User"
-                          )}
-                          alt={
-                            post.name ||
-                            "User"
-                          }
-                        />
-
-                        <div>
-
-                          <strong>
-                            {post.name ||
-                              post.username ||
-                              "User"}
-                          </strong>
-
-                          <span>
-                            @{post.username ||
-                              "user"}
-                          </span>
-
-                        </div>
-
-                      </div>
-
-
-                      {/* Image */}
-
-                      {post.img && (
-                        <img
-                          className="trendingPostImage"
-                          src={getImageUrl(
-                            post.img
-                          )}
-                          alt="Trending post"
-                        />
+                    <img
+                      src={avatar(
+                        latestPost.profilePic,
+                        latestPost.name ||
+                          latestPost.username ||
+                          "User"
                       )}
+                      alt={
+                        latestPost.name ||
+                        latestPost.username ||
+                        "User"
+                      }
+                    />
 
+                    <div>
 
-                      {/* Video */}
+                      <strong>
+                        {latestPost.name ||
+                          latestPost.username ||
+                          "User"}
+                      </strong>
 
-                      {!post.img &&
-                        post.video && (
-                          <video
-                            className="trendingPostImage"
-                            src={getImageUrl(
-                              post.video
-                            )}
-                            muted
-                            playsInline
-                          />
-                        )}
-
-
-                      {/* Description */}
-
-                      <p className="trendingDescription">
-
-                        {post.desc
-                          ? post.desc.length > 80
-                            ? `${post.desc.substring(
-                                0,
-                                80
-                              )}...`
-                            : post.desc
-                          : "Shared a new post"}
-
-                      </p>
-
-
-                      {/* Stats */}
-
-                      <div className="trendingStats">
-
-                        <span>
-                          <FavoriteBorderOutlinedIcon />
-
-                          {Number(
-                            post.likesCount || 0
-                          )}
-                        </span>
-
-                        <span>
-                          <CommentOutlinedIcon />
-
-                          {Number(
-                            post.commentsCount || 0
-                          )}
-                        </span>
-
-                      </div>
+                      <span>
+                        @{latestPost.username ||
+                          "user"}
+                      </span>
 
                     </div>
 
                   </div>
 
-                ))}
+
+                  {/* Image */}
+
+                  {latestPost.img && (
+                    <img
+                      className="trendingPostImage"
+                      src={getImageUrl(
+                        latestPost.img
+                      )}
+                      alt="Latest post"
+                    />
+                  )}
+
+
+                  {/* Video */}
+
+                  {!latestPost.img &&
+                    latestPost.video && (
+                      <video
+                        className="trendingPostImage"
+                        src={getImageUrl(
+                          latestPost.video
+                        )}
+                        muted
+                        playsInline
+                      />
+                    )}
+
+
+                  {/* Description */}
+
+                  <p className="trendingDescription">
+
+                    {latestPost.desc
+                      ? latestPost.desc.length > 80
+                        ? `${latestPost.desc.substring(
+                            0,
+                            80
+                          )}...`
+                        : latestPost.desc
+                      : "Shared a new post"}
+
+                  </p>
+
+
+                  {/* Stats */}
+
+                  <div className="trendingStats">
+
+                    <span>
+                      <FavoriteBorderOutlinedIcon />
+
+                      {Number(
+                        latestPost.likesCount || 0
+                      )}
+                    </span>
+
+                    <span>
+                      <CommentOutlinedIcon />
+
+                      {Number(
+                        latestPost.commentsCount || 0
+                      )}
+                    </span>
+
+                  </div>
+
+                </div>
+
+              </div>
 
             </div>
           )}
