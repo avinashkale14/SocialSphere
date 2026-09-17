@@ -43,10 +43,6 @@ const Navbar = () => {
 
   const navigate = useNavigate();
 
-  // ======================================================
-  // STATES
-  // ======================================================
-
   const [menuOpen, setMenuOpen] =
     useState(false);
 
@@ -89,17 +85,9 @@ const Navbar = () => {
   const searchRef = useRef(null);
   const mobileInputRef = useRef(null);
 
-  // ======================================================
-  // PROFILE IMAGE
-  // ======================================================
-
   const profileImage =
     getImageUrl(currentUser?.profilePic) ||
     getAvatarPlaceholder(currentUser?.name);
-
-  // ======================================================
-  // CLOSE MOBILE MENU ON OUTSIDE CLICK
-  // ======================================================
 
   useEffect(() => {
     const handleOutsideClick = (event) => {
@@ -127,10 +115,6 @@ const Navbar = () => {
       );
     };
   }, []);
-
-  // ======================================================
-  // SEARCH USERS
-  // ======================================================
 
   useEffect(() => {
     const searchPeople = async () => {
@@ -225,10 +209,6 @@ const Navbar = () => {
     currentUser?.id,
   ]);
 
-  // ======================================================
-  // RECENT SEARCHES
-  // ======================================================
-
   const saveRecentSearch = (user) => {
     if (!user?.id) {
       return;
@@ -290,10 +270,6 @@ const Navbar = () => {
     );
   };
 
-  // ======================================================
-  // SEARCH USER
-  // ======================================================
-
   const handleSearchUser = (user) => {
     if (!user?.id) {
       return;
@@ -314,13 +290,7 @@ const Navbar = () => {
     handleSearchUser(user);
   };
 
-  // ======================================================
-  // OPEN SEARCH
-  // ======================================================
-
   const handleSearchClick = () => {
-    // Search, hamburger menu and RightBar page must never
-    // stay open together on mobile.
     setMenuOpen(false);
     setSearchOpen(true);
 
@@ -331,10 +301,6 @@ const Navbar = () => {
     }, 100);
   };
 
-  // ======================================================
-  // CLOSE SEARCH
-  // ======================================================
-
   const closeSearch = () => {
     setSearchText("");
     setSearchUsers([]);
@@ -342,20 +308,12 @@ const Navbar = () => {
     setMenuOpen(false);
   };
 
-  // ======================================================
-  // MOBILE HAMBURGER MENU
-  // ======================================================
-
   const handleMobileMenuClick = () => {
     setSearchOpen(false);
     setSearchText("");
     setSearchUsers([]);
     setMenuOpen((previous) => !previous);
   };
-
-  // ======================================================
-// NOTIFICATIONS
-// ======================================================
 
 const handleNotificationClick = () => {
   setSearchOpen(false);
@@ -366,10 +324,6 @@ const handleNotificationClick = () => {
 
   navigate("/notifications");
 };
-
-  // ======================================================
-  // SCROLL TO ELEMENT AFTER NAVIGATION
-  // ======================================================
 
   const goToHomeAndScroll = (
     elementId
@@ -397,10 +351,6 @@ const handleNotificationClick = () => {
     }, 350);
   };
 
-  // ======================================================
-  // LOGOUT
-  // ======================================================
-
   const handleLogout = async () => {
     try {
       await makeRequest.post("/auth/logout");
@@ -415,25 +365,13 @@ const handleNotificationClick = () => {
     }
   };
 
-  // ======================================================
-  // MOBILE MENU ACTIONS
-  // ======================================================
-
   const handleMenuAction = (type) => {
     setMenuOpen(false);
-
-    // ----------------------------------------------
-    // CREATE POST
-    // ----------------------------------------------
 
     if (type === "createPost") {
       goToHomeAndScroll("create-post");
       return;
     }
-
-    // ----------------------------------------------
-    // MY POSTS
-    // ----------------------------------------------
 
     if (type === "myPosts") {
       if (currentUser?.id) {
@@ -445,10 +383,6 @@ const handleNotificationClick = () => {
       return;
     }
 
-    // ----------------------------------------------
-    // STORIES
-    // ----------------------------------------------
-
     if (type === "stories") {
       goToHomeAndScroll(
         "stories-section"
@@ -457,18 +391,7 @@ const handleNotificationClick = () => {
       return;
     }
 
-    // ----------------------------------------------
-    // DISCOVER PEOPLE
-    // ----------------------------------------------
-
     if (type === "discover") {
-      /*
-        RightBar is hidden on mobile,
-        so we cannot scroll to .suggestionsCard.
-
-        Instead, open the navbar search.
-      */
-
       setSearchOpen(true);
       setSearchText("");
 
@@ -481,26 +404,16 @@ const handleNotificationClick = () => {
       return;
     }
 
-    // ----------------------------------------------
-    // NOTIFICATIONS
-    // ----------------------------------------------
-
     if (type === "notifications") {
       handleNotificationClick();
       return;
     }
   };
 
-  // ======================================================
-  // DATA
-  // ======================================================
-
   return (
     <nav className="navbar">
 
-      {/* ==================================================
-          MOBILE HAMBURGER
-      ================================================== */}
+      {}
 
       <button
         type="button"
@@ -519,14 +432,11 @@ const handleNotificationClick = () => {
         )}
       </button>
 
-
-      {/* ==================================================
-          LEFT
-      ================================================== */}
+      {}
 
       <div className="left">
 
-        {/* LOGO */}
+        {}
 
         <Link
           to="/"
@@ -535,12 +445,11 @@ const handleNotificationClick = () => {
           SocialSphere
         </Link>
 
-
-        {/* NAV ICONS */}
+        {}
 
         <div className="nav-icons">
 
-          {/* HOME */}
+          {}
 
           <Link
             to="/"
@@ -550,8 +459,7 @@ const handleNotificationClick = () => {
             <HomeOutlinedIcon />
           </Link>
 
-
-          {/* THEME */}
+          {}
 
           <button
             type="button"
@@ -566,8 +474,7 @@ const handleNotificationClick = () => {
             )}
           </button>
 
-
-          {/* NOTIFICATIONS */}
+          {}
 
           <button
             type="button"
@@ -580,10 +487,7 @@ const handleNotificationClick = () => {
 
         </div>
 
-
-        {/* ==================================================
-            DESKTOP SEARCH
-        ================================================== */}
+        {}
 
         <div
           className="search desktop-search"
@@ -787,14 +691,11 @@ const handleNotificationClick = () => {
 
       </div>
 
-
-      {/* ==================================================
-          RIGHT
-      ================================================== */}
+      {}
 
       <div className="right">
 
-        {/* PROFILE */}
+        {}
 
         <Link
           to={`/profile/${currentUser?.id}`}
@@ -818,10 +719,7 @@ const handleNotificationClick = () => {
 
       </div>
 
-
-      {/* ==================================================
-          MOBILE SEARCH BUTTON
-      ================================================== */}
+      {}
 
       <button
         type="button"
@@ -846,12 +744,7 @@ const handleNotificationClick = () => {
         )}
       </button>
 
-
-      {/* ==================================================
-          MOBILE SEARCH
-          IMPORTANT:
-          This stays INSIDE navbar.
-      ================================================== */}
+      {}
 
       {searchOpen && (
         <div
@@ -887,8 +780,7 @@ const handleNotificationClick = () => {
 
           </div>
 
-
-          {/* SEARCH RESULTS / RECENT SEARCHES */}
+          {}
 
           {searchOpen && (
             <div className="mobileSearchResults">
@@ -1054,12 +946,7 @@ const handleNotificationClick = () => {
         </div>
       )}
 
-
-      {/* ==================================================
-          MOBILE LEFT MENU
-          This menu is only visible on mobile.
-          Desktop layout/menu is intentionally untouched.
-      ================================================== */}
+      {}
 
       {menuOpen && (
         <div
@@ -1067,7 +954,7 @@ const handleNotificationClick = () => {
           ref={menuRef}
         >
 
-          {/* PROFILE */}
+          {}
           <Link
             to={`/profile/${currentUser?.id}`}
             className="mobileProfileCard"
@@ -1101,8 +988,7 @@ const handleNotificationClick = () => {
             </span>
           </Link>
 
-
-          {/* MAIN */}
+          {}
           <div className="mobileMenuSectionTitle">
             MAIN
           </div>
@@ -1137,8 +1023,7 @@ const handleNotificationClick = () => {
             </span>
           </button>
 
-
-          {/* QUICK ACCESS */}
+          {}
           <div className="mobileMenuSectionTitle withDivider">
             QUICK ACCESS
           </div>
@@ -1164,7 +1049,6 @@ const handleNotificationClick = () => {
             </span>
           </button>
 
-
           <button
             type="button"
             className="mobileMenuItem"
@@ -1185,7 +1069,6 @@ const handleNotificationClick = () => {
               ›
             </span>
           </button>
-
 
           <button
             type="button"
@@ -1208,8 +1091,7 @@ const handleNotificationClick = () => {
             </span>
           </button>
 
-
-          {/* ACCOUNT */}
+          {}
           <div className="mobileMenuSectionTitle withDivider">
             ACCOUNT
           </div>
@@ -1228,8 +1110,7 @@ const handleNotificationClick = () => {
             </span>
           </button>
 
-
-          {/* SOCIALSPHERE CARD */}
+          {}
           <div className="mobileSocialCard">
             <span className="mobileSocialLogo">
               ✣
@@ -1243,7 +1124,6 @@ const handleNotificationClick = () => {
 
         </div>
       )}
-
 
     </nav>
   );

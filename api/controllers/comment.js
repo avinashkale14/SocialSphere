@@ -4,10 +4,7 @@ import { createActivity } from "./activity.js";
 
 const JWT_SECRET = "socialsphere_secret_key";
 
-// ======================================================
-// GET COMMENTS
-// ======================================================
-
+// Get comments
 export const getComments = (req, res) => {
   const postId = Number(req.query.postId);
 
@@ -41,10 +38,7 @@ export const getComments = (req, res) => {
   });
 };
 
-// ======================================================
-// ADD COMMENT
-// ======================================================
-
+// Add comment
 export const addComment = (req, res) => {
   const token = req.cookies.accessToken;
 
@@ -66,8 +60,6 @@ export const addComment = (req, res) => {
       );
     }
 
-    // Get post owner because LIKE/COMMENT notifications
-    // belong only to the owner of that post.
     const postOwnerQuery = `
       SELECT userId
       FROM posts
@@ -113,8 +105,6 @@ export const addComment = (req, res) => {
               return res.status(500).json(err);
             }
 
-            // Only the post owner receives the comment
-            // notification. Self-comment creates no notification.
             if (Number(userInfo.id) !== postOwnerId) {
               createActivity(
                 userInfo.id,
@@ -137,10 +127,7 @@ export const addComment = (req, res) => {
   });
 };
 
-// ======================================================
-// DELETE COMMENT
-// ======================================================
-
+// Delete comment
 export const deleteComment = (req, res) => {
   const token = req.cookies.accessToken;
 
@@ -185,8 +172,6 @@ export const deleteComment = (req, res) => {
         );
       }
 
-      // Because activity stores commentId, this removes
-      // exactly this comment's notification.
       const deleteActivityQuery = `
         DELETE FROM activities
         WHERE type = 'comment'

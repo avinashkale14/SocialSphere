@@ -5,21 +5,16 @@ import { useQuery } from "@tanstack/react-query";
 import makeRequest from "../../axios";
 
 const Posts = ({ userId }) => {
-
   const {
     isLoading,
     error,
     data,
   } = useQuery({
-
-    // Home = ["posts"]
-    // Profile = ["posts", userId]
     queryKey: userId
       ? ["posts", userId]
       : ["posts"],
 
     queryFn: async () => {
-
       const res = await makeRequest.get(
         "/posts",
         {
@@ -31,11 +26,9 @@ const Posts = ({ userId }) => {
 
       return res.data;
     },
-
   });
 
-  // ================= LOADING =================
-
+  // Loading
   if (isLoading) {
     return (
       <div className="postsMessage">
@@ -44,14 +37,12 @@ const Posts = ({ userId }) => {
     );
   }
 
-  // ================= ERROR =================
-
+  // Error
   if (error) {
-
     console.log(
       "POSTS ERROR:",
       error.response?.data ||
-      error.message
+        error.message
     );
 
     return (
@@ -61,10 +52,8 @@ const Posts = ({ userId }) => {
     );
   }
 
-  // ================= NO POSTS =================
-
+  // No posts
   if (!data || data.length === 0) {
-
     return (
       <div className="postsMessage">
         {userId
@@ -74,20 +63,14 @@ const Posts = ({ userId }) => {
     );
   }
 
-  // ================= POSTS =================
-
   return (
     <div className="posts">
-
       {data.map((post) => (
-
         <Post
           post={post}
           key={post.id}
         />
-
       ))}
-
     </div>
   );
 };

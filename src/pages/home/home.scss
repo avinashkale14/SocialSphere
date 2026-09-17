@@ -11,30 +11,22 @@
 
     overflow-x: hidden;
 
-
-    /* LARGE SCREENS */
-
+    // Large screens
     @include laptop {
       padding: 20px 25px;
     }
 
-
-    /*  TABLET */
-
+    // Tablet
     @include tablet {
       padding: 20px;
     }
 
-
-    /* MOBILE */
-
+    // Mobile
     @include mobile-large {
       padding: 12px 10px;
     }
 
-
-    /*  SMALL MOBILE */
-
+    // Small mobile
     @include mobile {
       padding: 10px 8px;
     }

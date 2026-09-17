@@ -4,10 +4,7 @@ import { createActivity } from "./activity.js";
 
 const JWT_SECRET = "socialsphere_secret_key";
 
-// ======================================================
-// GET LIKES
-// ======================================================
-
+// Get likes
 export const getLikes = (req, res) => {
   const postId = Number(req.query.postId);
 
@@ -31,10 +28,7 @@ export const getLikes = (req, res) => {
   });
 };
 
-// ======================================================
-// ADD LIKE
-// ======================================================
-
+// Add like
 export const addLike = (req, res) => {
   const token = req.cookies.accessToken;
 
@@ -118,8 +112,6 @@ export const addLike = (req, res) => {
                 return res.status(500).json(err);
               }
 
-              // Only the post owner receives the like
-              // notification. Self-like creates no notification.
               if (Number(userInfo.id) !== postOwnerId) {
                 createActivity(
                   userInfo.id,
@@ -143,10 +135,7 @@ export const addLike = (req, res) => {
   });
 };
 
-// ======================================================
-// DELETE LIKE / UNLIKE
-// ======================================================
-
+// Delete like
 export const deleteLike = (req, res) => {
   const token = req.cookies.accessToken;
 
@@ -184,7 +173,6 @@ export const deleteLike = (req, res) => {
         }
 
         if (result.affectedRows > 0) {
-          // Remove only this user's notification for this post.
           const deleteActivityQuery = `
             DELETE FROM activities
             WHERE type = 'like'

@@ -2,37 +2,19 @@
 
 .posts {
   display: flex;
-
   flex-direction: column;
-
   width: 100%;
-
   gap: 20px;
-
   padding-bottom: 20px;
-
-
-  .posts-loading,
-  .posts-error {
-    padding: 20px;
-
-    text-align: center;
-
-    font-size: 14px;
-  }
-
 
   @include tablet {
     gap: 16px;
   }
 
-
   @include mobile-large {
     gap: 12px;
-
     padding-bottom: 15px;
   }
-
 
   @include mobile {
     gap: 10px;

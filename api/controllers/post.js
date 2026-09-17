@@ -4,10 +4,7 @@ import { createActivity } from "./activity.js";
 
 const JWT_SECRET = "socialsphere_secret_key";
 
-// ======================================================
-// GET ALL POSTS
-// ======================================================
-
+// Get all posts
 export const getPosts = (req, res) => {
   const token = req.cookies.accessToken;
 
@@ -51,10 +48,7 @@ export const getPosts = (req, res) => {
   });
 };
 
-// ======================================================
-// ADD POST
-// ======================================================
-
+// Add post
 export const addPost = (req, res) => {
   const token = req.cookies.accessToken;
 
@@ -106,7 +100,6 @@ export const addPost = (req, res) => {
         return res.status(500).json(err);
       }
 
-      // POST activity is global.
       createActivity(
         userInfo.id,
         "post",
@@ -124,10 +117,7 @@ export const addPost = (req, res) => {
   });
 };
 
-// ======================================================
-// EDIT POST
-// ======================================================
-
+// Edit post
 export const editPost = (req, res) => {
   const token = req.cookies.accessToken;
 
@@ -198,18 +188,7 @@ export const editPost = (req, res) => {
   });
 };
 
-// ======================================================
-// DELETE POST
-// ======================================================
-// Deletes:
-// - all comments
-// - all likes
-// - post activity
-// - like activities
-// - comment activities
-// - finally the post
-// ======================================================
-
+// Delete post
 export const deletePost = (req, res) => {
   const token = req.cookies.accessToken;
 
@@ -250,9 +229,6 @@ export const deletePost = (req, res) => {
         );
       }
 
-      // First remove every activity connected to this post.
-      // This includes:
-      // post + like + comment activities.
       const deleteActivitiesQuery = `
         DELETE FROM activities
         WHERE postId = ?
@@ -270,7 +246,6 @@ export const deletePost = (req, res) => {
             return res.status(500).json(activityErr);
           }
 
-          // Remove comments.
           const deleteCommentsQuery = `
             DELETE FROM comments
             WHERE postId = ?
@@ -288,7 +263,6 @@ export const deletePost = (req, res) => {
                 return res.status(500).json(commentErr);
               }
 
-              // Remove likes.
               const deleteLikesQuery = `
                 DELETE FROM likes
                 WHERE postId = ?
@@ -306,7 +280,6 @@ export const deletePost = (req, res) => {
                     return res.status(500).json(likeErr);
                   }
 
-                  // Finally remove the post.
                   const deletePostQuery = `
                     DELETE FROM posts
                     WHERE id = ?

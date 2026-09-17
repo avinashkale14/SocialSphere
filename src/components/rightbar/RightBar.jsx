@@ -28,7 +28,6 @@ import {
   getAvatarPlaceholder,
 } from "../../utils/imageUrl";
 
-
 const RightBar = () => {
 
   const { currentUser } =
@@ -40,11 +39,6 @@ const RightBar = () => {
   const queryClient =
     useQueryClient();
 
-
-  // ======================================================
-  // SHOW ALL STATES
-  // ======================================================
-
   const [
     showAllSuggestions,
     setShowAllSuggestions,
@@ -54,11 +48,6 @@ const RightBar = () => {
     showAllActivities,
     setShowAllActivities,
   ] = useState(false);
-
-
-  // ======================================================
-  // USERS / SUGGESTIONS
-  // ======================================================
 
   const {
     isLoading: usersLoading,
@@ -83,11 +72,6 @@ const RightBar = () => {
     enabled: !!currentUser,
 
   });
-
-
-  // ======================================================
-  // ACTIVITIES
-  // ======================================================
 
   const {
     isLoading: activitiesLoading,
@@ -115,11 +99,6 @@ const RightBar = () => {
 
   });
 
-
-  // ======================================================
-  // LATEST POST
-  // ======================================================
-
   const {
     isLoading: latestPostLoading,
     error: latestPostError,
@@ -145,11 +124,6 @@ const RightBar = () => {
     refetchInterval: 30000,
 
   });
-
-
-  // ======================================================
-  // FOLLOW
-  // ======================================================
 
   const followMutation =
     useMutation({
@@ -194,11 +168,6 @@ const RightBar = () => {
 
     });
 
-
-  // ======================================================
-  // UNFOLLOW
-  // ======================================================
-
   const unfollowMutation =
     useMutation({
 
@@ -240,11 +209,6 @@ const RightBar = () => {
 
     });
 
-
-  // ======================================================
-  // FOLLOW / UNFOLLOW
-  // ======================================================
-
   const handleFollow = (
     person
   ) => {
@@ -269,11 +233,6 @@ const RightBar = () => {
 
   };
 
-
-  // ======================================================
-  // RELATIVE TIME
-  // ======================================================
-
   const getRelativeTime = (
     date
   ) => {
@@ -297,60 +256,49 @@ const RightBar = () => {
         diff / 1000
       );
 
-
     if (seconds < 10) {
       return "Just now";
     }
 
-
     if (seconds < 60) {
       return `${seconds}s ago`;
     }
-
 
     const minutes =
       Math.floor(
         seconds / 60
       );
 
-
     if (minutes < 60) {
       return `${minutes}m ago`;
     }
-
 
     const hours =
       Math.floor(
         minutes / 60
       );
 
-
     if (hours < 24) {
       return `${hours}h ago`;
     }
-
 
     const days =
       Math.floor(
         hours / 24
       );
 
-
     if (days < 7) {
       return `${days}d ago`;
     }
-
 
     const weeks =
       Math.floor(
         days / 7
       );
 
-
     if (weeks < 4) {
       return `${weeks}w ago`;
     }
-
 
     return activityDate.toLocaleDateString(
       "en-IN",
@@ -362,11 +310,6 @@ const RightBar = () => {
     );
 
   };
-
-
-  // ======================================================
-  // ACTIVITY ICON
-  // ======================================================
 
   const getActivityIcon = (
     type
@@ -393,11 +336,6 @@ const RightBar = () => {
 
   };
 
-
-  // ======================================================
-  // DATA
-  // ======================================================
-
   const suggestions =
     usersData || [];
 
@@ -407,11 +345,6 @@ const RightBar = () => {
   const latestPost =
     (latestPostData || [])[0] ||
     null;
-
-
-  // ======================================================
-  // AVATAR
-  // ======================================================
 
   const avatar = (
     image,
@@ -425,39 +358,21 @@ const RightBar = () => {
 
   };
 
-
-  // ======================================================
-  // VISIBLE SUGGESTIONS
-  // DEFAULT = 3
-  // VIEW ALL = EVERYTHING
-  // ======================================================
-
   const visibleSuggestions =
     showAllSuggestions
       ? suggestions
       : suggestions.slice(0, 3);
-
-
-  // ======================================================
-  // VISIBLE ACTIVITIES
-  // DEFAULT = 3
-  // VIEW ALL = EVERYTHING
-  // ======================================================
 
   const visibleActivities =
     showAllActivities
       ? activities
       : activities.slice(0, 3);
 
-
   return (
 
     <aside className="rightBar">
 
-
-      {/* ==================================================
-          SUGGESTIONS
-      ================================================== */}
+      {}
 
       <section className="rightCard suggestionsCard">
 
@@ -485,7 +400,6 @@ const RightBar = () => {
 
           </div>
 
-
           {suggestions.length > 3 && (
 
             <button
@@ -508,7 +422,6 @@ const RightBar = () => {
 
         </div>
 
-
         {usersLoading && (
 
           <div className="emptyState">
@@ -525,7 +438,6 @@ const RightBar = () => {
 
         )}
 
-
         {usersError && (
 
           <div className="emptyState">
@@ -541,7 +453,6 @@ const RightBar = () => {
           </div>
 
         )}
-
 
         {!usersLoading &&
           !usersError &&
@@ -560,7 +471,6 @@ const RightBar = () => {
             </div>
 
           )}
-
 
         {!usersLoading &&
           !usersError &&
@@ -597,7 +507,6 @@ const RightBar = () => {
                       }
                     />
 
-
                     <div
                       className="suggestionInfo"
                       onClick={() =>
@@ -620,7 +529,6 @@ const RightBar = () => {
 
                       </strong>
 
-
                       <span>
 
                         {person.city ||
@@ -633,7 +541,6 @@ const RightBar = () => {
                       </span>
 
                     </div>
-
 
                     <button
                       type="button"
@@ -673,10 +580,7 @@ const RightBar = () => {
 
       </section>
 
-
-      {/* ==================================================
-          LATEST ACTIVITIES
-      ================================================== */}
+      {}
 
       <section className="rightCard">
 
@@ -704,7 +608,6 @@ const RightBar = () => {
 
           </div>
 
-
           {activities.length > 3 && (
 
             <button
@@ -727,7 +630,6 @@ const RightBar = () => {
 
         </div>
 
-
         {activitiesLoading && (
 
           <div className="emptyState">
@@ -744,7 +646,6 @@ const RightBar = () => {
 
         )}
 
-
         {activitiesError && (
 
           <div className="emptyState">
@@ -760,7 +661,6 @@ const RightBar = () => {
           </div>
 
         )}
-
 
         {!activitiesLoading &&
           !activitiesError &&
@@ -779,7 +679,6 @@ const RightBar = () => {
             </div>
 
           )}
-
 
         {!activitiesLoading &&
           !activitiesError &&
@@ -810,7 +709,6 @@ const RightBar = () => {
                         }
                       />
 
-
                       <span className="activityBadge">
 
                         {getActivityIcon(
@@ -820,7 +718,6 @@ const RightBar = () => {
                       </span>
 
                     </div>
-
 
                     <div className="activityInfo">
 
@@ -847,10 +744,7 @@ const RightBar = () => {
 
       </section>
 
-
-      {/* ==================================================
-          LATEST POST
-      ================================================== */}
+      {}
 
       <section className="rightCard trendingCard">
 
@@ -880,7 +774,6 @@ const RightBar = () => {
 
         </div>
 
-
         {latestPostLoading && (
 
           <div className="emptyState">
@@ -897,7 +790,6 @@ const RightBar = () => {
 
         )}
 
-
         {latestPostError && (
 
           <div className="emptyState">
@@ -913,7 +805,6 @@ const RightBar = () => {
           </div>
 
         )}
-
 
         {!latestPostLoading &&
           !latestPostError &&
@@ -932,7 +823,6 @@ const RightBar = () => {
             </div>
 
           )}
-
 
         {!latestPostLoading &&
           !latestPostError &&
@@ -955,8 +845,7 @@ const RightBar = () => {
 
                 <div className="trendingContent">
 
-
-                  {/* AUTHOR */}
+                  {}
 
                   <div className="trendingAuthor">
 
@@ -974,7 +863,6 @@ const RightBar = () => {
                         "User"
                       }
                     />
-
 
                     <div>
 
@@ -997,8 +885,7 @@ const RightBar = () => {
 
                   </div>
 
-
-                  {/* IMAGE */}
+                  {}
 
                   {latestPost.img && (
 
@@ -1014,8 +901,7 @@ const RightBar = () => {
 
                   )}
 
-
-                  {/* VIDEO */}
+                  {}
 
                   {!latestPost.img &&
                     latestPost.video && (
@@ -1033,8 +919,7 @@ const RightBar = () => {
 
                     )}
 
-
-                  {/* DESCRIPTION */}
+                  {}
 
                   <p className="trendingDescription">
 
@@ -1049,8 +934,7 @@ const RightBar = () => {
 
                   </p>
 
-
-                  {/* STATS */}
+                  {}
 
                   <div className="trendingStats">
 
@@ -1064,7 +948,6 @@ const RightBar = () => {
                       )}
 
                     </span>
-
 
                     <span>
 
@@ -1089,12 +972,10 @@ const RightBar = () => {
 
       </section>
 
-
     </aside>
 
   );
 
 };
-
 
 export default RightBar;

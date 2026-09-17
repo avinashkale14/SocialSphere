@@ -4,10 +4,7 @@ import { createActivity } from "./activity.js";
 
 const JWT_SECRET = "socialsphere_secret_key";
 
-// ======================================================
-// GET ACTIVE STORIES
-// ======================================================
-
+// Get active stories
 export const getStories = (req, res) => {
   const token = req.cookies.accessToken;
 
@@ -19,13 +16,6 @@ export const getStories = (req, res) => {
     if (err) {
       return res.status(403).json("Token is not valid!");
     }
-
-    // ==================================================
-    // CLEAN EXPIRED STORY ACTIVITIES FIRST
-    // ==================================================
-    // Story activities are global, but they must disappear
-    // when the related story expires.
-    // ==================================================
 
     const deleteExpiredActivitiesQuery = `
       DELETE a
@@ -48,7 +38,7 @@ export const getStories = (req, res) => {
           return res.status(500).json(activityErr);
         }
 
-        // Delete expired stories.
+        // Delete expired stories
         const deleteExpiredQuery = `
           DELETE FROM stories
           WHERE expireAt IS NOT NULL
@@ -103,10 +93,7 @@ export const getStories = (req, res) => {
   });
 };
 
-// ======================================================
-// ADD STORY
-// ======================================================
-
+// Add story
 export const addStory = (req, res) => {
   const token = req.cookies.accessToken;
 
@@ -156,9 +143,6 @@ export const addStory = (req, res) => {
           return res.status(500).json(err);
         }
 
-        // STORY activity is global.
-        // Store storyId so it can be removed when
-        // the story is deleted or expires.
         createActivity(
           userInfo.id,
           "story",
@@ -179,10 +163,7 @@ export const addStory = (req, res) => {
   });
 };
 
-// ======================================================
-// DELETE STORY
-// ======================================================
-
+// Delete story
 export const deleteStory = (req, res) => {
   const token = req.cookies.accessToken;
 
@@ -225,7 +206,6 @@ export const deleteStory = (req, res) => {
         );
       }
 
-      // Remove the exact story's global activity.
       const deleteActivityQuery = `
         DELETE FROM activities
         WHERE type = 'story'
@@ -244,7 +224,7 @@ export const deleteStory = (req, res) => {
             return res.status(500).json(activityErr);
           }
 
-          // Remove story views.
+          // Remove story views
           const deleteViewsQuery = `
             DELETE FROM story_views
             WHERE storyId = ?
@@ -262,7 +242,6 @@ export const deleteStory = (req, res) => {
                 return res.status(500).json(viewErr);
               }
 
-              // Finally remove the story.
               const deleteQuery = `
                 DELETE FROM stories
                 WHERE id = ?
@@ -294,10 +273,7 @@ export const deleteStory = (req, res) => {
   });
 };
 
-// ======================================================
-// ADD STORY VIEW
-// ======================================================
-
+// Add story view
 export const addStoryView = (req, res) => {
   const token = req.cookies.accessToken;
 
@@ -388,10 +364,7 @@ export const addStoryView = (req, res) => {
   });
 };
 
-// ======================================================
-// GET STORY VIEWERS
-// ======================================================
-
+// Get story viewers
 export const getStoryViewers = (req, res) => {
   const token = req.cookies.accessToken;
 

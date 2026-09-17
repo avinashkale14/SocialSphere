@@ -3,21 +3,7 @@ import jwt from "jsonwebtoken";
 
 const JWT_SECRET = "socialsphere_secret_key";
 
-// ======================================================
-// CREATE ACTIVITY
-// ======================================================
-// userId       = actor
-// type         = post | story | follow | like | comment
-// targetUserId = user who should receive targeted activity
-// postId       = related post
-// commentId    = related comment
-// storyId      = related story
-//
-// POST / STORY  -> global activity
-// FOLLOW        -> only target user
-// LIKE/COMMENT  -> only post owner
-// ======================================================
-
+// Create activity
 export const createActivity = (
   userId,
   type,
@@ -58,10 +44,7 @@ export const createActivity = (
   );
 };
 
-// ======================================================
-// GET LATEST ACTIVITIES / NOTIFICATIONS
-// ======================================================
-
+// Get latest activities
 export const getActivities = (req, res) => {
   const token = req.cookies.accessToken;
 
@@ -76,27 +59,7 @@ export const getActivities = (req, res) => {
 
     const currentUserId = Number(userInfo.id);
 
-    // ==================================================
-    // VISIBILITY RULES
-    // ==================================================
-    //
-    // 1. POST / STORY
-    //    Global activity.
-    //    Every other user can see it.
-    //
-    // 2. FOLLOW
-    //    Targeted activity.
-    //    Only the user being followed can see it.
-    //
-    // 3. LIKE / COMMENT
-    //    Targeted activity.
-    //    Only the owner of the post can see it.
-    //
-    // 4. Own activities
-    //    Never show them to the actor himself.
-    //
-    // ==================================================
-
+    // Activity visibility
     const q = `
       SELECT
         a.id AS activityId,

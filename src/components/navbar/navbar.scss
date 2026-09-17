@@ -1,10 +1,5 @@
 @import "../../style.scss";
 
-
-/* =========================================================
-   MAIN NAVBAR
-========================================================= */
-
 .navbar {
   @include themify($themes);
 
@@ -40,11 +35,6 @@
     box-shadow 0.2s ease;
 }
 
-
-/* =========================================================
-   LEFT
-========================================================= */
-
 .navbar .left {
   display: flex;
 
@@ -54,11 +44,6 @@
 
   flex-shrink: 0;
 }
-
-
-/* =========================================================
-   LOGO
-========================================================= */
 
 .navbar .logo {
   display: flex;
@@ -107,11 +92,6 @@
 .navbar .logo:focus-visible {
   outline: none;
 }
-
-
-/* =========================================================
-   LEFT NAV ICONS
-========================================================= */
 
 .navbar .nav-icons {
   display: flex;
@@ -184,11 +164,6 @@
   height: 21px;
 }
 
-
-/* =========================================================
-   DESKTOP SEARCH
-========================================================= */
-
 .navbar .desktop-search {
   position: absolute;
 
@@ -198,7 +173,6 @@
   transform:
     translate(-50%, -50%);
 
-  /* Wide desktop search for a balanced navbar */
   width: min(440px, 38vw);
   height: 40px;
 
@@ -282,11 +256,6 @@
     themed("textColorSoft");
 }
 
-
-/* =========================================================
-   SEARCH RESULTS
-========================================================= */
-
 .navbar .searchResults {
   position: absolute;
 
@@ -334,10 +303,6 @@
     themed("textColorSoft");
 }
 
-/* =========================================================
-   SEARCH EMPTY STATE
-========================================================= */
-
 .navbar .searchEmptyState {
   min-height: 112px;
 
@@ -372,11 +337,6 @@
   font-size: 10px;
   color: themed("textColorSoft");
 }
-
-
-/* =========================================================
-   RECENT SEARCHES
-========================================================= */
 
 .navbar .recentSearchHeader {
   display: flex;
@@ -615,11 +575,6 @@
     themed("textColorSoft");
 }
 
-
-/* =========================================================
-   RIGHT
-========================================================= */
-
 .navbar .right {
   display: flex;
 
@@ -631,11 +586,6 @@
 
   flex-shrink: 0;
 }
-
-
-/* =========================================================
-   RIGHT ICONS
-========================================================= */
 
 .navbar .right-icon {
   width: 38px;
@@ -696,11 +646,6 @@
   width: 21px;
   height: 21px;
 }
-
-
-/* =========================================================
-   PROFILE
-========================================================= */
 
 .navbar .user {
   height: 42px;
@@ -769,19 +714,9 @@
   white-space: nowrap;
 }
 
-
-/* =========================================================
-   MOBILE HAMBURGER - HIDDEN DESKTOP
-========================================================= */
-
 .navbar .mobile-menu-button {
   display: none;
 }
-
-
-/* =========================================================
-   QUICK MENU
-========================================================= */
 
 .navbar .mobileMenu {
   display: none;
@@ -933,11 +868,6 @@
   flex-shrink: 0;
 }
 
-/* =========================================================
-   MOBILE LEFT MENU - MOBILE ONLY
-   Desktop is intentionally untouched.
-========================================================= */
-
 @media (max-width: 600px) {
 
   .navbar .mobileMenu {
@@ -947,11 +877,8 @@
     left: 8px;
     right: auto;
 
-    /* Important: remove the desktop centering transform on mobile.
-       Without this, the menu shifts left and gets clipped. */
     transform: none;
 
-    /* Compact LeftBar-style menu — only content width */
     width: 230px;
     max-width: calc(100vw - 20px);
     max-height: calc(100vh - 72px);
@@ -971,13 +898,10 @@
     z-index: 10030;
   }
 
-  /* Hide the old Quick Menu header because the hamburger now opens
-     the compact LeftBar-style mobile menu. */
   .navbar .mobileMenuHeader {
     display: none;
   }
 
-  /* PROFILE CARD */
   .navbar .mobileProfileCard {
     width: 100%;
     min-height: 58px;
@@ -1052,7 +976,6 @@
     color: themed("textColorSoft");
   }
 
-  /* SECTION LABELS */
   .navbar .mobileMenuSectionTitle {
     padding: 7px 10px 5px;
 
@@ -1068,7 +991,6 @@
     border-top: 1px solid themed("border");
   }
 
-  /* MENU ITEMS */
   .navbar .mobileMenuItem {
     min-height: 48px;
 
@@ -1138,12 +1060,10 @@
     color: themed("textColorSoft");
   }
 
-  /* LOGOUT */
   .navbar .logoutMenuItem .mobileMenuText strong {
     color: #e53935;
   }
 
-  /* SOCIALSPHERE CARD */
   .navbar .mobileSocialCard {
     min-height: 46px;
 
@@ -1198,28 +1118,13 @@
   }
 }
 
-
-/* =========================================================
-   MOBILE SEARCH BUTTON - HIDDEN DESKTOP
-========================================================= */
-
 .navbar .mobile-search-button {
   display: none;
 }
 
-
-/* =========================================================
-   MOBILE SEARCH PANEL
-========================================================= */
-
 .navbar .mobileSearchPanel {
   display: none;
 }
-
-
-/* =========================================================
-   LAPTOP
-========================================================= */
 
 @include laptop {
 
@@ -1267,11 +1172,6 @@
   }
 }
 
-
-/* =========================================================
-   TABLET
-========================================================= */
-
 @include tablet {
 
   .navbar {
@@ -1303,12 +1203,6 @@
     height: 20px;
   }
 
-  /* =======================================================
-     TABLET SEARCH
-     Fill only the free center space so the search never
-     overlaps the left/right navbar icons.
-  ======================================================= */
-
   .navbar .desktop-search {
     left: 245px;
     right: 75px;
@@ -1335,24 +1229,12 @@
     height: 38px;
   }
 
-
   .navbar .user span {
     display: none;
   }
 }
 
-
-/* =========================================================
-   MOBILE
-========================================================= */
-
 @media (max-width: 600px) {
-
-  /* =======================================================
-     MOBILE HAMBURGER
-     Target order:
-     Hamburger | Logo | Home | Notifications | Search | Profile
-  ======================================================= */
 
   .navbar .mobile-menu-button {
     grid-column: 1;
@@ -1400,7 +1282,6 @@
     height: 18px;
   }
 
-
   .navbar {
 
     width: 100%;
@@ -1411,10 +1292,6 @@
       0 9px;
 
     display: grid;
-
-    /*
-      Hamburger | Logo | Home | Notifications | Search | Profile
-    */
 
     grid-template-columns:
       34px
@@ -1439,19 +1316,9 @@
       rgba(0, 0, 0, 0.05);
   }
 
-
-  /* =======================================================
-     LEFT
-  ======================================================= */
-
   .navbar .left {
     display: contents;
   }
-
-
-  /* =======================================================
-     LOGO
-  ======================================================= */
 
   .navbar .logo {
 
@@ -1478,11 +1345,6 @@
     letter-spacing:
       -0.25px;
   }
-
-
-  /* =======================================================
-     NAV ICONS
-  ======================================================= */
 
   .navbar .nav-icons {
     display: contents;
@@ -1511,44 +1373,22 @@
     height: 20px;
   }
 
-
-  /* HOME */
-
   .navbar .home-icon {
     grid-column: 3;
   }
 
-
-  /* THEME */
-
   .navbar .theme-icon {
     display: none !important;
   }
-
-
-  /* NOTIFICATIONS
-     Mobile notification icon opens the existing RightBar
-     as a full page below the navbar.
-  */
 
   .navbar .notification-mobile-icon {
     grid-column: 4;
     display: flex !important;
   }
 
-  /* =======================================================
-     DESKTOP SEARCH OFF
-  ======================================================= */
-
   .navbar .desktop-search {
     display: none;
   }
-
-
-  /* =======================================================
-     MOBILE SEARCH BUTTON
-     IMPORTANT: SAME ROW AS NAVBAR
-  ======================================================= */
 
   .navbar .mobile-search-button {
 
@@ -1639,11 +1479,6 @@
       rgba(79, 109, 245, 0.10);
   }
 
-
-  /* =======================================================
-     RIGHT
-  ======================================================= */
-
   .navbar .right {
     display: contents;
   }
@@ -1651,11 +1486,6 @@
   .navbar .right-icon {
     display: none !important;
   }
-
-
-  /* =======================================================
-     PROFILE
-  ======================================================= */
 
   .navbar .user {
 
@@ -1705,16 +1535,6 @@
     display: none;
   }
 
-
-  /* =======================================================
-     MOBILE MENU
-     Compact width is defined in the mobile menu section above.
-  ======================================================= */
-
-  /* =======================================================
-     MOBILE SEARCH PANEL
-  ======================================================= */
-
   .navbar .mobileSearchPanel {
 
     display: flex;
@@ -1749,9 +1569,6 @@
 
     z-index: 10020;
   }
-
-
-  /* SEARCH BOX */
 
   .navbar .mobileSearchBox {
 
@@ -1873,11 +1690,6 @@
     height: 17px;
   }
 
-
-  /* =======================================================
-     MOBILE SEARCH RESULTS
-  ======================================================= */
-
   .navbar .mobileSearchResults {
 
     position: absolute;
@@ -1959,11 +1771,6 @@
     font-size: 8px;
   }
 }
-
-
-/* =========================================================
-   SMALL MOBILE
-========================================================= */
 
 @media (max-width: 380px) {
 
@@ -2055,11 +1862,6 @@
   }
 }
 
-
-/* =========================================================
-   VERY SMALL MOBILE
-========================================================= */
-
 @media (max-width: 330px) {
 
   .navbar .mobile-menu-button {
@@ -2120,22 +1922,12 @@
   }
 }
 
-
-/* =========================================================
-   DARK MODE
-========================================================= */
-
 .theme-dark .navbar {
 
   box-shadow:
     0 2px 14px
     rgba(0, 0, 0, 0.16);
 }
-
-/* =========================================================
-   DESKTOP NAVBAR — FINAL POLISH
-   Desktop only. Tablet and mobile remain untouched.
-========================================================= */
 
 @media (min-width: 1201px) {
 

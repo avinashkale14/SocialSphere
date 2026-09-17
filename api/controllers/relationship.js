@@ -4,10 +4,7 @@ import { createActivity } from "./activity.js";
 
 const JWT_SECRET = "socialsphere_secret_key";
 
-// ======================================================
-// GET RELATIONSHIPS
-// ======================================================
-
+// Get relationships
 export const getRelationships = (req, res) => {
   const userId = Number(req.query.userId);
 
@@ -33,10 +30,7 @@ export const getRelationships = (req, res) => {
   });
 };
 
-// ======================================================
-// ADD RELATIONSHIP / FOLLOW
-// ======================================================
-
+// Add relationship / follow
 export const addRelationship = (req, res) => {
   const token = req.cookies.accessToken;
 
@@ -137,8 +131,6 @@ export const addRelationship = (req, res) => {
                   return res.status(500).json(err);
                 }
 
-                // FOLLOW notification is targeted:
-                // only the followed user sees it.
                 createActivity(
                   followerUserId,
                   "follow",
@@ -163,10 +155,7 @@ export const addRelationship = (req, res) => {
   });
 };
 
-// ======================================================
-// DELETE RELATIONSHIP / UNFOLLOW
-// ======================================================
-
+// Delete relationship / unfollow
 export const deleteRelationship = (req, res) => {
   const token = req.cookies.accessToken;
 
@@ -211,8 +200,6 @@ export const deleteRelationship = (req, res) => {
         }
 
         if (result.affectedRows > 0) {
-          // Remove only the follow activity created
-          // by this follower for this target.
           const deleteActivityQuery = `
             DELETE FROM activities
             WHERE type = 'follow'

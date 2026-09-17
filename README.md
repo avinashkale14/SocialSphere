@@ -1,70 +1,252 @@
-# Getting Started with Create React App
+# 🌐 SocialSphere
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+**SocialSphere** is a full-stack social media web application where users can create profiles, share posts, upload stories, like and comment on posts, follow users, explore content, and receive notifications.
 
-## Available Scripts
+The project was built using React.js, Node.js, Express.js, MySQL, JWT authentication, REST APIs, file uploads, responsive UI, and dark mode.
 
-In the project directory, you can run:
+---
 
-### `npm start`
+## ✨ Features
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+### 👤 Authentication
+- User registration
+- Login and logout
+- JWT-based authentication
+- Protected routes
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+### 📝 Posts
+- Create, edit and delete posts
+- Upload images and videos
+- Like and unlike posts
+- Add and delete comments
+- Share post links
 
-### `npm test`
+### 📖 Stories
+- Create and upload stories
+- View active stories
+- Story views
+- View story viewers
+- Delete stories
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+### 👥 Social Features
+- Follow and unfollow users
+- View followers and following
+- User profiles
+- Profile and cover image updates
+- Notifications
+- Explore content
+- Trending content
 
-### `npm run build`
+### 🌙 UI & Experience
+- Light and dark mode
+- Responsive design
+- Desktop, tablet and mobile support
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+---
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+## 🛠️ Tech Stack
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+### Frontend
+- React.js
+- React Router
+- React Query
+- SCSS
+- Material UI
+- Axios
 
-### `npm run eject`
+### Backend
+- Node.js
+- Express.js
+- REST API
+- JWT
+- bcrypt
+- Multer
+- CORS
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+### Database
+- MySQL
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+### Tools
+- VS Code
+- Git
+- GitHub
+- Thunder Client
+- XAMPP
+- Nodemon
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+---
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+## 🏗️ Project Structure
 
-## Learn More
+```text
+SocialSphere/
+│
+├── api/
+│   ├── controllers/
+│   ├── routes/
+│   ├── connect.js
+│   └── index.js
+│
+├── public/
+│   ├── upload/
+│   ├── favicon.png
+│   ├── index.html
+│   └── manifest.json
+│
+├── src/
+│   ├── components/
+│   │   ├── comments/
+│   │   ├── leftbar/
+│   │   ├── navbar/
+│   │   ├── posts/
+│   │   ├── rightbar/
+│   │   ├── share/
+│   │   └── stories/
+│   │
+│   ├── context/
+│   ├── pages/
+│   │   ├── home/
+│   │   ├── login/
+│   │   ├── notifications/
+│   │   ├── profile/
+│   │   └── register/
+│   │
+│   ├── utils/
+│   ├── App.jsx
+│   ├── axios.js
+│   ├── index.js
+│   └── style.scss
+│
+├── .gitignore
+├── package.json
+├── package-lock.json
+└── README.md
+```
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+---
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+## ⚙️ Installation & Setup
 
-### Code Splitting
+### 1. Clone the repository
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+```bash
+git clone https://github.com/avinashkale14/SocialSphere.git
+```
 
-### Analyzing the Bundle Size
+### 2. Navigate to the project
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+```bash
+cd SocialSphere
+```
 
-### Making a Progressive Web App
+### 3. Install frontend dependencies
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+```bash
+npm install
+```
 
-### Advanced Configuration
+### 4. Install backend dependencies
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
+```bash
+cd api
+npm install
+```
 
-### Deployment
+### 5. Setup MySQL
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
+Start **Apache** and **MySQL** from XAMPP.
 
-### `npm run build` fails to minify
+Open phpMyAdmin and create a database named:
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+```text
+social
+```
+
+Configure the database connection in:
+
+```text
+api/connect.js
+```
+
+### 6. Start the backend
+
+```bash
+npm start
+```
+
+Backend:
+
+```text
+http://localhost:8800
+```
+
+### 7. Start the frontend
+
+Open another terminal in the project root:
+
+```bash
+npm start
+```
+
+Frontend:
+
+```text
+http://localhost:3000
+```
+
+---
+
+## 🔐 Environment Variables
+
+For production, database credentials and JWT secrets should be stored in environment variables.
+
+Example:
+
+```env
+DB_HOST=localhost
+DB_USER=root
+DB_PASSWORD=your_password
+DB_NAME=social
+
+JWT_SECRET=your_secret_key
+```
+
+Never commit `.env` files to GitHub.
+
+---
+
+## 🚀 Production Build
+
+Create a production build using:
+
+```bash
+npm run build
+```
+
+The production files will be generated in:
+
+```text
+build/
+```
+
+---
+
+## 👨‍💻 Developer
+
+### Avinash Kale
+
+**Bachelor of Computer Science**
+
+Full Stack Developer
+
+GitHub:  
+https://github.com/avinashkale14
+
+SocialSphere Repository:  
+https://github.com/avinashkale14/SocialSphere
+
+---
+
+## 📄 License
+
+This project was developed for educational, portfolio, and learning purposes.

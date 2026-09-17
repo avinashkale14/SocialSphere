@@ -30,10 +30,7 @@ import getImageUrl, {
   getAvatarPlaceholder,
 } from "../../utils/imageUrl";
 
-
-// ==========================================================
-// TIME AGO
-// ==========================================================
+// Time ago
 
 const timeAgo = (date) => {
   if (!date) return "Just now";
@@ -88,10 +85,7 @@ const timeAgo = (date) => {
   return `${years} year${years > 1 ? "s" : ""} ago`;
 };
 
-
-// ==========================================================
-// POST
-// ==========================================================
+// Post
 
 const Post = ({ post }) => {
   const { currentUser } =
@@ -100,10 +94,7 @@ const Post = ({ post }) => {
   const queryClient =
     useQueryClient();
 
-
-  // ========================================================
-  // STATES
-  // ========================================================
+  // States
 
   const [commentOpen, setCommentOpen] =
     useState(false);
@@ -117,42 +108,21 @@ const Post = ({ post }) => {
   const [editDesc, setEditDesc] =
     useState(post?.desc || "");
 
-
-  // ========================================================
-  // PROFILE IMAGE
-  // ========================================================
+  // Profile image
 
   const profilePic =
     getImageUrl(post?.profilePic) ||
     getAvatarPlaceholder(post?.name);
 
-
-  // ========================================================
-  // POST IMAGE
-  // ========================================================
+  // Post image
 
   const imageUrl =
     getImageUrl(post?.img);
 
-
-  // ========================================================
-  // POST VIDEO
-  // ========================================================
+  // Post video
 
   const videoUrl =
     getImageUrl(post?.video);
-
-  /*
-    IMPORTANT FIX:
-
-    Video should only show when:
-    1. video value exists
-    2. video has a real video extension
-    3. post does NOT already have an image
-
-    This prevents old/wrong video values from
-    showing a black video player under image posts.
-  */
 
   const isValidVideo =
     !!videoUrl &&
@@ -163,20 +133,14 @@ const Post = ({ post }) => {
   const shouldShowVideo =
     !imageUrl && isValidVideo;
 
-
-  // ========================================================
-  // OWNER
-  // ========================================================
+  // Owner
 
   const isOwner =
     currentUser &&
     Number(currentUser.id) ===
       Number(post?.userId);
 
-
-  // ========================================================
-  // GET LIKES
-  // ========================================================
+  // Get likes
 
   const {
     data: likes = [],
@@ -202,10 +166,7 @@ const Post = ({ post }) => {
       !!currentUser,
   });
 
-
-  // ========================================================
-  // CURRENT USER LIKED
-  // ========================================================
+  // Current user liked
 
   const liked =
     likes.some(
@@ -214,10 +175,7 @@ const Post = ({ post }) => {
         Number(currentUser?.id)
     );
 
-
-  // ========================================================
-  // GET COMMENTS
-  // ========================================================
+  // Get comments
 
   const {
     data: comments = [],
@@ -241,10 +199,7 @@ const Post = ({ post }) => {
     enabled: !!post?.id,
   });
 
-
-  // ========================================================
-  // LIKE / UNLIKE
-  // ========================================================
+  // Like / unlike
 
   const likeMutation =
     useMutation({
@@ -291,10 +246,7 @@ const Post = ({ post }) => {
       },
     });
 
-
-  // ========================================================
-  // HANDLE LIKE
-  // ========================================================
+  // Handle like
 
   const handleLike = () => {
 
@@ -314,10 +266,7 @@ const Post = ({ post }) => {
     likeMutation.mutate();
   };
 
-
-  // ========================================================
-  // DELETE POST
-  // ========================================================
+  // Delete post
 
   const deleteMutation =
     useMutation({
@@ -351,10 +300,7 @@ const Post = ({ post }) => {
       },
     });
 
-
-  // ========================================================
-  // HANDLE DELETE
-  // ========================================================
+  // Handle delete
 
   const handleDelete = () => {
 
@@ -370,10 +316,7 @@ const Post = ({ post }) => {
     deleteMutation.mutate();
   };
 
-
-  // ========================================================
-  // EDIT POST
-  // ========================================================
+  // Edit post
 
   const editMutation =
     useMutation({
@@ -411,10 +354,7 @@ const Post = ({ post }) => {
       },
     });
 
-
-  // ========================================================
-  // HANDLE EDIT
-  // ========================================================
+  // Handle edit
 
   const handleEdit = () => {
 
@@ -426,10 +366,7 @@ const Post = ({ post }) => {
     setMenuOpen(false);
   };
 
-
-  // ========================================================
-  // SAVE EDIT
-  // ========================================================
+  // Save edit
 
   const saveEdit = () => {
 
@@ -448,10 +385,7 @@ const Post = ({ post }) => {
     editMutation.mutate();
   };
 
-
-  // ========================================================
-  // COPY LINK
-  // ========================================================
+  // Copy link
 
   const handleCopyLink =
     async () => {
@@ -484,10 +418,7 @@ const Post = ({ post }) => {
       }
     };
 
-
-  // ========================================================
-  // SHARE
-  // ========================================================
+  // Share
 
   const handleShare =
     async () => {
@@ -535,10 +466,7 @@ const Post = ({ post }) => {
       }
     };
 
-
-  // ========================================================
-  // CLOSE MENU OUTSIDE
-  // ========================================================
+  // Close menu outside
 
   useEffect(() => {
 
@@ -571,10 +499,7 @@ const Post = ({ post }) => {
 
   }, []);
 
-
-  // ========================================================
-  // COMMENTS
-  // ========================================================
+  // Comments
 
   const toggleComments = () => {
 
@@ -584,10 +509,7 @@ const Post = ({ post }) => {
 
   };
 
-
-  // ========================================================
-  // RENDER
-  // ========================================================
+  // Render
 
   return (
 
@@ -595,10 +517,7 @@ const Post = ({ post }) => {
 
       <div className="container">
 
-
-        {/* ==================================================
-            HEADER
-        ================================================== */}
+        {}
 
         <div className="user">
 
@@ -633,8 +552,7 @@ const Post = ({ post }) => {
 
           </div>
 
-
-          {/* THREE DOT MENU */}
+          {}
 
           <div className="postMenu">
 
@@ -656,7 +574,6 @@ const Post = ({ post }) => {
 
             </button>
 
-
             {menuOpen && (
 
               <div className="menu">
@@ -677,7 +594,6 @@ const Post = ({ post }) => {
 
                     </button>
 
-
                     <button
                       type="button"
                       onClick={
@@ -692,7 +608,6 @@ const Post = ({ post }) => {
                       </span>
 
                     </button>
-
 
                     <button
                       type="button"
@@ -717,7 +632,6 @@ const Post = ({ post }) => {
 
                   </>
                 )}
-
 
                 {!isOwner && (
 
@@ -746,15 +660,11 @@ const Post = ({ post }) => {
 
         </div>
 
-
-        {/* ==================================================
-            CONTENT
-        ================================================== */}
+        {}
 
         <div className="content">
 
-
-          {/* DESCRIPTION */}
+          {}
 
           {editing ? (
 
@@ -813,8 +723,7 @@ const Post = ({ post }) => {
 
           )}
 
-
-          {/* LOCATION + FEELING */}
+          {}
 
           {(post?.location ||
             post?.feeling) && (
@@ -835,7 +744,6 @@ const Post = ({ post }) => {
 
               )}
 
-
               {post?.feeling && (
 
                 <span className="feelingTag">
@@ -850,10 +758,7 @@ const Post = ({ post }) => {
 
           )}
 
-
-          {/* ==================================================
-              IMAGE
-          ================================================== */}
+          {}
 
           {imageUrl && (
 
@@ -868,10 +773,7 @@ const Post = ({ post }) => {
 
           )}
 
-
-          {/* ==================================================
-              VIDEO
-          ================================================== */}
+          {}
 
           {shouldShowVideo && (
 
@@ -890,15 +792,11 @@ const Post = ({ post }) => {
 
         </div>
 
-
-        {/* ==================================================
-            ACTION BAR
-        ================================================== */}
+        {}
 
         <div className="info">
 
-
-          {/* LIKE */}
+          {}
 
           <button
             type="button"
@@ -937,8 +835,7 @@ const Post = ({ post }) => {
 
           </button>
 
-
-          {/* COMMENTS */}
+          {}
 
           <button
             type="button"
@@ -968,8 +865,7 @@ const Post = ({ post }) => {
 
           </button>
 
-
-          {/* SHARE */}
+          {}
 
           <button
             type="button"
@@ -989,10 +885,7 @@ const Post = ({ post }) => {
 
         </div>
 
-
-        {/* ==================================================
-            COMMENTS
-        ================================================== */}
+        {}
 
         {commentOpen && (
 

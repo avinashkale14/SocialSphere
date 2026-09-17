@@ -26,13 +26,16 @@ const Login = () => {
     }));
   };
 
+  // Login
   const handleLogin = async (e) => {
     e.preventDefault();
 
     setError("");
 
     if (!inputs.username || !inputs.password) {
-      setError("Please enter username and password.");
+      setError(
+        "Please enter username and password."
+      );
       return;
     }
 
@@ -44,7 +47,10 @@ const Login = () => {
         inputs
       );
 
-      console.log("LOGIN RESPONSE:", res.data);
+      console.log(
+        "LOGIN RESPONSE:",
+        res.data
+      );
 
       login(res.data);
 
@@ -54,7 +60,8 @@ const Login = () => {
     } catch (err) {
       console.log(
         "LOGIN ERROR:",
-        err.response?.data || err.message
+        err.response?.data ||
+          err.message
       );
 
       setError(
@@ -71,10 +78,7 @@ const Login = () => {
     <div className="login">
       <div className="card">
 
-        {/* =========================
-            LEFT SECTION
-        ========================= */}
-
+        {/* Left */}
         <div className="left">
           <h1>SocialSphere</h1>
 
@@ -89,22 +93,19 @@ const Login = () => {
 
           <button
             type="button"
-            onClick={() => navigate("/register")}
+            onClick={() =>
+              navigate("/register")
+            }
           >
             Register
           </button>
         </div>
 
-        {/* =========================
-            RIGHT SECTION
-        ========================= */}
-
+        {/* Right */}
         <div className="right">
-
           <h1>Login</h1>
 
           <form onSubmit={handleLogin}>
-
             <input
               type="text"
               name="username"
@@ -137,9 +138,7 @@ const Login = () => {
                 ? "Logging in..."
                 : "Login"}
             </button>
-
           </form>
-
         </div>
 
       </div>

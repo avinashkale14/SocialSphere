@@ -1,15 +1,11 @@
 import "./register.scss";
 
 import { Link, useNavigate } from "react-router-dom";
-
 import { useState } from "react";
-
 import axios from "axios";
 
 const Register = () => {
-
   const navigate = useNavigate();
-
 
   const [input, setInput] = useState({
     username: "",
@@ -18,85 +14,54 @@ const Register = () => {
     name: "",
   });
 
-
   const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
 
-  const [loading, setLoading] =
-    useState(false);
-
-
+  // Handle input
   const handleChange = (e) => {
-
     setInput((prev) => ({
       ...prev,
       [e.target.name]: e.target.value,
     }));
-
   };
 
-
+  // Register
   const handleRegister = async (e) => {
-
     e.preventDefault();
 
     try {
-
       setError("");
-
       setLoading(true);
-
 
       await axios.post(
         "http://localhost:8800/api/auth/register",
         input
       );
 
-
-      alert(
-        "User registered successfully!"
-      );
-
+      alert("User registered successfully!");
 
       navigate("/login");
-
     } catch (err) {
-
       console.log(
         "REGISTER ERROR:",
-        err.response?.data ||
-          err.message
+        err.response?.data || err.message
       );
-
 
       setError(
         typeof err.response?.data === "string"
           ? err.response.data
           : "Something went wrong!"
       );
-
     } finally {
-
       setLoading(false);
-
     }
   };
 
-
   return (
     <div className="register">
-
       <div className="card">
-
-        {/* =========================
-            LEFT SIDE
-        ========================= */}
-
         <div className="left">
-
-          <h1>
-            SocialSphere.
-          </h1>
-
+          <h1>SocialSphere.</h1>
 
           <p>
             Join SocialSphere and connect
@@ -105,40 +70,19 @@ const Register = () => {
             meaningful connections.
           </p>
 
-
-          <span>
-            Already have an account?
-          </span>
-
+          <span>Already have an account?</span>
 
           <Link to="/login">
-
-            <button
-              type="button"
-            >
+            <button type="button">
               Login
             </button>
-
           </Link>
-
         </div>
 
-
-        {/* =========================
-            RIGHT SIDE
-        ========================= */}
-
         <div className="right">
+          <h1>Create Account</h1>
 
-          <h1>
-            Create Account
-          </h1>
-
-
-          <form
-            onSubmit={handleRegister}
-          >
-
+          <form onSubmit={handleRegister}>
             <input
               type="text"
               name="username"
@@ -148,7 +92,6 @@ const Register = () => {
               autoComplete="username"
               required
             />
-
 
             <input
               type="email"
@@ -160,7 +103,6 @@ const Register = () => {
               required
             />
 
-
             <input
               type="password"
               name="password"
@@ -170,7 +112,6 @@ const Register = () => {
               autoComplete="new-password"
               required
             />
-
 
             <input
               type="text"
@@ -182,29 +123,21 @@ const Register = () => {
               required
             />
 
-
             {error && (
               <p className="error">
                 {error}
               </p>
             )}
 
-
             <button
               type="submit"
               disabled={loading}
             >
-              {loading
-                ? "Creating..."
-                : "Register"}
+              {loading ? "Creating..." : "Register"}
             </button>
-
           </form>
-
         </div>
-
       </div>
-
     </div>
   );
 };

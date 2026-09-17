@@ -26,7 +26,6 @@ import {
   getAvatarPlaceholder,
 } from "../../utils/imageUrl";
 
-
 const Stories = () => {
 
   const { currentUser } =
@@ -50,11 +49,6 @@ const Stories = () => {
   const [viewerOpen, setViewerOpen] =
     useState(false);
 
-
-  /* =====================================================
-     PREVIEW URL CLEANUP
-  ===================================================== */
-
   useEffect(() => {
     return () => {
       if (previewUrl) {
@@ -63,17 +57,11 @@ const Stories = () => {
     };
   }, [previewUrl]);
 
-
-  /* =====================================================
-     IMAGE URL
-  ===================================================== */
-
   const getImageUrl = (image) => {
 
     if (!image) {
       return "";
     }
-
 
     if (
       image.startsWith("http://") ||
@@ -82,14 +70,8 @@ const Stories = () => {
       return image;
     }
 
-
     return `http://localhost:8800/upload/${image}`;
   };
-
-
-  /* =====================================================
-     GET STORIES
-  ===================================================== */
 
   const {
     isLoading,
@@ -106,11 +88,6 @@ const Stories = () => {
 
   });
 
-
-  /* =====================================================
-     UPLOAD STORY
-  ===================================================== */
-
   const uploadStoryMutation =
     useMutation({
 
@@ -124,7 +101,6 @@ const Stories = () => {
           file
         );
 
-
         const uploadResponse =
           await makeRequest.post(
             "/upload",
@@ -137,10 +113,8 @@ const Stories = () => {
             }
           );
 
-
         const fileName =
           uploadResponse.data;
-
 
         const storyResponse =
           await makeRequest.post(
@@ -150,10 +124,8 @@ const Stories = () => {
             }
           );
 
-
         return storyResponse.data;
       },
-
 
       onSuccess: () => {
 
@@ -169,7 +141,6 @@ const Stories = () => {
         }
       },
 
-
       onError: (error) => {
 
         console.log(
@@ -181,11 +152,6 @@ const Stories = () => {
 
     });
 
-
-  /* =====================================================
-     DELETE STORY
-  ===================================================== */
-
   const deleteStoryMutation =
     useMutation({
 
@@ -193,7 +159,6 @@ const Stories = () => {
         makeRequest.delete(
           `/stories/${storyId}`
         ),
-
 
       onSuccess: () => {
 
@@ -206,7 +171,6 @@ const Stories = () => {
         });
       },
 
-
       onError: (error) => {
 
         console.log(
@@ -218,11 +182,6 @@ const Stories = () => {
 
     });
 
-
-  /* =====================================================
-     ADD STORY VIEW
-  ===================================================== */
-
   const addViewMutation =
     useMutation({
 
@@ -232,11 +191,6 @@ const Stories = () => {
         ),
 
     });
-
-
-  /* =====================================================
-     GET STORY VIEWERS
-  ===================================================== */
 
   const {
     data: viewers = [],
@@ -248,14 +202,12 @@ const Stories = () => {
       selectedStory?.id,
     ],
 
-
     queryFn: () =>
       makeRequest
         .get(
           `/stories/${selectedStory.id}/viewers`
         )
         .then((res) => res.data),
-
 
     enabled:
       !!selectedStory &&
@@ -265,12 +217,6 @@ const Stories = () => {
 
   });
 
-
-  /* =====================================================
-     HANDLE FILE SELECT
-     SHOW PREVIEW FIRST
-  ===================================================== */
-
   const handleFileChange = (e) => {
 
     const file =
@@ -279,7 +225,6 @@ const Stories = () => {
     if (!file) {
       return;
     }
-
 
     if (
       !file.type.startsWith(
@@ -296,7 +241,6 @@ const Stories = () => {
       return;
     }
 
-
     if (
       file.size >
       10 * 1024 * 1024
@@ -310,21 +254,12 @@ const Stories = () => {
 
       return;
     }
-
-
-    // Create local preview only.
-    // Story is NOT uploaded yet.
     const objectUrl =
       URL.createObjectURL(file);
 
     setPreviewFile(file);
     setPreviewUrl(objectUrl);
   };
-
-
-  /* =====================================================
-     CANCEL STORY PREVIEW
-  ===================================================== */
 
   const cancelStoryPreview = () => {
 
@@ -340,11 +275,6 @@ const Stories = () => {
     }
   };
 
-
-  /* =====================================================
-     CONFIRM STORY UPLOAD
-  ===================================================== */
-
   const confirmStoryUpload = () => {
 
     if (!previewFile) {
@@ -356,17 +286,11 @@ const Stories = () => {
     );
   };
 
-
-  /* =====================================================
-     OPEN STORY
-  ===================================================== */
-
   const openStory = (story) => {
 
     setSelectedStory(story);
 
     setViewerOpen(false);
-
 
     if (
       Number(story.userId) !==
@@ -379,11 +303,6 @@ const Stories = () => {
     }
   };
 
-
-  /* =====================================================
-     CLOSE STORY
-  ===================================================== */
-
   const closeStory = () => {
 
     setSelectedStory(null);
@@ -391,54 +310,35 @@ const Stories = () => {
     setViewerOpen(false);
   };
 
-
-  /* =====================================================
-     DELETE
-  ===================================================== */
-
   const handleDeleteStory = () => {
 
     if (!selectedStory) {
       return;
     }
 
-
     const confirmDelete =
       window.confirm(
         "Are you sure you want to delete this story?"
       );
 
-
     if (!confirmDelete) {
       return;
     }
-
 
     deleteStoryMutation.mutate(
       selectedStory.id
     );
   };
 
-
-  /* =====================================================
-     VIEWERS
-  ===================================================== */
-
   const openViewers = () => {
 
     setViewerOpen(true);
   };
 
-
   const closeViewers = () => {
 
     setViewerOpen(false);
   };
-
-
-  /* =====================================================
-     NEXT
-  ===================================================== */
 
   const goNext = () => {
 
@@ -449,7 +349,6 @@ const Stories = () => {
       return;
     }
 
-
     const currentIndex =
       stories.findIndex(
         (story) =>
@@ -457,25 +356,20 @@ const Stories = () => {
           Number(selectedStory.id)
       );
 
-
     if (currentIndex === -1) {
       return;
     }
-
 
     const nextIndex =
       (currentIndex + 1) %
       stories.length;
 
-
     const nextStory =
       stories[nextIndex];
-
 
     setSelectedStory(nextStory);
 
     setViewerOpen(false);
-
 
     if (
       Number(nextStory.userId) !==
@@ -488,11 +382,6 @@ const Stories = () => {
     }
   };
 
-
-  /* =====================================================
-     PREVIOUS
-  ===================================================== */
-
   const goPrevious = () => {
 
     if (
@@ -502,7 +391,6 @@ const Stories = () => {
       return;
     }
 
-
     const currentIndex =
       stories.findIndex(
         (story) =>
@@ -510,27 +398,22 @@ const Stories = () => {
           Number(selectedStory.id)
       );
 
-
     if (currentIndex === -1) {
       return;
     }
-
 
     const previousIndex =
       (currentIndex - 1 + stories.length) %
       stories.length;
 
-
     const previousStory =
       stories[previousIndex];
-
 
     setSelectedStory(
       previousStory
     );
 
     setViewerOpen(false);
-
 
     if (
       Number(previousStory.userId) !==
@@ -542,11 +425,6 @@ const Stories = () => {
       );
     }
   };
-
-
-  /* =====================================================
-     LOADING
-  ===================================================== */
 
   if (isLoading) {
 
@@ -561,11 +439,6 @@ const Stories = () => {
     );
   }
 
-
-  /* =====================================================
-     ERROR
-  ===================================================== */
-
   if (error) {
 
     return (
@@ -579,22 +452,13 @@ const Stories = () => {
     );
   }
 
-
-  /* =====================================================
-     RENDER
-  ===================================================== */
-
   return (
     <>
 
-      {/* =================================================
-          STORIES ROW
-      ================================================= */}
 
       <div className="stories">
 
-        {/* ================= YOUR STORY ================= */}
-
+  
         <div
           className="story yourStory"
           onClick={() => {
@@ -605,7 +469,6 @@ const Stories = () => {
                   Number(story.userId) ===
                   Number(currentUser?.id)
               );
-
 
             if (ownStory) {
 
@@ -630,14 +493,11 @@ const Stories = () => {
             alt="Your Story"
           />
 
-
           <div className="storyOverlay" />
-
 
           <div className="yourStoryLabel">
             Your Story
           </div>
-
 
           <button
             type="button"
@@ -652,30 +512,14 @@ const Stories = () => {
             <AddIcon />
           </button>
 
-
           <input
             ref={fileRef}
             type="file"
             accept="image/*"
             hidden
-            onChange={
-              handleFileChange
-            }
+            onChange={handleFileChange}
           />
-
-
-          {uploadStoryMutation.isPending && (
-
-            <div className="storyUploading">
-              Uploading...
-            </div>
-
-          )}
-
         </div>
-
-
-        {/* ================= OTHER STORIES ================= */}
 
         {stories
           .filter(
@@ -700,9 +544,7 @@ const Stories = () => {
                 alt={story.name}
               />
 
-
               <div className="storyOverlay" />
-
 
               <div className="storyUser">
 
@@ -728,10 +570,6 @@ const Stories = () => {
 
       </div>
 
-
-      {/* =================================================
-          STORY PREVIEW
-      ================================================= */}
 
       {previewFile &&
         previewUrl && (
@@ -774,7 +612,6 @@ const Stories = () => {
 
             </div>
 
-
             <div className="storyPreviewImageWrap">
 
               <img
@@ -784,7 +621,6 @@ const Stories = () => {
               />
 
             </div>
-
 
             <div className="storyPreviewInfo">
 
@@ -801,7 +637,6 @@ const Stories = () => {
 
             </div>
 
-
             {uploadStoryMutation.isPending && (
 
               <div className="storyPreviewUploading">
@@ -809,7 +644,6 @@ const Stories = () => {
               </div>
 
             )}
-
 
             <div className="storyPreviewActions">
 
@@ -845,10 +679,6 @@ const Stories = () => {
       )}
 
 
-      {/* =================================================
-          STORY VIEWER
-      ================================================= */}
-
       {selectedStory &&
         !viewerOpen && (
 
@@ -864,17 +694,14 @@ const Stories = () => {
               }
             >
 
-              {/* PROGRESS */}
-
+        
               <div className="storyProgress">
 
                 <div className="storyProgressActive" />
 
               </div>
 
-
-              {/* HEADER */}
-
+        
               <div className="storyHeader">
 
                 <div className="storyHeaderUser">
@@ -912,11 +739,9 @@ const Stories = () => {
 
                 </div>
 
-
                 <div className="storyHeaderActions">
 
-                  {/* VIEWERS */}
-
+            
                   {Number(
                     selectedStory.userId
                   ) ===
@@ -943,9 +768,7 @@ const Stories = () => {
 
                   )}
 
-
-                  {/* DELETE */}
-
+            
                   {Number(
                     selectedStory.userId
                   ) ===
@@ -968,9 +791,7 @@ const Stories = () => {
 
                   )}
 
-
-                  {/* CLOSE */}
-
+            
                   <button
                     type="button"
                     className="storyCloseButton"
@@ -988,9 +809,7 @@ const Stories = () => {
 
               </div>
 
-
-              {/* IMAGE */}
-
+        
               <div className="storyImageContainer">
 
                 <img
@@ -1003,9 +822,7 @@ const Stories = () => {
 
               </div>
 
-
-              {/* PREVIOUS */}
-
+        
               {stories.length > 1 && (
 
                 <button
@@ -1023,9 +840,7 @@ const Stories = () => {
 
               )}
 
-
-              {/* NEXT */}
-
+        
               {stories.length > 1 && (
 
                 <button
@@ -1050,10 +865,6 @@ const Stories = () => {
         )}
 
 
-      {/* =================================================
-          VIEWERS MODAL
-      ================================================= */}
-
       {selectedStory &&
         viewerOpen && (
 
@@ -1071,8 +882,7 @@ const Stories = () => {
               }
             >
 
-              {/* HEADER */}
-
+        
               <div className="viewersHeader">
 
                 <div>
@@ -1090,7 +900,6 @@ const Stories = () => {
 
                 </div>
 
-
                 <button
                   type="button"
                   onClick={
@@ -1105,9 +914,7 @@ const Stories = () => {
 
               </div>
 
-
-              {/* VIEWERS */}
-
+        
               <div className="viewersList">
 
                 {viewersLoading ? (
@@ -1151,7 +958,6 @@ const Stories = () => {
                           }
                         />
 
-
                         <div className="viewerInfo">
 
                           <strong>
@@ -1163,7 +969,6 @@ const Stories = () => {
                           </span>
 
                         </div>
-
 
                         <small>
                           {new Date(
@@ -1188,9 +993,7 @@ const Stories = () => {
 
               </div>
 
-
-              {/* BACK */}
-
+        
               <button
                 type="button"
                 className="backToStoryButton"

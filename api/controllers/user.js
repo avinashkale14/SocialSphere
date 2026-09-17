@@ -3,10 +3,7 @@ import jwt from "jsonwebtoken";
 
 const JWT_SECRET = "socialsphere_secret_key";
 
-// ========================================
-// GET USER BY ID
-// ========================================
-
+// Get user by ID
 export const getUser = (req, res) => {
   const userId = req.params.userId;
 
@@ -45,11 +42,7 @@ export const getUser = (req, res) => {
   });
 };
 
-
-// ========================================
-// GET ALL USERS FOR RIGHTBAR
-// ========================================
-
+// Get all users for RightBar
 export const getUsers = (req, res) => {
   const token = req.cookies.accessToken;
 
@@ -104,11 +97,7 @@ export const getUsers = (req, res) => {
   });
 };
 
-
-// ========================================
-// GET LATEST ACTIVITIES
-// ========================================
-
+// Get latest activities
 export const getActivities = (req, res) => {
   const token = req.cookies.accessToken;
 
@@ -126,8 +115,6 @@ export const getActivities = (req, res) => {
     const q = `
       SELECT *
       FROM (
-
-        /* PROFILE UPDATED */
 
         SELECT
           u.id AS activityId,
@@ -149,8 +136,6 @@ export const getActivities = (req, res) => {
         UNION ALL
 
 
-        /* NEW POST */
-
         SELECT
           p.id AS activityId,
           p.userId,
@@ -171,8 +156,6 @@ export const getActivities = (req, res) => {
 
         UNION ALL
 
-
-        /* NEW STORY */
 
         SELECT
           s.id AS activityId,
@@ -197,8 +180,6 @@ export const getActivities = (req, res) => {
         UNION ALL
 
 
-        /* NEW COMMENT */
-
         SELECT
           c.id AS activityId,
           c.userId,
@@ -219,8 +200,6 @@ export const getActivities = (req, res) => {
 
         UNION ALL
 
-
-        /* SOMEONE FOLLOWED CURRENT USER */
 
         SELECT
           r.followerUserId AS activityId,
@@ -259,11 +238,7 @@ export const getActivities = (req, res) => {
   });
 };
 
-
-// ========================================
-// UPDATE USER
-// ========================================
-
+// Update user
 export const updateUser = (req, res) => {
   const token = req.cookies.accessToken;
 
@@ -279,15 +254,11 @@ export const updateUser = (req, res) => {
 
     const userId = req.params.id;
 
-    // ONLY OWNER CAN UPDATE
-
     if (Number(userId) !== Number(userInfo.id)) {
       return res
         .status(403)
         .json("You can update only your own profile!");
     }
-
-    // GET EXISTING IMAGES
 
     const getUserQuery = `
       SELECT
@@ -316,8 +287,6 @@ export const updateUser = (req, res) => {
         const existingCoverPic =
           userData[0].coverPic;
 
-        // KEEP OLD IMAGE IF NO NEW IMAGE IS PROVIDED
-
         const profilePic =
           req.body.profilePic ||
           existingProfilePic ||
@@ -327,13 +296,6 @@ export const updateUser = (req, res) => {
           req.body.coverPic ||
           existingCoverPic ||
           null;
-
-        // UPDATE PROFILE
-        // ONLY:
-        // website
-        // instagram
-        // linkedin
-        // github
 
         const q = `
           UPDATE users

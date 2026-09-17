@@ -15,14 +15,12 @@ import DeleteIcon from "@mui/icons-material/Delete";
 
 import { AuthContext } from "../../context/authContext";
 import makeRequest from "../../axios";
+import getImageUrl, {
+  getAvatarPlaceholder,
+} from "../../utils/imageUrl";
 
-
-// ==========================================================
-// TIME AGO
-// ==========================================================
-
+// Time ago
 const timeAgo = (date) => {
-
   if (!date) {
     return "Just now";
   }
@@ -87,15 +85,9 @@ const timeAgo = (date) => {
   )}y`;
 };
 
-
-// ==========================================================
-// COMMENTS
-// ==========================================================
-
 const Comments = ({
   postId,
 }) => {
-
   const {
     currentUser,
   } = useContext(AuthContext);
@@ -103,27 +95,17 @@ const Comments = ({
   const queryClient =
     useQueryClient();
 
-
-  // ========================================================
-  // STATE
-  // ========================================================
-
   const [
     desc,
     setDesc,
   ] = useState("");
 
-
-  // ========================================================
-  // GET COMMENTS
-  // ========================================================
-
+  // Get comments
   const {
     data: comments = [],
     isLoading,
     isError,
   } = useQuery({
-
     queryKey: [
       "comments",
       postId,
@@ -143,31 +125,21 @@ const Comments = ({
 
     enabled:
       !!postId,
-
   });
 
-
-  // ========================================================
-  // ADD COMMENT
-  // ========================================================
-
+  // Add comment
   const addCommentMutation =
     useMutation({
-
       mutationFn: () =>
         makeRequest.post(
           "/comments",
           {
-            desc:
-              desc.trim(),
-
-            postId:
-              postId,
+            desc: desc.trim(),
+            postId: postId,
           }
         ),
 
       onSuccess: () => {
-
         setDesc("");
 
         queryClient.invalidateQueries({
@@ -176,11 +148,9 @@ const Comments = ({
             postId,
           ],
         });
-
       },
 
       onError: (error) => {
-
         console.log(
           "ADD COMMENT ERROR:",
           error.response?.data ||
@@ -192,35 +162,26 @@ const Comments = ({
             "Unable to add comment."
         );
       },
-
     });
 
-
-  // ========================================================
-  // DELETE COMMENT
-  // ========================================================
-
+  // Delete comment
   const deleteCommentMutation =
     useMutation({
-
       mutationFn: (commentId) =>
         makeRequest.delete(
           `/comments/${commentId}`
         ),
 
       onSuccess: () => {
-
         queryClient.invalidateQueries({
           queryKey: [
             "comments",
             postId,
           ],
         });
-
       },
 
       onError: (error) => {
-
         console.log(
           "DELETE COMMENT ERROR:",
           error.response?.data ||
@@ -232,16 +193,10 @@ const Comments = ({
             "Unable to delete comment."
         );
       },
-
     });
 
-
-  // ========================================================
-  // SUBMIT COMMENT
-  // ========================================================
-
+  // Submit comment
   const handleSubmit = (event) => {
-
     event.preventDefault();
 
     const text =
@@ -258,18 +213,12 @@ const Comments = ({
     }
 
     addCommentMutation.mutate();
-
   };
 
-
-  // ========================================================
-  // DELETE
-  // ========================================================
-
+  // Delete
   const handleDelete = (
     commentId
   ) => {
-
     const confirmed =
       window.confirm(
         "Delete this comment?"
@@ -282,118 +231,68 @@ const Comments = ({
     deleteCommentMutation.mutate(
       commentId
     );
-
   };
 
-
-  // ========================================================
-  // PROFILE IMAGE
-  // ========================================================
-
+  // Profile image
   const getProfileImage = (
     comment
   ) => {
-
-    if (
-      comment?.profilePic
-    ) {
-
-      if (
-        comment.profilePic.startsWith(
-          "http"
-        )
-      ) {
-
-        return comment.profilePic;
-      }
-
-      return `http://localhost:8800/upload/${comment.profilePic}`;
+    if (!comment?.profilePic) {
+      return getAvatarPlaceholder(
+        comment?.name || "User"
+      );
     }
-
-    if (
-      currentUser?.profilePic
-    ) {
-
-      if (
-        currentUser.profilePic.startsWith(
-          "http"
-        )
-      ) {
-
-        return currentUser.profilePic;
-      }
-
-      return `http://localhost:8800/upload/${currentUser.profilePic}`;
-    }
-
-    return "https://i.pravatar.cc/150?img=12";
-  };
-
-
-  // ========================================================
-  // LOADING
-  // ========================================================
-
-  if (isLoading) {
 
     return (
-      <div className="commentsBox">
+      getImageUrl(
+        comment.profilePic
+      ) ||
+      getAvatarPlaceholder(
+        comment?.name || "User"
+      )
+    );
+  };
 
+  // Loading
+  if (isLoading) {
+    return (
+      <div className="commentsBox">
         <div className="commentsLoading">
           Loading comments...
         </div>
-
       </div>
     );
   }
 
-
-  // ========================================================
-  // ERROR
-  // ========================================================
-
+  // Error
   if (isError) {
-
     return (
       <div className="commentsBox">
-
         <div className="commentsError">
           Unable to load comments.
         </div>
-
       </div>
     );
   }
 
-
-  // ========================================================
-  // RENDER
-  // ========================================================
-
   return (
-
     <div className="commentsBox">
-
-
-      {/* ====================================================
-          COMMENT INPUT
-      ==================================================== */}
-
       <form
         className="commentInput"
-        onSubmit={
-          handleSubmit
-        }
+        onSubmit={handleSubmit}
       >
-
         <img
-          src={getProfileImage({
-            profilePic:
-              currentUser?.profilePic,
-          })}
+          src={
+            getImageUrl(
+              currentUser?.profilePic
+            ) ||
+            getAvatarPlaceholder(
+              currentUser?.name ||
+                "You"
+            )
+          }
           alt="You"
         />
-
 
         <input
           type="text"
@@ -407,7 +306,6 @@ const Comments = ({
           maxLength={200}
         />
 
-
         <button
           type="submit"
           disabled={
@@ -415,33 +313,20 @@ const Comments = ({
             addCommentMutation.isPending
           }
         >
-
           {addCommentMutation.isPending
             ? "..."
             : "Send"}
-
         </button>
-
       </form>
 
-
-      {/* ====================================================
-          COMMENTS LIST
-      ==================================================== */}
-
       <div className="commentList">
-
         {comments.length === 0 ? (
-
           <div className="noComments">
             No comments yet. Be the first to comment.
           </div>
-
         ) : (
-
           comments.map(
             (comment) => {
-
               const canDelete =
                 currentUser &&
                 Number(
@@ -452,14 +337,10 @@ const Comments = ({
                   );
 
               return (
-
                 <div
                   className="comment"
-                  key={
-                    comment.id
-                  }
+                  key={comment.id}
                 >
-
                   <img
                     src={getProfileImage(
                       comment
@@ -470,13 +351,9 @@ const Comments = ({
                     }
                   />
 
-
                   <div className="commentBody">
-
                     <div className="commentTop">
-
                       <div className="commentAuthor">
-
                         <span className="commentName">
                           {comment.name ||
                             "User"}
@@ -487,12 +364,9 @@ const Comments = ({
                             comment.createdAt
                           )}
                         </span>
-
                       </div>
 
-
                       {canDelete && (
-
                         <button
                           type="button"
                           className="deleteComment"
@@ -506,32 +380,21 @@ const Comments = ({
                           }
                           title="Delete comment"
                         >
-
                           <DeleteIcon />
-
                         </button>
-
                       )}
-
                     </div>
-
 
                     <p>
                       {comment.desc}
                     </p>
-
                   </div>
-
                 </div>
-
               );
             }
           )
-
         )}
-
       </div>
-
     </div>
   );
 };

@@ -10,55 +10,14 @@ import {
 
 const router = express.Router();
 
+router.get("/", getStories);
 
-// ======================================================
-// GET ALL ACTIVE STORIES
-// ======================================================
+router.post("/", addStory);
 
-router.get(
-  "/",
-  getStories
-);
+router.delete("/:id", deleteStory);
 
+router.post("/:id/view", addStoryView);
 
-// ======================================================
-// ADD STORY
-// ======================================================
-
-router.post(
-  "/",
-  addStory
-);
-
-
-// ======================================================
-// DELETE OWN STORY
-// ======================================================
-
-router.delete(
-  "/:id",
-  deleteStory
-);
-
-
-// ======================================================
-// RECORD STORY VIEW
-// ======================================================
-
-router.post(
-  "/:id/view",
-  addStoryView
-);
-
-
-// ======================================================
-// GET STORY VIEWERS
-// ======================================================
-
-router.get(
-  "/:id/viewers",
-  getStoryViewers
-);
-
+router.get("/:id/viewers", getStoryViewers);
 
 export default router;

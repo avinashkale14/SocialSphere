@@ -7,7 +7,6 @@ import Posts from "../../components/posts/Posts";
 const Home = () => {
   return (
     <div className="home">
-
       <section id="stories-section">
         <Stories />
       </section>
@@ -19,7 +18,6 @@ const Home = () => {
       <section>
         <Posts />
       </section>
-
     </div>
   );
 };

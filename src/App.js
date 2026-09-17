@@ -28,27 +28,29 @@ function App() {
   const { darkMode } = useContext(DarkModeContext);
 
   const Layout = () => {
-  const location = useLocation();
+    const location = useLocation();
 
-  const isNotificationsPage =
-    location.pathname === "/notifications";
+    const isNotificationsPage =
+      location.pathname === "/notifications";
 
-  return (
-    <div className={`theme-${darkMode ? "dark" : "light"}`}>
-      <Navbar />
+    return (
+      <div
+        className={`theme-${darkMode ? "dark" : "light"}`}
+      >
+        <Navbar />
 
-      <div className="main-layout">
-        <LeftBar />
+        <div className="main-layout">
+          <LeftBar />
 
-        <main className="main-content">
-          <Outlet />
-        </main>
+          <main className="main-content">
+            <Outlet />
+          </main>
 
-        {!isNotificationsPage && <RightBar />}
+          {!isNotificationsPage && <RightBar />}
+        </div>
       </div>
-    </div>
-  );
-};
+    );
+  };
 
   const ProtectedRoute = ({ children }) => {
     if (!currentUser) {
@@ -71,24 +73,20 @@ function App() {
           index: true,
           element: <Home />,
         },
-
         {
           path: "profile/:id",
           element: <Profile />,
         },
-
         {
           path: "notifications",
           element: <Notifications />,
         },
       ],
     },
-
     {
       path: "/login",
       element: <Login />,
     },
-
     {
       path: "/register",
       element: <Register />,

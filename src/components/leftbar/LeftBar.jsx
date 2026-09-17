@@ -33,10 +33,7 @@ const LeftBar = () => {
     getImageUrl(currentUser?.profilePic) ||
     getAvatarPlaceholder(currentUser?.name);
 
-  /* =========================
-     SCROLL HELPER
-  ========================= */
-
+  // Scroll helper
   const scrollToElement = (id) => {
     setTimeout(() => {
       const element = document.getElementById(id);
@@ -50,42 +47,29 @@ const LeftBar = () => {
     }, 350);
   };
 
-  /* =========================
-     CREATE POST
-  ========================= */
-
+  // Create post
   const handleCreatePost = () => {
     navigate("/");
     scrollToElement("create-post");
   };
 
-  /* =========================
-     STORIES
-  ========================= */
-
+  // Stories
   const handleStories = () => {
     navigate("/");
     scrollToElement("stories-section");
   };
 
-  /* =========================
-     MY POSTS
-  ========================= */
-
+  // My posts
   const handleMyPosts = () => {
     if (!currentUser?.id) {
       return;
     }
 
     navigate(`/profile/${currentUser.id}`);
-
     scrollToElement("my-posts-section");
   };
 
-  /* =========================
-     LOGOUT
-  ========================= */
-
+  // Logout
   const handleLogout = async () => {
     try {
       await makeRequest.post("/auth/logout");
@@ -105,11 +89,6 @@ const LeftBar = () => {
 
   return (
     <aside className="leftBar">
-
-      {/* =========================
-          PROFILE
-      ========================= */}
-
       <Link
         to={`/profile/${currentUser?.id}`}
         className="sidebarProfile"
@@ -140,21 +119,12 @@ const LeftBar = () => {
         <KeyboardArrowRightOutlinedIcon className="profileArrow" />
       </Link>
 
-
-      {/* =========================
-          MAIN
-      ========================= */}
-
       <div className="sidebarSection">
-
         <div className="sectionTitle">
           MAIN
         </div>
 
         <div className="sidebarMenu">
-
-          {/* HOME */}
-
           <NavLink
             to="/"
             end
@@ -172,11 +142,6 @@ const LeftBar = () => {
               Home
             </span>
           </NavLink>
-
-
-          {/* =========================
-              DARK MODE
-          ========================= */}
 
           <button
             type="button"
@@ -197,12 +162,11 @@ const LeftBar = () => {
             </span>
 
             <span className="itemText">
-              {darkMode ? "Light Mode" : "Dark Mode"}
+              {darkMode
+                ? "Light Mode"
+                : "Dark Mode"}
             </span>
           </button>
-
-
-          {/* NOTIFICATIONS */}
 
           <NavLink
             to="/notifications"
@@ -220,28 +184,17 @@ const LeftBar = () => {
               Notifications
             </span>
           </NavLink>
-
         </div>
       </div>
 
-
       <div className="sidebarDivider" />
 
-
-      {/* =========================
-          QUICK ACCESS
-      ========================= */}
-
       <div className="sidebarSection">
-
         <div className="sectionTitle">
           QUICK ACCESS
         </div>
 
         <div className="quickAccessMenu">
-
-          {/* CREATE POST */}
-
           <button
             type="button"
             className="quickAccessItem"
@@ -263,9 +216,6 @@ const LeftBar = () => {
 
             <ArrowForwardIosOutlinedIcon className="quickAccessArrow" />
           </button>
-
-
-          {/* STORIES */}
 
           <button
             type="button"
@@ -289,9 +239,6 @@ const LeftBar = () => {
             <ArrowForwardIosOutlinedIcon className="quickAccessArrow" />
           </button>
 
-
-          {/* MY POSTS */}
-
           <button
             type="button"
             className="quickAccessItem"
@@ -313,26 +260,17 @@ const LeftBar = () => {
 
             <ArrowForwardIosOutlinedIcon className="quickAccessArrow" />
           </button>
-
         </div>
       </div>
 
-
       <div className="sidebarDivider" />
 
-
-      {/* =========================
-          ACCOUNT
-      ========================= */}
-
       <div className="sidebarSection">
-
         <div className="sectionTitle">
           ACCOUNT
         </div>
 
         <div className="sidebarMenu">
-
           <button
             type="button"
             className="sidebarItem sidebarButton logoutItem"
@@ -346,23 +284,15 @@ const LeftBar = () => {
               Logout
             </span>
           </button>
-
         </div>
       </div>
 
-
-      {/* =========================
-          SOCIALSPHERE
-      ========================= */}
-
       <div className="socialSphereCard">
-
         <div className="socialSphereIcon">
           <HubOutlinedIcon />
         </div>
 
         <div className="socialSphereInfo">
-
           <strong>
             SocialSphere
           </strong>
@@ -370,11 +300,8 @@ const LeftBar = () => {
           <span>
             Connect • Share • Discover
           </span>
-
         </div>
-
       </div>
-
     </aside>
   );
 };

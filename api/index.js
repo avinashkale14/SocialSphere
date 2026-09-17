@@ -22,10 +22,7 @@ const app = express();
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-// ======================================================
 // CORS
-// ======================================================
-
 app.use(
   cors({
     origin: "http://localhost:3000",
@@ -33,17 +30,11 @@ app.use(
   })
 );
 
-// ======================================================
-// MIDDLEWARE
-// ======================================================
-
+// Middleware
 app.use(express.json());
 app.use(cookieParser());
 
-// ======================================================
-// FILE UPLOAD
-// ======================================================
-
+// File upload
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
     cb(
@@ -73,10 +64,7 @@ const upload = multer({
   storage,
 });
 
-// ======================================================
-// UPLOAD API
-// ======================================================
-
+// Upload API
 app.post(
   "/api/upload",
   upload.single("file"),
@@ -93,10 +81,7 @@ app.post(
   }
 );
 
-// ======================================================
-// SERVE UPLOADED FILES
-// ======================================================
-
+// Serve uploaded files
 app.use(
   "/upload",
   express.static(
@@ -104,40 +89,23 @@ app.use(
   )
 );
 
-// ======================================================
-// API ROUTES
-// ======================================================
-
+// API routes
 app.use("/api/auth", authRoutes);
-
 app.use("/api/users", userRoutes);
-
 app.use("/api/posts", postRoutes);
-
 app.use("/api/likes", likeRoutes);
-
 app.use("/api/comments", commentRoutes);
-
-app.use("/api/relationships",relationshipRoutes);
-
-app.use("/api/stories",storyRoutes);
-
-app.use("/api/activities",activityRoutes);
-
+app.use("/api/relationships", relationshipRoutes);
+app.use("/api/stories", storyRoutes);
+app.use("/api/activities", activityRoutes);
 app.use("/api/trending", trendingRoutes);
 
-// ======================================================
-// ROOT
-// ======================================================
-
+// Root
 app.get("/", (req, res) => {
   res.send("SocialSphere API is running!");
 });
 
-// ======================================================
-// SERVER
-// ======================================================
-
+// Server
 app.listen(8800, () => {
   console.log(
     "SocialSphere API running on port 8800"

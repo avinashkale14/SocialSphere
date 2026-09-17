@@ -1,7 +1,3 @@
-// ======================================================
-// IMAGE URL HELPER
-// ======================================================
-
 export const getImageUrl = (image) => {
   if (!image) {
     return "";
@@ -13,7 +9,7 @@ export const getImageUrl = (image) => {
     return "";
   }
 
-  // Already complete URL
+  // Complete URL
   if (
     imageValue.startsWith("http://") ||
     imageValue.startsWith("https://") ||
@@ -23,14 +19,9 @@ export const getImageUrl = (image) => {
     return imageValue;
   }
 
-  // Local uploaded image from backend
+  // Backend image
   return `http://localhost:8800/upload/${imageValue}`;
 };
-
-
-// ======================================================
-// DEFAULT AVATAR PLACEHOLDER
-// ======================================================
 
 export const getAvatarPlaceholder = (
   name = "User"
@@ -49,8 +40,7 @@ export const getAvatarPlaceholder = (
       words[0].charAt(0) +
       words[words.length - 1].charAt(0);
   } else if (words.length === 1) {
-    initials =
-      words[0].slice(0, 2);
+    initials = words[0].slice(0, 2);
   }
 
   initials = initials
@@ -65,7 +55,6 @@ export const getAvatarPlaceholder = (
       height="200"
       viewBox="0 0 200 200"
     >
-
       <rect
         width="200"
         height="200"
@@ -95,7 +84,6 @@ export const getAvatarPlaceholder = (
       >
         ${initials}
       </text>
-
     </svg>
   `;
 
@@ -105,11 +93,6 @@ export const getAvatarPlaceholder = (
   );
 };
 
-
-// ======================================================
-// DEFAULT COVER PLACEHOLDER
-// ======================================================
-
 export const getCoverPlaceholder = () => {
   const svg = `
     <svg
@@ -118,7 +101,6 @@ export const getCoverPlaceholder = () => {
       height="360"
       viewBox="0 0 1200 360"
     >
-
       <defs>
         <linearGradient
           id="cover"
@@ -127,7 +109,6 @@ export const getCoverPlaceholder = () => {
           x2="1"
           y2="1"
         >
-
           <stop
             offset="0%"
             stop-color="#f3f5ff"
@@ -142,7 +123,6 @@ export const getCoverPlaceholder = () => {
             offset="100%"
             stop-color="#f8f9ff"
           />
-
         </linearGradient>
       </defs>
 
@@ -175,7 +155,6 @@ export const getCoverPlaceholder = () => {
       />
 
       <g transform="translate(600 150)">
-
         <rect
           x="-34"
           y="-25"
@@ -204,7 +183,6 @@ export const getCoverPlaceholder = () => {
           opacity="0.65"
           stroke-linecap="round"
         />
-
       </g>
 
       <text
@@ -231,7 +209,6 @@ export const getCoverPlaceholder = () => {
       >
         Make your profile feel more personal
       </text>
-
     </svg>
   `;
 
@@ -240,10 +217,5 @@ export const getCoverPlaceholder = () => {
     encodeURIComponent(svg)
   );
 };
-
-
-// ======================================================
-// DEFAULT EXPORT
-// ======================================================
 
 export default getImageUrl;

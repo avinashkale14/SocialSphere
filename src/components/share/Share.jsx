@@ -25,367 +25,199 @@ import getImageUrl, {
   getAvatarPlaceholder,
 } from "../../utils/imageUrl";
 
-
 const Share = () => {
+  const { currentUser } = useContext(AuthContext);
 
-  const { currentUser } =
-    useContext(AuthContext);
+  const queryClient = useQueryClient();
 
-  const queryClient =
-    useQueryClient();
+  const imageRef = useRef(null);
+  const videoRef = useRef(null);
 
+  const [desc, setDesc] = useState("");
+  const [image, setImage] = useState(null);
+  const [video, setVideo] = useState(null);
 
-  // =====================================================
-  // FILE REFERENCES
-  // =====================================================
+  const [imagePreview, setImagePreview] = useState(null);
+  const [videoPreview, setVideoPreview] = useState(null);
 
-  const imageRef =
-    useRef(null);
+  const [location, setLocation] = useState("");
+  const [locationOpen, setLocationOpen] = useState(false);
 
-  const videoRef =
-    useRef(null);
+  const [feeling, setFeeling] = useState("");
+  const [feelingOpen, setFeelingOpen] = useState(false);
 
-
-  // =====================================================
-  // STATES
-  // =====================================================
-
-  const [desc, setDesc] =
-    useState("");
-
-  const [image, setImage] =
-    useState(null);
-
-  const [video, setVideo] =
-    useState(null);
-
-  const [imagePreview, setImagePreview] =
-    useState(null);
-
-  const [videoPreview, setVideoPreview] =
-    useState(null);
-
-  const [location, setLocation] =
-    useState("");
-
-  const [locationOpen, setLocationOpen] =
-    useState(false);
-
-  const [feeling, setFeeling] =
-    useState("");
-
-  const [feelingOpen, setFeelingOpen] =
-    useState(false);
-
-
-  // =====================================================
-  // CLEAN PREVIEW URLS ON UNMOUNT
-  // =====================================================
-
+  // Preview cleanup
   useEffect(() => {
-
     return () => {
-
       if (imagePreview) {
-        URL.revokeObjectURL(
-          imagePreview
-        );
+        URL.revokeObjectURL(imagePreview);
       }
 
       if (videoPreview) {
-        URL.revokeObjectURL(
-          videoPreview
-        );
+        URL.revokeObjectURL(videoPreview);
       }
-
     };
+  }, [imagePreview, videoPreview]);
 
-  }, []);
-
-
-  // =====================================================
-  // UPLOAD FILE
-  // =====================================================
-
+  // Upload file
   const upload = async (file) => {
+    const formData = new FormData();
 
-    const formData =
-      new FormData();
+    formData.append("file", file);
 
-    formData.append(
-      "file",
-      file
+    const res = await makeRequest.post(
+      "/upload",
+      formData,
+      {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      }
     );
-
-    const res =
-      await makeRequest.post(
-        "/upload",
-        formData,
-        {
-          headers: {
-            "Content-Type":
-              "multipart/form-data",
-          },
-        }
-      );
 
     return res.data;
   };
 
-
-  // =====================================================
-  // CREATE POST
-  // =====================================================
-
-  const mutation =
-    useMutation({
-
-      mutationFn: async (
+  // Create post
+  const mutation = useMutation({
+    mutationFn: async (newPost) => {
+      return makeRequest.post(
+        "/posts",
         newPost
-      ) => {
+      );
+    },
 
-        return makeRequest.post(
-          "/posts",
-          newPost
-        );
+    onSuccess: () => {
+      setDesc("");
 
-      },
+      setImage(null);
+      setVideo(null);
 
-      onSuccess: () => {
+      setImagePreview(null);
+      setVideoPreview(null);
 
-        // Clear text
-        setDesc("");
+      setLocation("");
+      setFeeling("");
 
-        // Clear files
-        setImage(null);
-        setVideo(null);
+      setLocationOpen(false);
+      setFeelingOpen(false);
 
-        // Clear previews
-        setImagePreview(null);
-        setVideoPreview(null);
+      if (imageRef.current) {
+        imageRef.current.value = "";
+      }
 
-        // Clear location
-        setLocation("");
+      if (videoRef.current) {
+        videoRef.current.value = "";
+      }
 
-        // Clear feeling
-        setFeeling("");
+      queryClient.invalidateQueries({
+        queryKey: ["posts"],
+      });
+    },
 
-        // Close boxes
-        setLocationOpen(false);
-        setFeelingOpen(false);
+    onError: (err) => {
+      console.log(
+        "CREATE POST ERROR:",
+        err.response?.data || err.message
+      );
 
-        // Reset file inputs
-        if (imageRef.current) {
-          imageRef.current.value = "";
-        }
+      alert(
+        typeof err.response?.data === "string"
+          ? err.response.data
+          : "Something went wrong while creating post."
+      );
+    },
+  });
 
-        if (videoRef.current) {
-          videoRef.current.value = "";
-        }
-
-        // Refresh posts
-        queryClient.invalidateQueries({
-          queryKey: ["posts"],
-        });
-
-      },
-
-      onError: (err) => {
-
-        console.log(
-          "CREATE POST ERROR:",
-          err.response?.data ||
-            err.message
-        );
-
-        alert(
-          typeof err.response?.data ===
-            "string"
-            ? err.response.data
-            : "Something went wrong while creating post."
-        );
-
-      },
-
-    });
-
-
-  // =====================================================
-  // IMAGE SELECT
-  // =====================================================
-
+  // Image select
   const handleImageChange = (e) => {
-
-    const file =
-      e.target.files?.[0];
+    const file = e.target.files?.[0];
 
     if (!file) return;
 
-
-    if (
-      !file.type.startsWith(
-        "image/"
-      )
-    ) {
-
-      alert(
-        "Please select a valid image."
-      );
+    if (!file.type.startsWith("image/")) {
+      alert("Please select a valid image.");
 
       e.target.value = "";
 
       return;
     }
 
-
-    // Remove video
     setVideo(null);
     setVideoPreview(null);
 
     if (videoRef.current) {
       videoRef.current.value = "";
     }
-
-
-    // Revoke previous image preview
-    if (imagePreview) {
-      URL.revokeObjectURL(
-        imagePreview
-      );
-    }
-
 
     setImage(file);
 
-    const previewURL =
-      URL.createObjectURL(file);
+    const previewURL = URL.createObjectURL(file);
 
-    setImagePreview(
-      previewURL
-    );
+    setImagePreview(previewURL);
 
     setLocationOpen(false);
     setFeelingOpen(false);
-
   };
 
-
-  // =====================================================
-  // VIDEO SELECT
-  // =====================================================
-
+  // Video select
   const handleVideoChange = (e) => {
-
-    const file =
-      e.target.files?.[0];
+    const file = e.target.files?.[0];
 
     if (!file) return;
 
-
-    if (
-      !file.type.startsWith(
-        "video/"
-      )
-    ) {
-
-      alert(
-        "Please select a valid video."
-      );
+    if (!file.type.startsWith("video/")) {
+      alert("Please select a valid video.");
 
       e.target.value = "";
 
       return;
     }
 
-
-    // Remove image
     setImage(null);
     setImagePreview(null);
 
     if (imageRef.current) {
       imageRef.current.value = "";
     }
-
-
-    // Revoke previous video preview
-    if (videoPreview) {
-      URL.revokeObjectURL(
-        videoPreview
-      );
-    }
-
 
     setVideo(file);
 
-    const previewURL =
-      URL.createObjectURL(file);
+    const previewURL = URL.createObjectURL(file);
 
-    setVideoPreview(
-      previewURL
-    );
+    setVideoPreview(previewURL);
 
     setLocationOpen(false);
     setFeelingOpen(false);
-
   };
 
-
-  // =====================================================
-  // REMOVE IMAGE
-  // =====================================================
-
+  // Remove image
   const removeImage = () => {
-
-    if (imagePreview) {
-      URL.revokeObjectURL(
-        imagePreview
-      );
-    }
-
     setImage(null);
     setImagePreview(null);
 
     if (imageRef.current) {
       imageRef.current.value = "";
     }
-
   };
 
-
-  // =====================================================
-  // REMOVE VIDEO
-  // =====================================================
-
+  // Remove video
   const removeVideo = () => {
-
-    if (videoPreview) {
-      URL.revokeObjectURL(
-        videoPreview
-      );
-    }
-
     setVideo(null);
     setVideoPreview(null);
 
     if (videoRef.current) {
       videoRef.current.value = "";
     }
-
   };
 
-
-  // =====================================================
-  // SHARE POST
-  // =====================================================
-
+  // Share post
   const handleShare = async (e) => {
-
     e.preventDefault();
 
     if (mutation.isPending) {
       return;
     }
-
 
     if (
       !desc.trim() &&
@@ -394,172 +226,90 @@ const Share = () => {
       !location.trim() &&
       !feeling
     ) {
-
-      alert(
-        "Please add something to your post."
-      );
+      alert("Please add something to your post.");
 
       return;
     }
 
-
     try {
-
       let imgUrl = "";
       let videoUrl = "";
 
-
-      // =================================================
-      // IMAGE UPLOAD
-      // =================================================
-
       if (image) {
-
-        imgUrl =
-          await upload(image);
-
+        imgUrl = await upload(image);
       }
-
-
-      // =================================================
-      // VIDEO UPLOAD
-      // =================================================
 
       if (video) {
-
-        videoUrl =
-          await upload(video);
-
+        videoUrl = await upload(video);
       }
 
-
-      // =================================================
-      // CREATE POST
-      // =================================================
-
       mutation.mutate({
-
-        desc:
-          desc.trim(),
-
-        img:
-          imgUrl,
-
-        video:
-          videoUrl,
-
-        location:
-          location.trim() ||
-          null,
-
-        feeling:
-          feeling ||
-          null,
-
+        desc: desc.trim(),
+        img: imgUrl,
+        video: videoUrl,
+        location: location.trim() || null,
+        feeling: feeling || null,
       });
-
     } catch (err) {
-
       console.log(
         "UPLOAD ERROR:",
-        err.response?.data ||
-          err.message
+        err.response?.data || err.message
       );
 
       alert(
         "File upload failed. Please try again."
       );
-
     }
-
   };
 
-
-  // =====================================================
-  // FEELINGS
-  // =====================================================
-
   const feelings = [
-
     {
       emoji: "😊",
       text: "Happy",
     },
-
     {
       emoji: "❤️",
       text: "Loved",
     },
-
     {
       emoji: "😂",
       text: "Funny",
     },
-
     {
       emoji: "😎",
       text: "Cool",
     },
-
     {
       emoji: "😢",
       text: "Sad",
     },
-
     {
       emoji: "🔥",
       text: "Excited",
     },
-
   ];
 
-
-  // =====================================================
-  // SELECT FEELING
-  // =====================================================
-
+  // Select feeling
   const selectFeeling = (item) => {
-
     setFeeling(
       `${item.emoji} ${item.text}`
     );
 
     setFeelingOpen(false);
     setLocationOpen(false);
-
   };
 
-
-  // =====================================================
-  // PROFILE IMAGE
-  // =====================================================
-
   const profilePic =
-    getImageUrl(
-      currentUser?.profilePic
-    ) ||
+    getImageUrl(currentUser?.profilePic) ||
     getAvatarPlaceholder(currentUser?.name);
 
-
-  // =====================================================
-  // JSX
-  // =====================================================
-
   return (
-
     <div className="share">
-
       <div className="container">
 
-
-        {/* =================================================
-            TOP
-        ================================================= */}
-
+        {/* Top */}
         <div className="top">
-
           <div className="left">
-
             <img
               src={profilePic}
               alt="Profile"
@@ -567,50 +317,33 @@ const Share = () => {
 
             <textarea
               placeholder={`What's on your mind, ${
-                currentUser?.name ||
-                "User"
+                currentUser?.name || "User"
               }?`}
               value={desc}
               onChange={(e) =>
-                setDesc(
-                  e.target.value
-                )
+                setDesc(e.target.value)
               }
               maxLength={1000}
             />
-
           </div>
 
-
-          {/* =================================================
-              SMALL PREVIEW
-          ================================================= */}
-
-          {(imagePreview ||
-            videoPreview) && (
-
+          {/* Preview */}
+          {(imagePreview || videoPreview) && (
             <div className="preview">
-
               {imagePreview && (
-
                 <img
                   src={imagePreview}
                   alt="Selected"
                 />
-
               )}
 
-
               {videoPreview && (
-
                 <video
                   src={videoPreview}
                   controls
                   muted
                 />
-
               )}
-
 
               <button
                 type="button"
@@ -622,26 +355,15 @@ const Share = () => {
                 }
                 aria-label="Remove selected media"
               >
-
                 <CloseIcon />
-
               </button>
-
             </div>
-
           )}
-
         </div>
 
-
-        {/* =================================================
-            LOCATION BOX
-        ================================================= */}
-
+        {/* Location */}
         {locationOpen && (
-
           <div className="locationBox">
-
             <LocationOnIcon />
 
             <input
@@ -649,9 +371,7 @@ const Share = () => {
               placeholder="Enter location..."
               value={location}
               onChange={(e) =>
-                setLocation(
-                  e.target.value
-                )
+                setLocation(e.target.value)
               }
               autoFocus
               maxLength={255}
@@ -660,78 +380,50 @@ const Share = () => {
             <button
               type="button"
               onClick={() =>
-                setLocationOpen(
-                  false
-                )
+                setLocationOpen(false)
               }
             >
               ✓
             </button>
-
           </div>
-
         )}
 
-
-        {/* =================================================
-            FEELING BOX
-        ================================================= */}
-
+        {/* Feeling */}
         {feelingOpen && (
-
           <div className="feelingBox">
-
-            {feelings.map(
-              (item) => (
-
-                <button
-                  type="button"
-                  key={item.text}
-                  className={
-                    feeling ===
-                    `${item.emoji} ${item.text}`
-                      ? "selected"
-                      : ""
-                  }
-                  onClick={() =>
-                    selectFeeling(item)
-                  }
-                >
-
-                  {item.emoji}{" "}
-                  {item.text}
-
-                </button>
-
-              )
-            )}
-
+            {feelings.map((item) => (
+              <button
+                type="button"
+                key={item.text}
+                className={
+                  feeling ===
+                  `${item.emoji} ${item.text}`
+                    ? "selected"
+                    : ""
+                }
+                onClick={() =>
+                  selectFeeling(item)
+                }
+              >
+                {item.emoji} {item.text}
+              </button>
+            ))}
           </div>
-
         )}
-
 
         <hr />
 
-
-        {/* =================================================
-            BOTTOM
-        ================================================= */}
-
+        {/* Bottom */}
         <div className="bottom">
-
           <div className="left">
 
-
-            {/* ADD IMAGE */}
-
+            {/* Add image */}
             <div
               className="item imageItem"
               onClick={() =>
                 imageRef.current?.click()
               }
             >
-
               <ImageIcon />
 
               <span>
@@ -743,23 +435,17 @@ const Share = () => {
                 type="file"
                 accept="image/*"
                 hidden
-                onChange={
-                  handleImageChange
-                }
+                onChange={handleImageChange}
               />
-
             </div>
 
-
-            {/* ADD VIDEO */}
-
+            {/* Add video */}
             <div
               className="item videoItem"
               onClick={() =>
                 videoRef.current?.click()
               }
             >
-
               <VideoCameraBackIcon />
 
               <span>
@@ -771,100 +457,60 @@ const Share = () => {
                 type="file"
                 accept="video/*"
                 hidden
-                onChange={
-                  handleVideoChange
-                }
+                onChange={handleVideoChange}
               />
-
             </div>
 
-
-            {/* LOCATION */}
-
+            {/* Location */}
             <div
               className={`item locationItem ${
-                location
-                  ? "active"
-                  : ""
+                location ? "active" : ""
               }`}
               onClick={() => {
-
-                setLocationOpen(
-                  (prev) => !prev
-                );
-
+                setLocationOpen((prev) => !prev);
                 setFeelingOpen(false);
-
               }}
             >
-
               <LocationOnIcon />
 
               <span>
-                {location
-                  ? location
-                  : "Add Location"}
+                {location || "Add Location"}
               </span>
-
             </div>
 
-
-            {/* FEELING */}
-
+            {/* Feeling */}
             <div
               className={`item feelingItem ${
-                feeling
-                  ? "active"
-                  : ""
+                feeling ? "active" : ""
               }`}
               onClick={() => {
-
-                setFeelingOpen(
-                  (prev) => !prev
-                );
-
+                setFeelingOpen((prev) => !prev);
                 setLocationOpen(false);
-
               }}
             >
-
               <EmojiEmotionsIcon />
 
               <span>
-                {feeling ||
-                  "Feeling"}
+                {feeling || "Feeling"}
               </span>
-
             </div>
-
           </div>
 
-
-          {/* =================================================
-              SHARE BUTTON
-          ================================================= */}
-
+          {/* Share button */}
           <button
             type="button"
             className="shareButton"
             onClick={handleShare}
-            disabled={
-              mutation.isPending
-            }
+            disabled={mutation.isPending}
           >
-
             <SendIcon />
 
             {mutation.isPending
               ? "Sharing..."
               : "Share"}
-
           </button>
-
         </div>
-
       </div>
-
     </div>
   );
 };

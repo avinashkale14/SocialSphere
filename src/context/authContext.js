@@ -5,18 +5,17 @@ export const AuthContext = createContext();
 export const AuthContextProvider = ({ children }) => {
   const [currentUser, setCurrentUser] = useState(() => {
     try {
-      return JSON.parse(
-        localStorage.getItem("user")
-      ) || null;
+      return (
+        JSON.parse(
+          localStorage.getItem("user")
+        ) || null
+      );
     } catch (error) {
       return null;
     }
   });
 
-  // ==========================================
-  // LOGIN
-  // ==========================================
-
+  // Login
   const login = (user) => {
     setCurrentUser(user);
 
@@ -26,10 +25,7 @@ export const AuthContextProvider = ({ children }) => {
     );
   };
 
-  // ==========================================
-  // UPDATE CURRENT USER
-  // ==========================================
-
+  // Update current user
   const updateUser = (user) => {
     setCurrentUser(user);
 
@@ -39,10 +35,7 @@ export const AuthContextProvider = ({ children }) => {
     );
   };
 
-  // ==========================================
-  // LOGOUT
-  // ==========================================
-
+  // Logout
   const logout = () => {
     setCurrentUser(null);
 

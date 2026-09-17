@@ -29,11 +29,7 @@
     rgba(120, 120, 120, 0.3)
     transparent;
 
-
-  /* =========================
-     SCROLLBAR
-  ========================= */
-
+  // Scrollbar
   &::-webkit-scrollbar {
     width: 5px;
   }
@@ -47,11 +43,7 @@
     border-radius: 20px;
   }
 
-
-  /* =========================
-     PROFILE CARD
-  ========================= */
-
+  // Profile card
   .sidebarProfile {
     width: 100%;
 
@@ -90,11 +82,7 @@
     }
   }
 
-
-  /* =========================
-     PROFILE IMAGE
-  ========================= */
-
+  // Profile image
   .sidebarProfileImage {
     position: relative;
 
@@ -117,11 +105,7 @@
     }
   }
 
-
-  /* =========================
-     ONLINE STATUS
-  ========================= */
-
+  // Online status
   .profileStatusDot {
     position: absolute;
 
@@ -140,11 +124,7 @@
     box-sizing: border-box;
   }
 
-
-  /* =========================
-     PROFILE INFO
-  ========================= */
-
+  // Profile info
   .sidebarProfileInfo {
     min-width: 0;
 
@@ -186,7 +166,6 @@
     }
   }
 
-
   .profileArrow {
     width: 17px;
     height: 17px;
@@ -196,15 +175,10 @@
     color: themed("textColorSoft");
   }
 
-
-  /* =========================
-     SECTION
-  ========================= */
-
+  // Section
   .sidebarSection {
     width: 100%;
   }
-
 
   .sectionTitle {
     padding: 0 11px 7px;
@@ -218,11 +192,7 @@
     color: themed("textColorSoft");
   }
 
-
-  /* =========================
-     NORMAL MENU
-  ========================= */
-
+  // Normal menu
   .sidebarMenu {
     display: flex;
 
@@ -231,11 +201,7 @@
     gap: 3px;
   }
 
-
-  /* =========================
-     MAIN MENU ITEM
-  ========================= */
-
+  // Main menu item
   .sidebarItem {
     width: 100%;
 
@@ -274,11 +240,7 @@
     }
   }
 
-
-  /* =========================
-     BUTTON RESET
-  ========================= */
-
+  // Button reset
   .sidebarButton {
     font-family: inherit;
 
@@ -293,11 +255,7 @@
     cursor: pointer;
   }
 
-
-  /* =========================
-     ACTIVE MAIN ITEM
-  ========================= */
-
+  // Active main item
   .sidebarItem.active {
     background: rgba(79, 109, 245, 0.09);
 
@@ -312,11 +270,7 @@
     }
   }
 
-
-  /* =========================
-     ICON BASE
-  ========================= */
-
+  // Icon base
   .itemIcon {
     width: 29px;
     height: 29px;
@@ -343,11 +297,7 @@
     }
   }
 
-
-  /* =========================
-     MAIN COLORS
-  ========================= */
-
+  // Main colors
   .homeIcon {
     color: #4f6df5;
 
@@ -356,37 +306,34 @@
 
   .notificationIcon {
     color: #ef8c00;
+
     background: rgba(239, 140, 0, 0.09);
   }
 
-  /* =========================
-   DARK / LIGHT MODE
-========================= */
-
-.themeToggleItem {
-  color: themed("textColor");
-
-  .themeToggleIcon {
-    color: #6b7280;
-    background: rgba(107, 114, 128, 0.09);
-  }
-
-  &:hover {
-    color: #4f6df5;
-    background: themed("bgSoft");
+  // Dark / light mode
+  .themeToggleItem {
+    color: themed("textColor");
 
     .themeToggleIcon {
+      color: #6b7280;
+
+      background: rgba(107, 114, 128, 0.09);
+    }
+
+    &:hover {
       color: #4f6df5;
-      background: rgba(79, 109, 245, 0.11);
+
+      background: themed("bgSoft");
+
+      .themeToggleIcon {
+        color: #4f6df5;
+
+        background: rgba(79, 109, 245, 0.11);
+      }
     }
   }
-}
 
-
-  /* =========================
-     QUICK ACCESS
-  ========================= */
-
+  // Quick access
   .quickAccessMenu {
     width: 100%;
 
@@ -396,7 +343,6 @@
 
     gap: 5px;
   }
-
 
   .quickAccessItem {
     width: 100%;
@@ -445,11 +391,7 @@
     }
   }
 
-
-  /* =========================
-     QUICK ACCESS COLORS
-  ========================= */
-
+  // Quick access colors
   .createIcon {
     color: #e91e63;
 
@@ -468,9 +410,7 @@
     background: rgba(79, 109, 245, 0.09);
   }
 
-
   .quickAccessItem:hover {
-
     .createIcon {
       background: rgba(233, 30, 99, 0.14);
     }
@@ -484,11 +424,7 @@
     }
   }
 
-
-  /* =========================
-     QUICK ACCESS CONTENT
-  ========================= */
-
+  // Quick access content
   .quickAccessContent {
     flex: 1;
 
@@ -500,7 +436,6 @@
 
     gap: 3px;
   }
-
 
   .quickAccessContent strong {
     font-size: 11px;
@@ -515,7 +450,6 @@
 
     text-overflow: ellipsis;
   }
-
 
   .quickAccessContent small {
     font-size: 9px;
@@ -533,11 +467,7 @@
     text-overflow: ellipsis;
   }
 
-
-  /* =========================
-     QUICK ACCESS ARROW
-  ========================= */
-
+  // Quick access arrow
   .quickAccessArrow {
     width: 11px !important;
     height: 11px !important;
@@ -551,18 +481,13 @@
       transform 0.18s ease;
   }
 
-
   .quickAccessItem:hover .quickAccessArrow {
     color: themed("textColor");
 
     transform: translateX(2px);
   }
 
-
-  /* =========================
-     TEXT
-  ========================= */
-
+  // Text
   .itemText {
     font-size: 12px;
 
@@ -573,13 +498,8 @@
     white-space: nowrap;
   }
 
-
-  /* =========================
-     LOGOUT
-  ========================= */
-
+  // Logout
   .logoutItem {
-
     color: #e53935;
 
     .itemIcon {
@@ -601,11 +521,7 @@
     }
   }
 
-
-  /* =========================
-     DIVIDER
-  ========================= */
-
+  // Divider
   .sidebarDivider {
     width: calc(100% - 20px);
 
@@ -616,11 +532,7 @@
     background: themed("border");
   }
 
-
-  /* =========================
-     SOCIALSPHERE CARD
-  ========================= */
-
+  // SocialSphere card
   .socialSphereCard {
     margin-top: 18px;
 
@@ -640,7 +552,6 @@
 
     box-sizing: border-box;
   }
-
 
   .socialSphereIcon {
     width: 29px;
@@ -665,7 +576,6 @@
       height: 17px;
     }
   }
-
 
   .socialSphereInfo {
     min-width: 0;
@@ -692,13 +602,8 @@
   }
 }
 
-
-/* =========================
-   LAPTOP
-========================= */
-
+// Laptop
 @include laptop {
-
   .leftBar {
     width: 230px;
 
@@ -718,13 +623,8 @@
   }
 }
 
-
-/* =========================
-   TABLET
-========================= */
-
+// Tablet
 @include tablet {
-
   .leftBar {
     width: 215px;
 
@@ -744,13 +644,8 @@
   }
 }
 
-
-/* =========================
-   MOBILE
-========================= */
-
+// Mobile
 @include mobile-large {
-
   .leftBar {
     display: none;
   }

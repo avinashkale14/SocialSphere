@@ -4,10 +4,7 @@ import jwt from "jsonwebtoken";
 
 const JWT_SECRET = "socialsphere_secret_key";
 
-// ==========================================
-// REGISTER
-// ==========================================
-
+// Register
 export const register = (req, res) => {
   const q = `
     SELECT *
@@ -63,10 +60,7 @@ export const register = (req, res) => {
   });
 };
 
-// ==========================================
-// LOGIN
-// ==========================================
-
+// Login
 export const login = (req, res) => {
   const q = `
     SELECT *
@@ -107,10 +101,7 @@ export const login = (req, res) => {
 
     const { password, ...userWithoutPassword } = user;
 
-    // ==========================================
-    // SET JWT COOKIE
-    // ==========================================
-
+    // Set JWT cookie
     res.cookie("accessToken", token, {
       httpOnly: true,
       secure: false,
@@ -129,10 +120,7 @@ export const login = (req, res) => {
   });
 };
 
-// ==========================================
-// LOGOUT
-// ==========================================
-
+// Logout
 export const logout = (req, res) => {
   res.clearCookie("accessToken", {
     httpOnly: true,

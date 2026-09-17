@@ -36,9 +36,6 @@ import {
 
 import makeRequest from "../../axios";
 import { AuthContext } from "../../context/authContext";
-
-// Make profile links open as external websites even when the user enters
-// a bare domain such as avinashkale.in instead of https://avinashkale.in.
 const normalizeExternalUrl = (url) => {
   if (!url) return "";
   const value = url.trim();
@@ -58,23 +55,15 @@ const Profile = () => {
 
   const userId = location.pathname.split("/")[2];
 
-  // ========================================
-  // STATES
-  // ========================================
-
   const [openEdit, setOpenEdit] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
 
   const [name, setName] = useState("");
   const [city, setCity] = useState("");
   const [website, setWebsite] = useState("");
-
-  // SOCIAL LINKS
   const [instagram, setInstagram] = useState("");
   const [linkedin, setLinkedin] = useState("");
   const [github, setGithub] = useState("");
-
-  // IMAGE STATES
   const [profileFile, setProfileFile] = useState(null);
   const [coverFile, setCoverFile] = useState(null);
 
@@ -83,10 +72,6 @@ const Profile = () => {
 
   const profileInputRef = useRef(null);
   const coverInputRef = useRef(null);
-
-  // ========================================
-  // GET USER
-  // ========================================
 
   const {
     isLoading,
@@ -103,10 +88,6 @@ const Profile = () => {
     enabled: !!userId,
   });
 
-  // ========================================
-  // RELATIONSHIP
-  // ========================================
-
   const {
     data: relationshipData = [],
   } = useQuery({
@@ -120,10 +101,6 @@ const Profile = () => {
     enabled: !!userId,
   });
 
-  // ========================================
-  // FOLLOW CHECK
-  // ========================================
-
   const isFollowing = relationshipData.some(
     (relationship) =>
       Number(
@@ -131,10 +108,6 @@ const Profile = () => {
           relationship.followerId
       ) === Number(currentUser?.id)
   );
-
-  // ========================================
-  // FOLLOW / UNFOLLOW
-  // ========================================
 
   const followMutation = useMutation({
     mutationFn: (following) => {
@@ -187,10 +160,6 @@ const Profile = () => {
     },
   });
 
-  // ========================================
-  // HANDLE FOLLOW
-  // ========================================
-
   const handleFollow = () => {
     if (!currentUser) {
       alert("Please login first!");
@@ -210,8 +179,6 @@ const Profile = () => {
 
     followMutation.mutate(isFollowing);
   };
-
-  // ================= PROFILE MORE MENU =================
 
 const copyText = async (text) => {
   if (navigator.clipboard?.writeText) {
@@ -297,8 +264,6 @@ const handleUnfollowFromMenu = () => {
   followMutation.mutate(true);
   setMenuOpen(false);
 };
-
-  // Close menu when clicking outside
   useEffect(() => {
     const handleOutsideClick = (event) => {
       if (!event.target.closest(".profileActionsMenu")) {
@@ -317,22 +282,14 @@ const handleUnfollowFromMenu = () => {
     setMenuOpen(false);
   }, [userId]);
 
-  // ========================================
-  // SET FORM DATA
-  // ========================================
-
   useEffect(() => {
     if (data) {
       setName(data.name || "");
       setCity(data.city || "");
       setWebsite(data.website || "");
-
-      // SOCIAL LINKS
       setInstagram(data.instagram || "");
       setLinkedin(data.linkedin || "");
       setGithub(data.github || "");
-
-      // IMAGES
       setProfilePreview(
         getImageUrl(data.profilePic)
       );
@@ -343,25 +300,15 @@ const handleUnfollowFromMenu = () => {
     }
   }, [data]);
 
-  // ========================================
-  // OPEN EDIT PROFILE
-  // ========================================
-
   const openEditProfile = () => {
     setName(data?.name || "");
     setCity(data?.city || "");
     setWebsite(data?.website || "");
-
-    // SOCIAL LINKS
     setInstagram(data?.instagram || "");
     setLinkedin(data?.linkedin || "");
     setGithub(data?.github || "");
-
-    // RESET FILES
     setProfileFile(null);
     setCoverFile(null);
-
-    // RESET PREVIEWS
     setProfilePreview(
       getImageUrl(data?.profilePic)
     );
@@ -373,22 +320,14 @@ const handleUnfollowFromMenu = () => {
     setOpenEdit(true);
   };
 
-  // ========================================
-  // CLOSE EDIT PROFILE
-  // ========================================
-
   const closeEditProfile = () => {
     setOpenEdit(false);
 
     setProfileFile(null);
     setCoverFile(null);
-
-    // RESET SOCIAL LINKS
     setInstagram(data?.instagram || "");
     setLinkedin(data?.linkedin || "");
     setGithub(data?.github || "");
-
-    // RESET IMAGES
     setProfilePreview(
       getImageUrl(data?.profilePic)
     );
@@ -397,10 +336,6 @@ const handleUnfollowFromMenu = () => {
       getImageUrl(data?.coverPic)
     );
   };
-
-  // ========================================
-  // PROFILE IMAGE
-  // ========================================
 
   const handleProfileImage = (e) => {
     const file = e.target.files?.[0];
@@ -419,10 +354,6 @@ const handleUnfollowFromMenu = () => {
     );
   };
 
-  // ========================================
-  // COVER IMAGE
-  // ========================================
-
   const handleCoverImage = (e) => {
     const file = e.target.files?.[0];
 
@@ -439,10 +370,6 @@ const handleUnfollowFromMenu = () => {
       URL.createObjectURL(file)
     );
   };
-
-  // ========================================
-  // UPLOAD IMAGE
-  // ========================================
 
   const upload = async (file) => {
     const formData = new FormData();
@@ -463,10 +390,6 @@ const handleUnfollowFromMenu = () => {
     return res.data;
   };
 
-  // ========================================
-  // UPDATE PROFILE
-  // ========================================
-
   const updateMutation = useMutation({
     mutationFn: async () => {
       let profilePic =
@@ -475,27 +398,15 @@ const handleUnfollowFromMenu = () => {
       let coverPic =
         data?.coverPic || null;
 
-      // --------------------------------
-      // UPLOAD NEW PROFILE PICTURE
-      // --------------------------------
-
       if (profileFile) {
         profilePic =
           await upload(profileFile);
       }
 
-      // --------------------------------
-      // UPLOAD NEW COVER PICTURE
-      // --------------------------------
-
       if (coverFile) {
         coverPic =
           await upload(coverFile);
       }
-
-      // --------------------------------
-      // UPDATE USER
-      // --------------------------------
 
       const res = await makeRequest.put(
         "/users/" + userId,
@@ -503,13 +414,9 @@ const handleUnfollowFromMenu = () => {
           name: name.trim(),
           city: city.trim(),
           website: website.trim(),
-
-          // SOCIAL LINKS
           instagram: normalizeExternalUrl(instagram),
           linkedin: normalizeExternalUrl(linkedin),
           github: normalizeExternalUrl(github),
-
-          // IMAGES
           profilePic,
           coverPic,
         }
@@ -518,15 +425,8 @@ const handleUnfollowFromMenu = () => {
       return res.data;
     },
 
-    // ========================================
-    // SUCCESS
-    // ========================================
-
     onSuccess: async () => {
       try {
-        // --------------------------------
-        // GET FRESH USER DATA
-        // --------------------------------
 
         const freshUser =
           await queryClient.fetchQuery({
@@ -542,10 +442,6 @@ const handleUnfollowFromMenu = () => {
                 ),
           });
 
-        // --------------------------------
-        // UPDATE LOGGED-IN USER
-        // --------------------------------
-
         if (
           currentUser &&
           Number(currentUser.id) ===
@@ -557,32 +453,16 @@ const handleUnfollowFromMenu = () => {
           });
         }
 
-        // --------------------------------
-        // REFRESH PROFILE
-        // --------------------------------
-
         await queryClient.invalidateQueries({
           queryKey: ["user", userId],
         });
-
-        // --------------------------------
-        // REFRESH POSTS
-        // --------------------------------
 
         await queryClient.invalidateQueries({
           queryKey: ["posts"],
         });
 
-        // --------------------------------
-        // RESET FILES
-        // --------------------------------
-
         setProfileFile(null);
         setCoverFile(null);
-
-        // --------------------------------
-        // RESET PREVIEWS
-        // --------------------------------
 
         setProfilePreview(
           getImageUrl(
@@ -596,10 +476,6 @@ const handleUnfollowFromMenu = () => {
           )
         );
 
-        // --------------------------------
-        // RESET FILE INPUTS
-        // --------------------------------
-
         if (profileInputRef.current) {
           profileInputRef.current.value = "";
         }
@@ -607,10 +483,6 @@ const handleUnfollowFromMenu = () => {
         if (coverInputRef.current) {
           coverInputRef.current.value = "";
         }
-
-        // --------------------------------
-        // CLOSE MODAL
-        // --------------------------------
 
         setOpenEdit(false);
 
@@ -629,10 +501,6 @@ const handleUnfollowFromMenu = () => {
       }
     },
 
-    // ========================================
-    // ERROR
-    // ========================================
-
     onError: (err) => {
       console.log(
         "UPDATE PROFILE ERROR:",
@@ -647,10 +515,6 @@ const handleUnfollowFromMenu = () => {
     },
   });
 
-  // ========================================
-  // SAVE
-  // ========================================
-
   const handleSave = () => {
     if (!name.trim()) {
       alert("Name cannot be empty!");
@@ -664,10 +528,6 @@ const handleUnfollowFromMenu = () => {
     updateMutation.mutate();
   };
 
-  // ========================================
-  // LOADING
-  // ========================================
-
   if (isLoading) {
     return (
       <div className="profileLoading">
@@ -675,10 +535,6 @@ const handleUnfollowFromMenu = () => {
       </div>
     );
   }
-
-  // ========================================
-  // ERROR
-  // ========================================
 
   if (error) {
     console.log(
@@ -694,10 +550,6 @@ const handleUnfollowFromMenu = () => {
     );
   }
 
-  // ========================================
-  // USER NOT FOUND
-  // ========================================
-
   if (!data) {
     return (
       <div className="profileError">
@@ -706,18 +558,9 @@ const handleUnfollowFromMenu = () => {
     );
   }
 
-  // ========================================
-  // UI
-  // ========================================
-
   return (
     <div className="profile">
-
-      {/* ========================================
-          COVER + PROFILE IMAGE
-      ======================================== */}
-
-      <div className="images">
+<div className="images">
 
         <img
           src={
@@ -738,18 +581,8 @@ const handleUnfollowFromMenu = () => {
         />
 
       </div>
-
-      {/* ========================================
-          PROFILE INFORMATION
-      ======================================== */}
-
-      <div className="profileContainer">
-
-        {/* ======================================
-            PROFILE CONTENT
-        ====================================== */}
-
-        <div className="center">
+<div className="profileContainer">
+<div className="center">
 
           <span className="name">
             {data.name}
@@ -761,9 +594,7 @@ const handleUnfollowFromMenu = () => {
               <span>{data.city}</span>
             </div>
           )}
-
-          {/* UPDATE / FOLLOW */}
-          {Number(currentUser?.id) === Number(userId) ? (
+{Number(currentUser?.id) === Number(userId) ? (
             <button
               className="updateBtn"
               onClick={openEditProfile}
@@ -783,9 +614,7 @@ const handleUnfollowFromMenu = () => {
                 : "Follow"}
             </button>
           )}
-
-          {/* SOCIAL + WEBSITE ICONS */}
-          <div className="profileSocials">
+<div className="profileSocials">
 
             {data.instagram && (
               <a
@@ -838,9 +667,7 @@ const handleUnfollowFromMenu = () => {
           </div>
 
         </div>
-
-        {/* PROFILE MORE MENU - TOP RIGHT */}
-        <div className="profileActionsMenu">
+<div className="profileActionsMenu">
 
           <button
             type="button"
@@ -901,26 +728,13 @@ const handleUnfollowFromMenu = () => {
         </div>
 
       </div>
-
-      {/* ========================================
-          POSTS
-      ======================================== */}
-
-      <Posts userId={userId} />
-
-      {/* ========================================
-          EDIT PROFILE MODAL
-      ======================================== */}
-
-      {openEdit && (
+<Posts userId={userId} />
+{openEdit && (
 
         <div className="editOverlay">
 
           <div className="editModal">
-
-            {/* HEADER */}
-
-            <div className="editHeader">
+<div className="editHeader">
 
               <h2>
                 Edit Profile
@@ -934,12 +748,7 @@ const handleUnfollowFromMenu = () => {
               </button>
 
             </div>
-
-            {/* ==================================
-                PROFILE IMAGE
-            ================================== */}
-
-            <div className="editImageSection">
+<div className="editImageSection">
 
               <div className="editProfileImage">
 
@@ -977,12 +786,7 @@ const handleUnfollowFromMenu = () => {
               />
 
             </div>
-
-            {/* ==================================
-                COVER IMAGE
-            ================================== */}
-
-            <div className="coverEditSection">
+<div className="coverEditSection">
 
               <div className="coverPreview">
 
@@ -1025,12 +829,7 @@ const handleUnfollowFromMenu = () => {
               />
 
             </div>
-
-            {/* ==================================
-                NAME
-            ================================== */}
-
-            <div className="formGroup">
+<div className="formGroup">
 
               <label>
                 Name
@@ -1046,12 +845,7 @@ const handleUnfollowFromMenu = () => {
               />
 
             </div>
-
-            {/* ==================================
-                CITY
-            ================================== */}
-
-            <div className="formGroup">
+<div className="formGroup">
 
               <label>
                 City
@@ -1067,12 +861,7 @@ const handleUnfollowFromMenu = () => {
               />
 
             </div>
-
-            {/* ==================================
-                WEBSITE
-            ================================== */}
-
-            <div className="formGroup">
+<div className="formGroup">
 
               <label>
                 Website
@@ -1088,12 +877,7 @@ const handleUnfollowFromMenu = () => {
               />
 
             </div>
-
-            {/* ==================================
-                INSTAGRAM
-            ================================== */}
-
-            <div className="formGroup">
+<div className="formGroup">
 
               <label>
                 Instagram
@@ -1109,12 +893,7 @@ const handleUnfollowFromMenu = () => {
               />
 
             </div>
-
-            {/* ==================================
-                LINKEDIN
-            ================================== */}
-
-            <div className="formGroup">
+<div className="formGroup">
 
               <label>
                 LinkedIn
@@ -1130,12 +909,7 @@ const handleUnfollowFromMenu = () => {
               />
 
             </div>
-
-            {/* ==================================
-                GITHUB
-            ================================== */}
-
-            <div className="formGroup">
+<div className="formGroup">
 
               <label>
                 GitHub
@@ -1151,12 +925,7 @@ const handleUnfollowFromMenu = () => {
               />
 
             </div>
-
-            {/* ==================================
-                ACTION BUTTONS
-            ================================== */}
-
-            <div className="editActions">
+<div className="editActions">
 
               <button
                 className="cancelBtn"

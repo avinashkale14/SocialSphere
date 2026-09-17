@@ -1,9 +1,5 @@
 @import "../../style.scss";
 
-/* =========================================================
-   NOTIFICATIONS PAGE
-========================================================= */
-
 .notificationsPage {
   width: 100%;
   min-height: calc(100vh - #{$navbar-height});
@@ -18,11 +14,6 @@
   overflow-x: hidden;
 }
 
-
-/* =========================================================
-   CONTAINER
-========================================================= */
-
 .notificationsContainer {
   width: 100%;
   max-width: 100%;
@@ -31,16 +22,6 @@
 
   box-sizing: border-box;
 }
-
-
-/* =========================================================
-   RIGHTBAR INSIDE NOTIFICATIONS PAGE
-========================================================= */
-
-/*
-  Normally RightBar is the third column of the desktop layout.
-  On this page we use it as the main page content.
-*/
 
 .notificationsContainer .rightBar {
   display: block !important;
@@ -65,39 +46,19 @@
   box-sizing: border-box;
 }
 
-
-/* =========================================================
-   LAPTOP
-========================================================= */
-
 @include laptop {
-
   .notificationsPage {
     padding: 18px 16px 28px;
   }
-
 }
 
-
-/* =========================================================
-   TABLET
-========================================================= */
-
 @include tablet {
-
   .notificationsPage {
     padding: 16px 12px 25px;
   }
-
 }
 
-
-/* =========================================================
-   MOBILE
-========================================================= */
-
 @media (max-width: 600px) {
-
   .notificationsPage {
     width: 100%;
 
@@ -111,17 +72,9 @@
     overflow-y: auto;
   }
 
-
   .notificationsContainer {
     width: 100%;
   }
-
-
-  /*
-     RightBar normally disappears on mobile.
-     Here we explicitly show it because this IS
-     the Notifications page.
-  */
 
   .notificationsContainer .rightBar {
     display: block !important;
@@ -142,5 +95,4 @@
 
     background: transparent !important;
   }
-
 }

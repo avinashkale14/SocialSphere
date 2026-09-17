@@ -8,13 +8,10 @@ import {
 
 const router = express.Router();
 
-// GET followers
 router.get("/", getRelationships);
 
-// FOLLOW
 router.post("/", addRelationship);
 
-// UNFOLLOW
 router.delete("/", deleteRelationship);
 
 export default router;
