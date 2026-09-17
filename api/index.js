@@ -1,8 +1,11 @@
+import "dotenv/config";
+
 import express from "express";
 import cors from "cors";
 import cookieParser from "cookie-parser";
 import multer from "multer";
 import path from "path";
+import fs from "fs";
 import { fileURLToPath } from "url";
 
 import authRoutes from "./routes/auth.js";
@@ -22,10 +25,19 @@ const app = express();
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
+const PORT = process.env.PORT || 8800;
+const CLIENT_URL = process.env.CLIENT_URL || "http://localhost:3000";
+
+const uploadPath = path.join(__dirname, "../public/upload");
+
+if (!fs.existsSync(uploadPath)) {
+  fs.mkdirSync(uploadPath, { recursive: true });
+}
+
 // CORS
 app.use(
   cors({
-    origin: "http://localhost:3000",
+    origin: CLIENT_URL,
     credentials: true,
   })
 );
@@ -37,25 +49,16 @@ app.use(cookieParser());
 // File upload
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
-    cb(
-      null,
-      path.join(__dirname, "../public/upload")
-    );
+    cb(null, uploadPath);
   },
 
   filename: function (req, file, cb) {
     const uniqueSuffix =
-      Date.now() +
-      "-" +
-      Math.round(Math.random() * 1e9);
+      Date.now() + "-" + Math.round(Math.random() * 1e9);
 
     cb(
       null,
-      file.fieldname +
-        "-" +
-        uniqueSuffix +
-        "-" +
-        file.originalname
+      file.fieldname + "-" + uniqueSuffix + "-" + file.originalname
     );
   },
 });
@@ -65,29 +68,16 @@ const upload = multer({
 });
 
 // Upload API
-app.post(
-  "/api/upload",
-  upload.single("file"),
-  (req, res) => {
-    if (!req.file) {
-      return res
-        .status(400)
-        .json("No file uploaded!");
-    }
-
-    return res
-      .status(200)
-      .json(req.file.filename);
+app.post("/api/upload", upload.single("file"), (req, res) => {
+  if (!req.file) {
+    return res.status(400).json("No file uploaded!");
   }
-);
+
+  return res.status(200).json(req.file.filename);
+});
 
 // Serve uploaded files
-app.use(
-  "/upload",
-  express.static(
-    path.join(__dirname, "../public/upload")
-  )
-);
+app.use("/upload", express.static(uploadPath));
 
 // API routes
 app.use("/api/auth", authRoutes);
@@ -106,8 +96,6 @@ app.get("/", (req, res) => {
 });
 
 // Server
-app.listen(8800, () => {
-  console.log(
-    "SocialSphere API running on port 8800"
-  );
+app.listen(PORT, () => {
+  console.log(`SocialSphere API running on port ${PORT}`);
 });
