@@ -23,3 +23,7 @@
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+
+# User uploaded files
+/public/upload/*
+!/public/upload/.gitkeep
