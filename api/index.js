@@ -4,9 +4,7 @@ import express from "express";
 import cors from "cors";
 import cookieParser from "cookie-parser";
 import multer from "multer";
-import path from "path";
-import fs from "fs";
-import { fileURLToPath } from "url";
+import { v2 as cloudinary } from "cloudinary";
 
 import authRoutes from "./routes/auth.js";
 import userRoutes from "./routes/users.js";
@@ -22,17 +20,14 @@ import "./connect.js";
 
 const app = express();
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
-
 const PORT = process.env.PORT || 8800;
 const CLIENT_URL = process.env.CLIENT_URL || "http://localhost:3000";
 
-const uploadPath = path.join(__dirname, "../public/upload");
-
-if (!fs.existsSync(uploadPath)) {
-  fs.mkdirSync(uploadPath, { recursive: true });
-}
+cloudinary.config({
+  cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+  api_key: process.env.CLOUDINARY_API_KEY,
+  api_secret: process.env.CLOUDINARY_API_SECRET,
+});
 
 // CORS
 app.use(
@@ -47,37 +42,41 @@ app.use(express.json());
 app.use(cookieParser());
 
 // File upload
-const storage = multer.diskStorage({
-  destination: function (req, file, cb) {
-    cb(null, uploadPath);
-  },
-
-  filename: function (req, file, cb) {
-    const uniqueSuffix =
-      Date.now() + "-" + Math.round(Math.random() * 1e9);
-
-    cb(
-      null,
-      file.fieldname + "-" + uniqueSuffix + "-" + file.originalname
-    );
-  },
-});
-
 const upload = multer({
-  storage,
+  storage: multer.memoryStorage(),
 });
 
 // Upload API
-app.post("/api/upload", upload.single("file"), (req, res) => {
+app.post("/api/upload", upload.single("file"), async (req, res) => {
   if (!req.file) {
     return res.status(400).json("No file uploaded!");
   }
 
-  return res.status(200).json(req.file.filename);
-});
+  try {
+    const result = await new Promise((resolve, reject) => {
+      const stream = cloudinary.uploader.upload_stream(
+        {
+          folder: "socialsphere",
+          resource_type: "auto",
+        },
+        (error, result) => {
+          if (error) {
+            reject(error);
+          } else {
+            resolve(result);
+          }
+        }
+      );
 
-// Serve uploaded files
-app.use("/upload", express.static(uploadPath));
+      stream.end(req.file.buffer);
+    });
+
+    return res.status(200).json(result.secure_url);
+  } catch (error) {
+    console.error("CLOUDINARY UPLOAD ERROR:", error);
+    return res.status(500).json("Image upload failed!");
+  }
+});
 
 // API routes
 app.use("/api/auth", authRoutes);
