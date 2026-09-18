@@ -255,7 +255,3 @@ https://github.com/avinashkale14
 ## 📄 License
 
 This project was developed for **educational, portfolio, and learning purposes**.
-
----
-
-⭐ **If you like SocialSphere, feel free to star the repository!**
