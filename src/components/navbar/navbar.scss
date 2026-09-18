@@ -1295,7 +1295,7 @@
 
     grid-template-columns:
       34px
-      minmax(86px, 1.55fr)
+      auto
       repeat(4, minmax(0, 1fr));
 
     grid-template-rows:
@@ -1793,7 +1793,7 @@
 
     grid-template-columns:
       30px
-      minmax(76px, 1.45fr)
+      auto
       repeat(4, minmax(0, 1fr));
 
     grid-template-rows:
@@ -1881,7 +1881,7 @@
 
     grid-template-columns:
       30px
-      minmax(66px, 1.35fr)
+      auto
       repeat(4, minmax(0, 1fr));
 
     column-gap: 3px;
