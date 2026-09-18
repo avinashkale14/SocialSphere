@@ -20,8 +20,9 @@ export const getImageUrl = (image) => {
   }
 
   // Backend image
-  return `http://localhost:8800/upload/${imageValue}`;
+  return `https://socialsphere-1b6c.onrender.com/upload/${imageValue}`;
 };
+
 
 export const getAvatarPlaceholder = (
   name = "User"

@@ -34,7 +34,7 @@ const Register = () => {
       setLoading(true);
 
       await axios.post(
-        "http://localhost:8800/api/auth/register",
+        "https://socialsphere-1b6c.onrender.com/api/auth/register",
         input
       );
 

@@ -177,7 +177,7 @@ npm start
 Backend:
 
 ```text
-http://localhost:8800
+https://socialsphere-1b6c.onrender.com
 ```
 
 ### 7. Start the frontend

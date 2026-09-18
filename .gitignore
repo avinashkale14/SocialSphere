@@ -27,3 +27,6 @@ yarn-error.log*
 # User uploaded files
 /public/upload/*
 !/public/upload/.gitkeep
+
+# API dependencies
+/api/node_modules/

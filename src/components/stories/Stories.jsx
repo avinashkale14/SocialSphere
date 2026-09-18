@@ -70,7 +70,7 @@ const Stories = () => {
       return image;
     }
 
-    return `http://localhost:8800/upload/${image}`;
+    return `https://socialsphere-1b6c.onrender.com/upload/${image}`;
   };
 
   const {

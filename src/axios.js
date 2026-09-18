@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const makeRequest = axios.create({
-  baseURL: "http://localhost:8800/api",
+  baseURL: "https://socialsphere-1b6c.onrender.com/api",
   withCredentials: true,
 });
 
