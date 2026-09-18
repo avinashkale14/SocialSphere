@@ -245,7 +245,6 @@ The React frontend communicates with the production Express API through Vercel r
 ### Avinash Kale
 
 **Bachelor of Computer Science**  
-**Full Stack Developer**
 
 GitHub:  
 https://github.com/avinashkale14
