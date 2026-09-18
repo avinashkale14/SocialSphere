@@ -1,14 +1,16 @@
 # 🌐 SocialSphere
 
-**SocialSphere** is a full-stack social media web application where users can create profiles, share posts, upload stories, like and comment on posts, follow users, explore content, and receive notifications.
+**SocialSphere** is a full-stack social media web application where users can create profiles, share posts, upload stories, like and comment on posts, follow users, explore content, search for people, and receive notifications.
 
-The project was built using React.js, Node.js, Express.js, MySQL, JWT authentication, REST APIs, file uploads, responsive UI, and dark mode.
+The project is built using **React.js, Node.js, Express.js, MySQL, JWT authentication, REST APIs, Cloudinary, and SCSS** with a responsive interface and dark mode support.
 
 ---
 
 ## 🚀 Live Demo
 
-🔗 https://socialsphere-web.vercel.app/
+🌐 Frontend: https://socialsphere-web.vercel.app/
+
+🔗 Backend API: https://socialsphere-1b6c.onrender.com/
 
 ---
 
@@ -16,21 +18,27 @@ The project was built using React.js, Node.js, Express.js, MySQL, JWT authentica
 
 ### 👤 Authentication
 - User registration
-- Login and logout
+- User login and logout
 - JWT-based authentication
 - Protected routes
+- Secure password hashing with bcrypt
 
 ### 📝 Posts
-- Create, edit and delete posts
+- Create posts
+- Edit posts
+- Delete posts
 - Upload images and videos
 - Like and unlike posts
-- Add and delete comments
+- Add comments
+- Delete comments
 - Share post links
+- View personal posts
 
 ### 📖 Stories
 - Create and upload stories
 - View active stories
-- Story views
+- Story viewer
+- Story view tracking
 - View story viewers
 - Delete stories
 
@@ -38,47 +46,78 @@ The project was built using React.js, Node.js, Express.js, MySQL, JWT authentica
 - Follow and unfollow users
 - View followers and following
 - User profiles
-- Profile and cover image updates
-- Notifications
+- Update profile information
+- Profile and cover image support
+- Search users
 - Explore content
 - Trending content
+- Notifications
+- Latest activities
 
-### 🌙 UI & Experience
-- Light and dark mode
+### 🌙 UI & User Experience
+- Light mode
+- Dark mode
 - Responsive design
-- Desktop, tablet and mobile support
+- Desktop support
+- Tablet support
+- Mobile support
+- Responsive navbar
+- Responsive profile layout
+
+### ☁️ Media Uploads
+- Cloudinary image uploads
+- Cloudinary video uploads
+- Secure cloud-based media storage
+- No user-uploaded media stored in the GitHub repository
 
 ---
 
 ## 🛠️ Tech Stack
 
 ### Frontend
+
 - React.js
 - React Router
 - React Query
+- Axios
 - SCSS
 - Material UI
-- Axios
 
 ### Backend
+
 - Node.js
 - Express.js
-- REST API
+- REST APIs
 - JWT
 - bcrypt
 - Multer
 - CORS
+- Cookie Parser
 
 ### Database
-- MySQL
 
-### Tools
+- MySQL
+- Railway MySQL
+
+### Media Storage
+
+- Cloudinary
+
+### Development Tools
+
 - VS Code
 - Git
 - GitHub
 - Thunder Client
 - XAMPP
 - Nodemon
+
+### Deployment
+
+- Vercel — Frontend
+- Render — Backend
+- Railway — MySQL Database
+- Cloudinary — Media Storage
 
 ---
 
@@ -89,12 +128,35 @@ SocialSphere/
 │
 ├── api/
 │   ├── controllers/
+│   │   ├── activity.js
+│   │   ├── auth.js
+│   │   ├── comment.js
+│   │   ├── like.js
+│   │   ├── post.js
+│   │   ├── relationship.js
+│   │   ├── story.js
+│   │   ├── trending.js
+│   │   └── user.js
+│   │
 │   ├── routes/
+│   │   ├── activities.js
+│   │   ├── auth.js
+│   │   ├── comments.js
+│   │   ├── likes.js
+│   │   ├── posts.js
+│   │   ├── relationships.js
+│   │   ├── stories.js
+│   │   ├── trending.js
+│   │   └── users.js
+│   │
 │   ├── connect.js
-│   └── index.js
+│   ├── index.js
+│   ├── package.json
+│   └── package-lock.json
 │
 ├── public/
 │   ├── upload/
+│   │   └── .gitkeep
 │   ├── favicon.png
 │   ├── index.html
 │   └── manifest.json
@@ -110,6 +172,7 @@ SocialSphere/
 │   │   └── stories/
 │   │
 │   ├── context/
+│   │
 │   ├── pages/
 │   │   ├── home/
 │   │   ├── login/
@@ -124,8 +187,10 @@ SocialSphere/
 │   └── style.scss
 │
 ├── .gitignore
+├── .vercelignore
 ├── package.json
 ├── package-lock.json
+├── vercel.json
 └── README.md
 ```
 
@@ -158,35 +223,80 @@ cd api
 npm install
 ```
 
-### 5. Setup MySQL
+---
 
-Start **Apache** and **MySQL** from XAMPP.
+## 🗄️ Local Database Setup
 
-Open phpMyAdmin and create a database named:
+For local development, MySQL can be run using **XAMPP**.
+
+### 1. Start MySQL
+
+Open XAMPP and start:
+
+```text
+Apache
+MySQL
+```
+
+### 2. Create the database
+
+Open phpMyAdmin and create a database for the project.
+
+Example:
 
 ```text
 social
 ```
 
-Configure the database connection in:
+### 3. Configure environment variables
 
-```text
-api/connect.js
+Create an `.env` file inside the `api` folder.
+
+Example:
+
+```env
+DB_HOST=localhost
+DB_PORT=3306
+DB_USER=root
+DB_PASSWORD=your_password
+DB_NAME=social
+
+JWT_SECRET=your_secret_key
+
+CLIENT_URL=http://localhost:3000
+
+CLOUDINARY_CLOUD_NAME=your_cloud_name
+CLOUDINARY_API_KEY=your_api_key
+CLOUDINARY_API_SECRET=your_api_secret
 ```
 
-### 6. Start the backend
+Do not commit `.env` files or secret credentials to GitHub.
+
+---
+
+## ▶️ Run the Backend
+
+From the `api` folder:
 
 ```bash
 npm start
 ```
 
-Backend:
+The backend will run on:
+
+```text
+http://localhost:8800
+```
+
+Production backend:
 
 ```text
 https://socialsphere-1b6c.onrender.com
 ```
 
-### 7. Start the frontend
+---
+
+## ▶️ Run the Frontend
 
 Open another terminal in the project root:
 
@@ -194,7 +304,7 @@ Open another terminal in the project root:
 npm start
 ```
 
-Frontend:
+The frontend will run on:
 
 ```text
 http://localhost:3000
@@ -202,38 +312,161 @@ http://localhost:3000
 
 ---
 
+## ☁️ Cloudinary
+
+SocialSphere uses **Cloudinary** for storing uploaded images and videos.
+
+Media uploads are sent through the backend and stored securely in Cloudinary instead of being stored inside the GitHub repository.
+
+Required environment variables:
+
+```env
+CLOUDINARY_CLOUD_NAME=your_cloud_name
+CLOUDINARY_API_KEY=your_api_key
+CLOUDINARY_API_SECRET=your_api_secret
+```
+
+Never expose the Cloudinary API secret publicly.
+
+---
+
 ## 🔐 Environment Variables
 
-For production, database credentials and JWT secrets should be stored in environment variables.
+The application uses environment variables for sensitive configuration.
 
 Example:
 
 ```env
 DB_HOST=localhost
+DB_PORT=3306
 DB_USER=root
 DB_PASSWORD=your_password
 DB_NAME=social
 
 JWT_SECRET=your_secret_key
+
+CLIENT_URL=http://localhost:3000
+
+CLOUDINARY_CLOUD_NAME=your_cloud_name
+CLOUDINARY_API_KEY=your_api_key
+CLOUDINARY_API_SECRET=your_api_secret
 ```
 
-Never commit `.env` files to GitHub.
+For production, these variables are configured through the deployment platform.
+
+**Never commit `.env` files, database passwords, JWT secrets, or Cloudinary API secrets to GitHub.**
 
 ---
 
-## 🚀 Production Build
+## 🚀 Deployment
 
-Create a production build using:
+### Frontend
+
+The React frontend is deployed on **Vercel**.
+
+Production URL:
+
+```text
+https://socialsphere-web.vercel.app/
+```
+
+### Backend
+
+The Node.js and Express.js backend is deployed on **Render**.
+
+Production API:
+
+```text
+https://socialsphere-1b6c.onrender.com/
+```
+
+### Database
+
+The production MySQL database is hosted on **Railway**.
+
+### Media Storage
+
+Images and videos are stored using **Cloudinary**.
+
+---
+
+## 🔄 Production Architecture
+
+```text
+                 ┌─────────────────────────┐
+                 │        User Browser     │
+                 └────────────┬────────────┘
+                              │
+                              ▼
+                 ┌─────────────────────────┐
+                 │     React Frontend      │
+                 │        Vercel           │
+                 └────────────┬────────────┘
+                              │
+                              ▼
+                 ┌─────────────────────────┐
+                 │   Node.js + Express     │
+                 │        Render           │
+                 └───────┬─────────┬───────┘
+                         │         │
+              ┌──────────┘         └──────────┐
+              ▼                               ▼
+     ┌─────────────────┐             ┌─────────────────┐
+     │   MySQL         │             │   Cloudinary    │
+     │   Railway       │             │ Images / Videos │
+     └─────────────────┘             └─────────────────┘
+```
+
+---
+
+## 🧪 Testing
+
+API endpoints can be tested using:
+
+```text
+Thunder Client
+```
+
+The application was tested across:
+
+- Desktop
+- Tablet
+- Mobile
+- Light mode
+- Dark mode
+- Authentication
+- Posts
+- Stories
+- Likes
+- Comments
+- Notifications
+- Profiles
+- Search
+- Media uploads
+
+---
+
+## 📦 Production Build
+
+To create an optimized production build:
 
 ```bash
 npm run build
 ```
 
-The production files will be generated in:
+The production files will be generated inside:
 
 ```text
 build/
 ```
+
+---
+
+## 🔗 Repository
+
+GitHub:
+
+https://github.com/avinashkale14/SocialSphere
 
 ---
 
@@ -245,10 +478,12 @@ build/
 
 Full Stack Developer
 
-GitHub:  
+GitHub:
+
 https://github.com/avinashkale14
 
-SocialSphere Repository:  
+SocialSphere:
+
 https://github.com/avinashkale14/SocialSphere
 
 ---
