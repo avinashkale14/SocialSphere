@@ -240,14 +240,6 @@ The React frontend communicates with the production Express API through Vercel r
 
 ---
 
-## 🔗 Repository
-
-GitHub:
-
-https://github.com/avinashkale14/SocialSphere
-
----
-
 ## 👨‍💻 Developer
 
 ### Avinash Kale
