@@ -5,7 +5,6 @@
 The project was built using React.js, Node.js, Express.js, MySQL, JWT authentication, REST APIs, file uploads, responsive UI, and dark mode.
 
 ---
----
 
 ## 🚀 Live Demo
 
