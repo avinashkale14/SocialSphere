@@ -8,9 +8,7 @@ Users can create profiles, share posts and stories, follow users, like and comme
 
 ## 🚀 Live Demo
 
-🌐 **Frontend:** https://socialsphere-web.vercel.app/
-
-🔗 **Backend API:** https://socialsphere-1b6c.onrender.com/
+🌐 https://socialsphere-web.vercel.app/
 
 ---
 
@@ -170,8 +168,6 @@ CLOUDINARY_API_KEY=your_api_key
 CLOUDINARY_API_SECRET=your_api_secret
 ~~~
 
-**Never commit `.env` files, database passwords, JWT secrets, or Cloudinary secrets to GitHub.**
-
 ---
 
 ## 🗄️ Database Setup
@@ -241,68 +237,6 @@ Media     → Cloudinary
 ~~~
 
 The React frontend communicates with the production Express API through Vercel routing.
-
----
-
-## 🔒 Security
-
-- JWT authentication
-- HTTP-only authentication cookies
-- Password hashing with bcrypt
-- Protected API routes
-- CORS configuration
-- Environment variables for secrets
-- No database credentials in source code
-- No uploaded media committed to GitHub
-
----
-
-## 📱 Responsive Design
-
-SocialSphere is designed for:
-
-- 💻 Desktop
-- 📱 Mobile
-- 📲 Tablet
-
-The responsive interface includes navigation, profiles, posts, stories, search, notifications, and dark mode.
-
----
-
-## 🧪 Testing
-
-The application was tested for:
-
-- Authentication
-- Posts
-- Likes
-- Comments
-- Stories
-- Notifications
-- Profiles
-- Search
-- Media uploads
-- Dark mode
-- Responsive layouts
-- Production deployment
-
-API testing was performed using **Thunder Client**.
-
----
-
-## 📦 Production Build
-
-Create an optimized production build using:
-
-~~~bash
-npm run build
-~~~
-
-The production files are generated inside:
-
-~~~text
-build/
-~~~
 
 ---
 
